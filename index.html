@@ -998,3 +998,222 @@ async function clientNamesFor(ids){
 async function loadDocuments(){
   const box=$('documents-list'); if(!box) return;
   const {data,error}=await sb.from('documents').select('id,owner_id,division,original_name,size_bytes,created_at,storage_path').order('created_at',{ascending:false}).limit(50);
+  if(error){ box.innerHTML='<p>Documents are unavailable.</p>'; return; }
+  const names=await clientNamesFor((data||[]).map(d=>d.owner_id));
+  box.innerHTML = data?.length ? data.map(d=>{
+    const who=currentProfile?.role==='client' ? '' : `${esc(names[d.owner_id]||'Client')} · `;
+    return `<div class="dash-row"><div><strong>${who}${esc(d.original_name)}</strong><small>${esc(d.division)} • ${new Date(d.created_at).toLocaleDateString()}</small></div><button type="button" onclick="downloadDocument('${d.id}')">Download</button></div>`;
+  }).join('') : '<p class="empty">No documents yet.</p>';
+}
+
+async function downloadDocument(id){
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const {data:doc,error}=await sb.from('documents').select('storage_path,original_name').eq('id',id).single();
+  if(error) return notice('Document not found.','error');
+  const {data,error:dlErr}=await sb.storage.from('client-documents').download(doc.storage_path);
+  if(dlErr) return notice('Document download failed.','error');
+  const url=URL.createObjectURL(data); const a=document.createElement('a'); a.href=url; a.download=doc.original_name; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+async function loadTasks(){
+  const box=$('tasks-list');
+  const {data,error}=await sb.from('tasks').select('id,client_id,title,status,due_at,division').order('created_at',{ascending:false}).limit(50);
+  const names=await clientNamesFor((data||[]).map(t=>t.client_id));
+  box.innerHTML = error ? '<p>Tasks are unavailable.</p>' : (data?.length ? data.map(t=>{
+    const who=currentProfile?.role==='client' ? '' : `${esc(names[t.client_id]||'Client')} · `;
+    return `<div class="dash-row"><div><strong>${who}${esc(t.title)}</strong><small>${esc(t.division)}${t.due_at?' • due '+new Date(t.due_at).toLocaleDateString():''}</small></div><span class="status-pill">${esc(t.status)}</span></div>`;
+  }).join('') : '<p class="empty">No open tasks.</p>');
+}
+
+async function loadMessages(){
+  const box=$('messages-list');
+  const {data,error}=await sb.from('messages').select('id,client_id,body,division,sender_id,created_at').order('created_at',{ascending:false}).limit(30);
+  const names=await clientNamesFor((data||[]).map(m=>m.client_id));
+  box.innerHTML = error ? '<p>Messages are unavailable.</p>' : (data?.length ? data.map(m=>{
+    let sender='Binya';
+    if(m.sender_id===currentUser.id) sender='You';
+    else if(currentProfile?.role!=='client' && m.sender_id===m.client_id) sender=names[m.client_id]||'Client';
+    else if(currentProfile?.role!=='client') sender='Binya team';
+    return `<div class="message"><strong>${esc(sender)}</strong><small>${esc(m.division)} • ${new Date(m.created_at).toLocaleString()}</small><p>${esc(m.body)}</p></div>`;
+  }).join('') : '<p class="empty">No secure messages yet.</p>');
+}
+
+async function sendMessage(){
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const body=$('message-body').value.trim(); const division=$('message-division').value;
+  if(!division){ notice('Choose an available service area.','warn'); return; }
+  if(!body) return;
+  const {error}=await sb.from('messages').insert({client_id:currentUser.id,sender_id:currentUser.id,division,body});
+  if(error) notice('Message could not be sent.','error'); else { $('message-body').value=''; notice('Secure message sent.','success'); await loadMessages(); }
+}
+
+async function loadAppointments(){
+  const box=$('appointments-list');
+  let q=sb.from('appointments').select('id,client_id,staff_id,division,starts_at,ends_at,status,label,service_type_id').gte('starts_at',new Date().toISOString()).neq('status','cancelled').order('starts_at').limit(30);
+  if(['staff','admin'].includes(currentProfile?.role) && currentProfile?.role!=='admin') q=q.eq('staff_id',currentUser.id);
+  const {data,error}=await q;
+  window.__binyaAppointments=data||[];
+  let clientNames={};
+  if(!error && ['staff','admin'].includes(currentProfile?.role) && data?.length){
+    const ids=[...new Set(data.map(a=>a.client_id).filter(Boolean))];
+    if(ids.length){
+      const {data:profiles}=await sb.from('profiles').select('id,display_name').in('id',ids);
+      clientNames=Object.fromEntries((profiles||[]).map(p=>[p.id,p.display_name||'Client']));
+    }
+  }
+  box.innerHTML = error ? '<p>Appointments are unavailable.</p>' : (data?.length ? data.map(a=>{
+    const who=currentProfile?.role==='client' ? '' : `${esc(clientNames[a.client_id]||'Client')} · `;
+    return `<div class="dash-row"><div><strong>${who}${esc(a.label || 'Appointment')}</strong><small>${esc(a.division)} • ${new Date(a.starts_at).toLocaleString()}</small><div class="appt-actions">${currentProfile?.role==='client'?`<button type="button" onclick="startReschedule('${a.id}','${a.service_type_id||''}')">Reschedule</button><button class="danger" type="button" onclick="cancelAppointment('${a.id}')">Cancel</button>`:''}<button type="button" onclick="downloadAppointmentIcs('${a.id}')">Add to calendar</button></div></div><span class="status-pill">${esc(a.status)}</span></div>`;
+  }).join('') : '<p class="empty">No upcoming appointments.</p>');
+}
+
+window.portalLogin=login; window.portalLogout=logout; window.portalRequestReset=requestReset;
+window.enrollMfa=enrollMfa; window.verifyMfa=verifyMfa; window.verifyExistingMfa=verifyExistingMfa; window.updatePortalPassword=updatePortalPassword; window.uploadDocument=uploadDocument;
+window.downloadDocument=downloadDocument; window.sendMessage=sendMessage;
+window.loadAvailableSlots=loadAvailableSlots; window.selectSchedulerSlot=selectSchedulerSlot; window.bookSelectedSlot=bookSelectedSlot;
+window.cancelAppointment=cancelAppointment; window.startReschedule=startReschedule; window.rescheduleSelectedSlot=rescheduleSelectedSlot; window.cancelRescheduleMode=cancelRescheduleMode;
+window.downloadAppointmentIcs=downloadAppointmentIcs; window.createAvailabilitySlot=createAvailabilitySlot; window.closeAvailabilitySlot=closeAvailabilitySlot;
+document.addEventListener('DOMContentLoaded',initPortal);
+
+/* ---------------- The North Star scheduler ---------------- */
+let selectedSlotId = null;
+let selectedSlotData = null;
+let schedulerServices = [];
+
+function schedulerServiceById(id){ return schedulerServices.find(s=>s.id===id); }
+
+async function loadSchedulerServices(){
+  const clientSelect=$('scheduler-service');
+  const teamSelect=$('team-service');
+  if(!clientSelect) return;
+  const {data,error}=await sb.from('service_types')
+    .select('id,division,name,description,duration_minutes,active')
+    .eq('active',true).order('division').order('name');
+  if(error){ clientSelect.innerHTML='<option value="">Scheduler unavailable</option>'; return; }
+  schedulerServices=data||[];
+  const options=['<option value="">Choose a service…</option>'].concat(schedulerServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+  clientSelect.innerHTML=options;
+  if(teamSelect){
+    let teamServices=schedulerServices;
+    if(currentProfile?.role==='staff'){
+      const {data:perms}=await sb.from('staff_service_permissions').select('service_type_id').eq('staff_id',currentUser.id).eq('active',true);
+      const allowed=new Set((perms||[]).map(x=>x.service_type_id));
+      teamServices=schedulerServices.filter(s=>allowed.has(s.id));
+    }
+    teamSelect.innerHTML=['<option value="">Choose a service…</option>'].concat(teamServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+  }
+  if(currentProfile?.role==='client') await loadAvailableSlots();
+}
+
+async function loadAvailableSlots(){
+  const box=$('scheduler-slots'); if(!box || !sb) return;
+  selectedSlotId=null; selectedSlotData=null;
+  $('scheduler-summary')?.classList.add('hidden'); $('scheduler-book-btn')?.classList.add('hidden');
+  const serviceId=$('scheduler-service')?.value;
+  if(!serviceId){ box.innerHTML='<p class="empty">Choose a service to see times.</p>'; return; }
+  const days=Number($('scheduler-window')?.value||14);
+  const end=new Date(Date.now()+days*86400000);
+  const {data,error}=await sb.rpc('list_available_slots',{p_service_type_id:serviceId,p_until:end.toISOString()});
+  if(error){ box.innerHTML='<p class="empty">Available times could not be loaded.</p>'; return; }
+  if(!data?.length){ box.innerHTML='<p class="empty">No open times in this window yet. Check back or message Binya.</p>'; return; }
+  box.innerHTML=data.map(slot=>{
+    const dt=new Date(slot.starts_at);
+    return `<button class="slot-btn" type="button" data-slot="${slot.id}" onclick="selectSchedulerSlot('${slot.id}')"><strong>${esc(dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))}</strong><small>${esc(dt.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}))}</small></button>`;
+  }).join('');
+  window.__binyaSlots=data;
+}
+
+function selectSchedulerSlot(id){
+  const data=(window.__binyaSlots||[]).find(x=>x.id===id); if(!data) return;
+  selectedSlotId=id; selectedSlotData=data;
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.toggle('selected',b.dataset.slot===id));
+  const svc=schedulerServiceById(data.service_type_id);
+  const summary=$('scheduler-summary');
+  summary.innerHTML=`<strong>${esc(svc?.name||'Appointment')}</strong><br>${esc(new Date(data.starts_at).toLocaleString())}<br><small>${esc(svc?.division||data.division)} · ${svc?.duration_minutes||''} minutes</small>`;
+  summary.classList.remove('hidden'); $('scheduler-book-btn').classList.remove('hidden');
+}
+
+async function bookSelectedSlot(){
+  if(window.__rescheduleAppointment){ notice('Finish or cancel the current reschedule first.','warn'); return; }
+  if(!selectedSlotId) return;
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const btn=$('scheduler-book-btn'); btn.disabled=true; btn.textContent='Booking…';
+  const {data,error}=await sb.rpc('book_appointment',{p_slot_id:selectedSlotId});
+  btn.disabled=false; btn.textContent='Confirm appointment';
+  if(error){ notice(error.message?.includes('already booked')?'That time was just taken. Choose another slot.':'Appointment could not be booked.','error'); await loadAvailableSlots(); return; }
+  notice('Appointment confirmed.','success');
+  selectedSlotId=null; selectedSlotData=null; $('scheduler-summary').classList.add('hidden'); btn.classList.add('hidden');
+  await Promise.all([loadAvailableSlots(),loadAppointments()]);
+}
+
+async function cancelAppointment(id){
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  if(!confirm('Cancel this appointment?')) return;
+  const {error}=await sb.rpc('cancel_appointment',{p_appointment_id:id});
+  if(error) notice('Appointment could not be cancelled.','error');
+  else { notice('Appointment cancelled. The time is available again.','success'); await Promise.all([loadAppointments(),loadAvailableSlots()]); }
+}
+
+async function startReschedule(id,serviceId){
+  const sel=$('scheduler-service'); if(sel){ sel.value=serviceId; await loadAvailableSlots(); }
+  notice('Choose a new time above. Your current appointment stays reserved until the new time is confirmed.','info');
+  window.__rescheduleAppointment=id;
+  const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm new time'; btn.onclick=rescheduleSelectedSlot; }
+  $('scheduler-reschedule-cancel')?.classList.remove('hidden');
+  document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function cancelRescheduleMode(){
+  window.__rescheduleAppointment=null;
+  selectedSlotId=null; selectedSlotData=null;
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('selected'));
+  $('scheduler-summary')?.classList.add('hidden');
+  const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm appointment'; btn.onclick=bookSelectedSlot; btn.classList.add('hidden'); }
+  $('scheduler-reschedule-cancel')?.classList.add('hidden');
+  notice('Your original appointment is unchanged.','info');
+}
+
+async function rescheduleSelectedSlot(){
+  if(!selectedSlotId || !window.__rescheduleAppointment) return;
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const btn=$('scheduler-book-btn'); btn.disabled=true; btn.textContent='Rescheduling…';
+  const {error}=await sb.rpc('reschedule_appointment',{p_appointment_id:window.__rescheduleAppointment,p_new_slot_id:selectedSlotId});
+  btn.disabled=false; btn.textContent='Confirm appointment'; btn.onclick=bookSelectedSlot;
+  if(error){ notice('Appointment could not be rescheduled. Your original time is still reserved.','error'); return; }
+  window.__rescheduleAppointment=null; $('scheduler-reschedule-cancel')?.classList.add('hidden'); notice('Appointment moved to the new time.','success');
+  await Promise.all([loadAppointments(),loadAvailableSlots()]);
+}
+
+function downloadAppointmentIcs(id){
+  const a=(window.__binyaAppointments||[]).find(x=>x.id===id); if(!a) return;
+  const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Binya//The North Star//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:Binya appointment','DESCRIPTION:Open The North Star for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='binya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+async function createAvailabilitySlot(){
+  if(!['staff','admin'].includes(currentProfile?.role)) return;
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const serviceId=$('team-service')?.value; const local=$('team-slot-start')?.value;
+  if(!serviceId || !local){ notice('Choose a service and start time.','warn'); return; }
+  const start=new Date(local); if(Number.isNaN(start.getTime()) || start<=new Date()){ notice('Choose a future start time.','warn'); return; }
+  const {error}=await sb.rpc('create_availability_slot',{p_service_type_id:serviceId,p_starts_at:start.toISOString()});
+  if(error) notice('That availability could not be added.','error');
+  else { $('team-slot-start').value=''; notice('Available time added.','success'); await Promise.all([loadTeamSlots(),loadAvailableSlots()]); }
+}
+
+async function loadTeamSlots(){
+  const box=$('team-slots-list'); if(!box || !['staff','admin'].includes(currentProfile?.role)) return;
+  const {data,error}=await sb.from('availability_slots').select('id,starts_at,ends_at,active,service_types(name)').eq('staff_id',currentUser.id).gte('starts_at',new Date().toISOString()).order('starts_at').limit(40);
+  box.innerHTML=error?'<p class="empty">Availability unavailable.</p>':(data?.length?data.map(s=>`<div class="dash-row"><div><strong>${esc(s.service_types?.name||'Appointment')}</strong><small>${esc(new Date(s.starts_at).toLocaleString())}</small></div><button type="button" onclick="closeAvailabilitySlot('${s.id}')">Close</button></div>`).join(''):'<p class="empty">No future availability opened.</p>');
+}
+
+async function closeAvailabilitySlot(id){
+  if(!['staff','admin'].includes(currentProfile?.role)) return;
+  const {error}=await sb.rpc('close_availability_slot',{p_slot_id:id});
+  if(error) notice('That time could not be closed. It may already be booked.','error'); else { notice('Availability closed.','success'); await Promise.all([loadTeamSlots(),loadAvailableSlots()]); }
+}
+
+</script>
+</body>
+</html>
