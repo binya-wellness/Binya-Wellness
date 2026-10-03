@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The North Star | Binya</title>
+  <title>Binya | Wellness • Process House • Resource Collective</title>
   <meta name="description" content="Binya Wellness, Binya Process House, and Binya Resource Collective — practical support, community navigation, and wellness under one rooted umbrella." />
   <style>
     :root{
@@ -217,6 +217,9 @@
     .portal-dashboard{margin-top:1.25rem}.dash-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1rem}.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.dash-panel{background:rgba(21,18,14,.92);color:var(--cream)}.dash-list{display:grid;gap:.65rem;margin-top:1rem}.dash-row,.message{display:flex;justify-content:space-between;gap:1rem;padding:.8rem;border:1px solid var(--line);border-radius:14px;background:#100e0b}.dash-row small,.message small{display:block;color:var(--muted);margin-top:.2rem}.dash-row button{border:1px solid var(--line);background:transparent;color:var(--cream);border-radius:999px;padding:.4rem .7rem}.message{display:block}.message p{margin:.55rem 0 0;white-space:pre-wrap}.empty{color:var(--muted)}
     .upload-box,.message-compose{display:grid;gap:.65rem;margin-top:.75rem}.upload-box select,.upload-box input,.message-compose select,.message-compose textarea,.mfa-enroll-step input{width:100%;padding:.75rem;border:1px solid var(--line);border-radius:12px;background:#0f0d0a;color:var(--cream);font:inherit}.mfa-box{margin-bottom:1rem;background:rgba(29,24,18,.96);color:var(--cream)}.mfa-enroll-step{margin-top:1rem}.mfa-enroll-step img{max-width:220px;background:#fff;padding:8px;border-radius:12px}.mfa-enroll-step code{word-break:break-all}.status-pill{background:rgba(29,98,100,.18);color:#a9d6d6;height:max-content}
     @media(max-width:850px){.dashboard-grid{grid-template-columns:1fr}.dash-header{flex-direction:column}.dash-row{align-items:flex-start}}
+.northstar-page .hero,.northstar-page #about,.northstar-page #process,.northstar-page #resource,.northstar-page #wellness,.northstar-page #contact{display:none!important}
+    .northstar-page #portal{display:block!important;padding-top:36px}
+    .northstar-page #northstar-main-link,.northstar-page #northstar-nav-link{pointer-events:auto!important}
 </style>
 
 <script>
@@ -252,7 +255,7 @@
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.tab[data-target]').forEach(function(tab) {
+    document.querySelectorAll('button.tab[data-target]').forEach(function(tab) {
       tab.addEventListener('click', function(e) {
         e.preventDefault();
         window.showPanel(tab.dataset.target);
@@ -279,11 +282,11 @@
 </script>
 
 </head>
-<body>
+<body class="northstar-page">
 <header>
   <div class="shell">
     <div class="topbar">
-      <a class="brand" href="/">
+      <a class="brand" href="https://binya-wellness.onrender.com/">
         <div class="mark">B</div>
         <div class="brand-copy">
           <strong>Binya</strong>
@@ -291,7 +294,7 @@
         </div>
       </a>
       <div class="controls">
-        <a class="portal-login-btn" href="#portal">The North Star</a>
+        <a id="northstar-main-link" class="portal-login-btn" href="#portal">The North Star</a>
         <select class="language" aria-label="Language" title="Additional translated editions will launch after consistent funding." disabled>
           <option selected>English</option>
         </select>
@@ -303,7 +306,7 @@
       <button class="tab" data-target="process" role="tab" aria-selected="false">Process House</button>
       <button class="tab" data-target="resource" role="tab" aria-selected="false">Resource Collective</button>
       <button class="tab" data-target="wellness" role="tab" aria-selected="false">Wellness</button>
-      <button class="tab" data-target="portal" role="tab" aria-selected="false">The North Star</button>
+      <a id="northstar-nav-link" class="tab active" href="#portal" role="link" aria-current="page">The North Star</a>
     </nav>
   </div>
 </header>
