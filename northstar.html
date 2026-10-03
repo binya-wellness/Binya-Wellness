@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The North Star | Binya</title>
+  <meta name="description" content="Binya Wellness, Binya Process House, and Binya Resource Collective — practical support, community navigation, and wellness under one rooted umbrella." />
+  <style>
+    :root{
+      --bg:#0c0b09;
+      --panel:#15120e;
+      --panel-2:#1d1812;
+      --gold:#d8a24a;
+      --cream:#f3e7d2;
+      --green:#556b45;
+      --teal:#1d6264;
+      --rust:#b65326;
+      --muted:#b9ad9a;
+      --line:#3a3023;
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(182,83,38,.14), transparent 30%),
+        radial-gradient(circle at 88% 15%, rgba(29,98,100,.14), transparent 28%),
+        var(--bg);
+      color:var(--cream);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a{color:inherit;text-decoration:none}
+    .shell{max-width:1180px;margin:auto;padding:0 24px}
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(14px);
+      background:rgba(12,11,9,.9);
+      border-bottom:1px solid rgba(216,162,74,.18);
+    }
+    .topbar{
+      min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+    }
+    .brand{display:flex;align-items:center;gap:13px;min-width:max-content}
+    .mark{
+      width:42px;height:42px;border:1px solid var(--gold);border-radius:50%;
+      display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;color:var(--gold);
+      background:linear-gradient(145deg,#1a160f,#0c0b09);
+      box-shadow:inset 0 0 0 5px rgba(216,162,74,.06);
+    }
+    .brand-copy strong{display:block;font-family:Georgia,serif;font-size:1.1rem;letter-spacing:.04em}
+    .brand-copy span{font-size:.7rem;color:var(--muted);letter-spacing:.13em;text-transform:uppercase}
+    .controls{display:flex;gap:10px;align-items:center}
+    .language{
+      border:1px solid var(--line);background:#100e0b;color:var(--cream);border-radius:999px;
+      padding:10px 14px;
+    }
+    .tabs{
+      display:flex;gap:9px;overflow:auto;padding:0 0 13px;scrollbar-width:none;
+    }
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{
+      appearance:none;border:1px solid var(--line);background:#100e0b;color:var(--cream);
+      border-radius:999px;padding:10px 16px;cursor:pointer;white-space:nowrap;transition:.2s ease;
+    }
+    .tab:hover{border-color:rgba(216,162,74,.6);transform:translateY(-1px)}
+    .tab.active{background:var(--gold);color:#17110a;border-color:var(--gold);font-weight:800}
+
+    .hero{padding:58px 0 34px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;color:var(--gold);text-transform:uppercase;
+      letter-spacing:.17em;font-size:.75rem;font-weight:800;
+    }
+    .eyebrow:before{content:"";width:28px;height:1px;background:currentColor}
+    h1,h2,h3{font-family:Georgia,serif}
+    h1{
+      font-size:clamp(2.65rem,6vw,5.25rem);
+      margin:.15em 0 .18em;line-height:.96;letter-spacing:-.035em;
+      max-width:950px;
+    }
+    .hero-copy{max-width:760px;font-size:1.08rem;line-height:1.75;color:#d7cbb9}
+    .brand-stack{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .mini-card{
+      border:1px solid var(--line);border-radius:20px;padding:21px;background:rgba(21,18,14,.82);
+      min-height:168px;position:relative;overflow:hidden;cursor:pointer;transition:.2s ease;
+    }
+    .mini-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+    .mini-card:after{
+      pointer-events:none;
+      content:"";position:absolute;right:-30px;bottom:-30px;width:100px;height:100px;border-radius:50%;
+      background:var(--accent,var(--gold));opacity:.09;
+    }
+    .mini-card small{text-transform:uppercase;letter-spacing:.15em;color:var(--muted);font-size:.69rem}
+    .mini-card h3{font-size:1.45rem;margin:9px 0 8px}
+    .mini-card p{margin:0;color:#cbbdaa;line-height:1.55}
+
+    .panel{display:none;padding:24px 0 78px;animation:fade .28s ease}
+    .panel.active{display:block}
+    @keyframes fade{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    .panel-hero{display:grid;grid-template-columns:1.22fr .78fr;gap:28px;align-items:stretch;margin-top:8px}
+    .feature{
+      border:1px solid var(--line);border-radius:26px;padding:34px;
+      background:linear-gradient(145deg,rgba(29,24,18,.96),rgba(15,13,10,.96));
+      box-shadow:var(--shadow);position:relative;overflow:hidden;
+    }
+    .feature:after{
+      pointer-events:none;
+      content:"";position:absolute;width:245px;height:245px;border-radius:50%;right:-105px;top:-105px;
+      background:var(--accent);opacity:.09;filter:blur(4px);
+    }
+    .division-name{
+      font-size:clamp(2.1rem,4.2vw,4.25rem);margin:.14em 0 .16em;line-height:1.02;
+      max-width:900px;
+    }
+    .slogan{
+      font-family:Georgia,serif;font-style:italic;color:var(--accent);
+      font-size:clamp(1.3rem,2vw,1.85rem);margin:0 0 21px;
+    }
+    .descriptor{color:#d7cbb9;line-height:1.72;font-size:1.02rem;max-width:760px}
+    .cta-row{display:flex;gap:11px;flex-wrap:wrap;margin-top:24px}
+    .btn{
+      border:1px solid var(--accent);padding:11px 17px;border-radius:999px;font-weight:800;
+      display:inline-block;
+    }
+    .btn.primary{background:var(--accent);color:#130e08}
+    .btn.secondary{background:transparent;color:var(--cream)}
+
+    .side-note{border:1px solid var(--line);border-radius:26px;padding:28px;background:rgba(21,18,14,.74)}
+    .side-note h3{font-size:1.42rem;margin-top:0}
+    .side-note p,.side-note li{color:#cbbdaa;line-height:1.62}
+    .side-note ul{padding-left:20px}
+
+    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:30px}
+    .service{border:1px solid var(--line);border-radius:20px;padding:23px;background:rgba(18,15,12,.84)}
+    .service .num{font-size:.72rem;color:var(--accent);font-weight:900;letter-spacing:.16em}
+    .service h3{font-size:1.28rem;margin:9px 0}
+    .service p{color:#c6b9a5;line-height:1.58;margin-bottom:0}
+
+    .clients{margin-top:30px;border-top:1px solid var(--line);padding-top:27px;display:grid;grid-template-columns:.85fr 1.15fr;gap:30px}
+    .clients h2,.section-title{font-size:clamp(2rem,3.5vw,3.1rem);line-height:1.03;margin:0;max-width:700px}
+    .chips{display:flex;flex-wrap:wrap;gap:9px;align-content:flex-start}
+    .chip{border:1px solid var(--line);border-radius:999px;padding:9px 13px;color:#d7cbb9;background:#100e0b}
+
+    /* ABOUT */
+    #about{--accent:var(--green)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+    .about-card{
+      border:1px solid var(--line);border-radius:22px;padding:27px;background:rgba(18,15,12,.86);
+    }
+    .about-card h3{font-size:1.55rem;margin:0 0 12px}
+    .about-card p{color:#d2c5b3;line-height:1.68;margin:0 0 13px}
+    .about-card ul{color:#d2c5b3;line-height:1.7;padding-left:20px}
+    .culture-band{
+      margin-top:18px;padding:28px;border-radius:22px;border:1px solid var(--line);
+      background:linear-gradient(120deg,rgba(85,107,69,.13),rgba(29,98,100,.08),rgba(182,83,38,.07));
+    }
+    .culture-band h3{font-size:1.65rem;margin:0 0 10px}
+    .culture-band p{color:#d2c5b3;line-height:1.7;max-width:900px}
+    .source-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .source-link{
+      font-size:.82rem;border-bottom:1px solid rgba(216,162,74,.55);color:#dbc08b;padding-bottom:2px
+    }
+    .founder-grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:16px;margin-top:18px}
+    .portrait-placeholder{
+      min-height:290px;border:1px dashed #5b4a35;border-radius:22px;background:
+      radial-gradient(circle at 50% 30%,rgba(216,162,74,.13),transparent 36%),
+      rgba(18,15,12,.75);
+      display:flex;align-items:flex-end;padding:22px;color:var(--muted);
+    }
+    .founder-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}
+    .fact{border:1px solid var(--line);border-radius:16px;padding:15px;background:#100e0b}
+    .fact strong{display:block;color:var(--gold);font-size:.78rem;letter-spacing:.11em;text-transform:uppercase;margin-bottom:5px}
+    .fact span{color:#d9ccba;line-height:1.45}
+
+    footer{border-top:1px solid var(--line);padding:32px 0 45px;color:var(--muted)}
+    .footer-grid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .tiny{font-size:.77rem;line-height:1.58;max-width:760px}
+
+    #process{--accent:var(--gold)}
+    #resource{--accent:var(--rust)}
+    #wellness{--accent:var(--teal)}
+
+    @media(max-width:850px){
+      .brand-stack,.services,.about-grid,.founder-grid{grid-template-columns:1fr}
+      .founder-facts{grid-template-columns:1fr}
+      .panel-hero,.clients{grid-template-columns:1fr}
+      .hero{padding-top:42px}
+      .feature{padding:27px}
+      .topbar{align-items:flex-start;padding:13px 0}
+      .controls{align-self:center}
+      .brand-copy span{display:none}
+      h1{font-size:clamp(2.5rem,12vw,4.2rem)}
+      .division-name{font-size:clamp(2.05rem,10vw,3.35rem)}
+    }
+  
+    .portal-login-btn{position:relative;z-index:2;pointer-events:auto;display:inline-block;border:1px solid rgba(255,255,255,.22);background:var(--cream);color:#17110a;border-radius:999px;padding:.68rem 1rem;font-weight:800;cursor:pointer;letter-spacing:.01em}
+    .portal-login-btn:hover{transform:translateY(-1px)}
+    #portal{scroll-margin-top:92px}
+    #portal:target{display:block!important}
+    .portal-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:1.2rem;margin-top:1.25rem}
+    .portal-card,.portal-status,.portal-tile{background:rgba(21,18,14,.92);color:var(--cream);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .portal-card{padding:1.5rem}.portal-card h3,.portal-status h3{margin-top:0}.portal-status{padding:1.25rem;background:rgba(29,24,18,.94)}
+    .portal-card p,.portal-status p,.portal-tile p{color:#cbbdaa}
+    .secure-note{display:flex;gap:.8rem;align-items:flex-start;margin-top:1rem;padding:1rem;border-radius:16px;background:rgba(29,98,100,.13);border:1px solid rgba(29,98,100,.42);color:#d7cbb9}
+    .secure-note .lock{font-size:1.3rem;line-height:1}.portal-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+    .portal-tile{padding:1rem;min-height:118px;background:#100e0b}.portal-tile h4{margin:.15rem 0 .35rem;color:var(--cream)}.portal-tile p{margin:0;font-size:.92rem;opacity:.88}
+    .portal-disabled{opacity:.62;position:relative;cursor:not-allowed}.portal-disabled::after{content:"Secure access required";position:absolute;right:.7rem;top:.7rem;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:.28rem .45rem;border-radius:999px;background:rgba(216,162,74,.12);color:#f1c97f;border:1px solid rgba(216,162,74,.24)}
+    .portal-form{display:grid;gap:.8rem;margin-top:1rem}.portal-form label{font-weight:700;font-size:.9rem;color:var(--cream)}.portal-form input{width:100%;padding:.82rem .9rem;border:1px solid var(--line);border-radius:12px;background:#100e0b;color:var(--cream);font:inherit}.portal-form input::placeholder{color:#887d6c}.portal-form input:focus{outline:2px solid rgba(216,162,74,.34);outline-offset:2px;border-color:var(--gold)}.portal-form button{width:100%}
+    .portal-footnote{font-size:.82rem;color:var(--muted);margin-top:.9rem}.scope-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.8rem}.scope-badge{padding:.4rem .65rem;border-radius:999px;background:rgba(29,98,100,.18);color:#a9d6d6;border:1px solid rgba(29,98,100,.3);font-size:.82rem;font-weight:700}
+    .scheduler-wrap{display:grid;gap:1rem}.scheduler-controls{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.scheduler-controls select,.scheduler-controls input,.team-scheduler input,.team-scheduler select{width:100%;padding:.78rem .85rem;border:1px solid var(--line);border-radius:12px;background:#100e0b;color:var(--cream);font:inherit}.slot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.8rem}.slot-btn{border:1px solid var(--line);background:#100e0b;color:var(--cream);border-radius:14px;padding:.8rem;text-align:left;cursor:pointer}.slot-btn:hover,.slot-btn.selected{border-color:var(--gold);background:rgba(216,162,74,.12)}.slot-btn strong{display:block}.slot-btn small{display:block;color:var(--muted);margin-top:.25rem}.scheduler-summary{border:1px solid var(--line);border-radius:14px;padding:.9rem;background:rgba(216,162,74,.08)}.appt-actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.55rem}.appt-actions button{border:1px solid var(--line);background:transparent;color:var(--cream);border-radius:999px;padding:.38rem .65rem;cursor:pointer}.appt-actions button.danger{border-color:#8f5148}.team-scheduler{display:grid;gap:.75rem}.team-scheduler-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.calendar-note{font-size:.82rem;color:var(--muted);line-height:1.5}.role-only{display:none}.role-only.visible{display:block}.scheduler-divider{height:1px;background:var(--line);margin:1rem 0}
+    @media(max-width:800px){.portal-grid{grid-template-columns:1fr}.portal-actions{grid-template-columns:1fr}.slot-grid{grid-template-columns:1fr}.scheduler-controls,.team-scheduler-row{grid-template-columns:1fr}.portal-login-btn{padding:.58rem .8rem}}
+
+
+    .hidden{display:none!important}.portal-notice{margin:1rem 0;padding:1rem 1.1rem;border-radius:15px;border:1px solid var(--line);background:rgba(216,162,74,.1)}.portal-notice.error{border-color:#a14f45;background:rgba(161,79,69,.14)}.portal-notice.success{border-color:#557a59;background:rgba(85,122,89,.14)}.portal-notice.warn{border-color:#a57a35;background:rgba(165,122,53,.14)}
+    .live-state,.mfa-chip,.status-pill{display:inline-block;border-radius:999px;padding:.35rem .62rem;font-size:.76rem;font-weight:800}.live-state.pending,.mfa-chip.warn{background:rgba(216,162,74,.15);color:#f1c97f}.live-state.ready,.mfa-chip.good{background:rgba(85,107,69,.24);color:#cde0bf}
+    .portal-dashboard{margin-top:1.25rem}.dash-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1rem}.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.dash-panel{background:rgba(21,18,14,.92);color:var(--cream)}.dash-list{display:grid;gap:.65rem;margin-top:1rem}.dash-row,.message{display:flex;justify-content:space-between;gap:1rem;padding:.8rem;border:1px solid var(--line);border-radius:14px;background:#100e0b}.dash-row small,.message small{display:block;color:var(--muted);margin-top:.2rem}.dash-row button{border:1px solid var(--line);background:transparent;color:var(--cream);border-radius:999px;padding:.4rem .7rem}.message{display:block}.message p{margin:.55rem 0 0;white-space:pre-wrap}.empty{color:var(--muted)}
+    .upload-box,.message-compose{display:grid;gap:.65rem;margin-top:.75rem}.upload-box select,.upload-box input,.message-compose select,.message-compose textarea,.mfa-enroll-step input{width:100%;padding:.75rem;border:1px solid var(--line);border-radius:12px;background:#0f0d0a;color:var(--cream);font:inherit}.mfa-box{margin-bottom:1rem;background:rgba(29,24,18,.96);color:var(--cream)}.mfa-enroll-step{margin-top:1rem}.mfa-enroll-step img{max-width:220px;background:#fff;padding:8px;border-radius:12px}.mfa-enroll-step code{word-break:break-all}.status-pill{background:rgba(29,98,100,.18);color:#a9d6d6;height:max-content}
+    @media(max-width:850px){.dashboard-grid{grid-template-columns:1fr}.dash-header{flex-direction:column}.dash-row{align-items:flex-start}}
+</style>
+
+<script>
+(function () {
+  window.showPanel = function(id) {
+    const panels = document.querySelectorAll('.panel');
+    const tabs = document.querySelectorAll('.tab');
+    const isHome = id === 'home';
+
+    panels.forEach(function(p) {
+      p.classList.toggle('active', !isHome && p.id === id);
+    });
+
+    tabs.forEach(function(t) {
+      const active = t.dataset.target === id;
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+
+    try { history.replaceState(null, '', '#' + id); } catch (_) {}
+
+    if (isHome) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const target = document.getElementById(id);
+    if (target) {
+      requestAnimationFrame(function() {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.tab[data-target]').forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.showPanel(tab.dataset.target);
+      });
+    });
+
+    document.querySelectorAll('.mini-card[onclick]').forEach(function(card) {
+      card.style.position = 'relative';
+      card.style.zIndex = '1';
+    });
+
+    window.addEventListener('hashchange', function() {
+      const hash = (location.hash || '').slice(1);
+      if (['home','about','process','resource','wellness','portal'].includes(hash)) {
+        window.showPanel(hash);
+      }
+    });
+
+    const hash = (location.hash || '#home').slice(1);
+    const allowed = ['home','about','process','resource','wellness','portal'];
+    window.showPanel(allowed.includes(hash) ? hash : 'home');
+  });
+})();
+</script>
+
+</head>
+<body>
+<header>
+  <div class="shell">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <div class="mark">B</div>
+        <div class="brand-copy">
+          <strong>Binya</strong>
+          <span>Wellness • Process • Resources</span>
+        </div>
+      </a>
+      <div class="controls">
+        <a class="portal-login-btn" href="#portal">The North Star</a>
+        <select class="language" aria-label="Language" title="Additional translated editions will launch after consistent funding." disabled>
+          <option selected>English</option>
+        </select>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Binya website sections" role="tablist">
+      <button class="tab active" data-target="home" role="tab" aria-selected="true">Home</button>
+      <button class="tab" data-target="about" role="tab" aria-selected="false">About Binya</button>
+      <button class="tab" data-target="process" role="tab" aria-selected="false">Process House</button>
+      <button class="tab" data-target="resource" role="tab" aria-selected="false">Resource Collective</button>
+      <button class="tab" data-target="wellness" role="tab" aria-selected="false">Wellness</button>
+      <button class="tab" data-target="portal" role="tab" aria-selected="false">The North Star</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero shell" id="home">
+    <span class="eyebrow">Practical help, rooted in community</span>
+    <h1>Real help for paperwork, resources, and wellness.</h1>
+    <p class="hero-copy">
+      Binya is one home for three kinds of support. Pick what you need today:
+      court and document support, help navigating resources, or wellness care.
+    </p>
+
+    <div class="brand-stack">
+      <article class="mini-card" style="--accent:var(--gold)" onclick="showPanel('process')">
+        <small>Court + document support</small>
+        <h3>Binya Process House</h3>
+        <p><em>De paper got fa move. We move um.</em></p>
+      </article>
+      <article class="mini-card" style="--accent:var(--rust)" onclick="showPanel('resource')">
+        <small>Community navigation</small>
+        <h3>Binya Resource Collective</h3>
+        <p><em>You ain got fa do um lone.</em></p>
+      </article>
+      <article class="mini-card" style="--accent:var(--teal)" onclick="showPanel('wellness')">
+        <small>Clinical + wellness</small>
+        <h3>Binya Wellness</h3>
+        <p><em>Tek care ya body. Tek care ya spirit.</em></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel shell" id="about">
+    <div class="panel-hero">
+      <div class="feature">
+        <span class="eyebrow">About Binya</span>
+        <h2 class="division-name">Rooted in culture. Built for everyday people.</h2>
+        <p class="descriptor">
+          Binya was built around a simple idea: people deserve support that feels human.
+          Whether somebody needs papers served, help finding resources, or wellness care,
+          the experience should be clear, respectful, and easier to understand.
+        </p>
+      </div>
+      <aside class="side-note">
+        <h3>Why the language sounds different</h3>
+        <p>
+          You’ll see Gullah Creole in Binya’s slogans and brand voice. That choice is intentional.
+          The language is treated here as culture and living language — not as a joke, costume, or marketing gimmick.
+        </p>
+      </aside>
+    </div>
+
+    <div class="culture-band">
+      <h3>Gullah Geechee culture is living culture.</h3>
+      <p>
+        Gullah Geechee communities developed along the southeastern Atlantic coast, especially in the
+        coastal Carolinas, Georgia, and Florida. The culture carries strong West and Central African
+        continuities that can be seen in language, foodways, storytelling, music and spiritual traditions,
+        crafts such as sweetgrass basketry, and relationships to coastal land and water.
+      </p>
+      <p>
+        Gullah is an English-based creole language shaped by contact among speakers of many African languages
+        and English. For generations it was dismissed by outsiders as “bad English.” Today, researchers,
+        cultural institutions, and Gullah Geechee communities recognize it as a distinct creole language with
+        its own history, patterns, and cultural importance. Keeping the language visible matters because language
+        carries memory: family sayings, humor, worldview, rhythm, history, and ways of understanding community.
+      </p>
+      <div class="source-links">
+        <a class="source-link" href="https://www.nps.gov/fofr/learn/historyculture/gullah-geechee-culture.htm" target="_blank" rel="noopener">National Park Service: Gullah Geechee Culture</a>
+        <a class="source-link" href="https://gullahgeecheecorridor.org/" target="_blank" rel="noopener">Gullah Geechee Cultural Heritage Corridor</a>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <article class="about-card">
+        <h3>What shows up in the Binya brand</h3>
+        <ul>
+          <li>Gullah Creole slogans and everyday language</li>
+          <li>Coastal, marsh, river, path, and land imagery</li>
+          <li>Warm earth tones alongside deep greens, teals, golds, and indigo-inspired color</li>
+          <li>References to movement, community, care, and finding a way through</li>
+          <li>A commitment to keeping cultural references specific, researched, and respectful</li>
+        </ul>
+      </article>
+      <article class="about-card">
+        <h3>What Binya is trying to feel like</h3>
+        <p>
+          Not a courthouse portal. Not a hospital hallway. Not a confusing agency website.
+          Binya should feel like somebody competent answered the phone, explained what happens next,
+          and actually helped you get there.
+        </p>
+        <p>
+          The three divisions are different, but the promise is the same: clear support, fewer unnecessary barriers,
+          and respect for the person on the other side of the paperwork.
+        </p>
+      </article>
+    </div>
+
+    <div class="founder-grid">
+      <div class="portrait-placeholder">
+        Founder photo / portrait can go here later.
+      </div>
+      <article class="about-card">
+        <h3>Meet the founder</h3>
+        <p>
+          <strong style="color:var(--cream)">Daria Porter, AMFT, MA</strong> is the founder of Binya.
+          Their professional background is in mental health and community-centered support, and the larger
+          Binya model is being designed to bring practical services, resource navigation, and wellness together
+          without making people feel like they need a dictionary to ask for help.
+        </p>
+        <p>
+          Daria is building Binya as a long-term organization — not just a one-person side business.
+          The plan is to develop clear systems, train staff, create jobs, and eventually have teams carrying out
+          day-to-day process serving, navigation, operations, and support work.
+        </p>
+        <div class="founder-facts">
+          <div class="fact"><strong>Founder</strong><span>Daria Porter</span></div>
+          <div class="fact"><strong>Professional title</strong><span>Associate Marriage & Family Therapist (AMFT), MA</span></div>
+          <div class="fact"><strong>Approach</strong><span>Human, practical, culturally responsive, and easy to understand</span></div>
+          <div class="fact"><strong>Long-term vision</strong><span>A staffed, multi-service organization with distinct teams under the Binya umbrella</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel shell" id="process">
+    <div class="panel-hero">
+      <div class="feature">
+        <span class="eyebrow">Binya Process House</span>
+        <h2 class="division-name">Court support without the courthouse attitude.</h2>
+        <p class="slogan">De paper got fa move. We move um.</p>
+        <p class="descriptor">
+          Process serving, court runs, document delivery, copy retrieval, and practical field support
+          for attorneys, property managers, organizations, and everyday people who need paperwork handled correctly and on time.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#process-services">See services</a>
+          <a class="btn secondary" href="#contact">Request a serve</a>
+        </div>
+      </div>
+      <aside class="side-note">
+        <h3>For one job or a hundred.</h3>
+        <p>
+          Use Process House for one-time service or set up a recurring professional account.
+          The long-term plan includes trained servers, runners, intake support, dispatch, and account management.
+        </p>
+      </aside>
+    </div>
+
+    <div class="services" id="process-services">
+      <article class="service"><div class="num">01</div><h3>Process Serving</h3><p>Routine, priority, rush, and coordinated service attempts with clear updates and documentation.</p></article>
+      <article class="service"><div class="num">02</div><h3>Court Runs</h3><p>Document drop-off, retrieval, copy pickup, filing support where permitted, and courthouse logistics.</p></article>
+      <article class="service"><div class="num">03</div><h3>Document Delivery</h3><p>Professional delivery of time-sensitive paperwork, notices, records, and client materials.</p></article>
+      <article class="service"><div class="num">04</div><h3>Copy + Record Retrieval</h3><p>Certified-copy pickup and administrative retrieval support where available and authorized.</p></article>
+      <article class="service"><div class="num">05</div><h3>Property Manager Accounts</h3><p>Recurring service coordination, status reporting, invoice consolidation, and higher-volume workflows.</p></article>
+      <article class="service"><div class="num">06</div><h3>Professional Accounts</h3><p>Streamlined intake and billing for law firms, organizations, agencies, and repeat clients.</p></article>
+    </div>
+
+    <div class="clients">
+      <div><h2>Who Process House can help</h2></div>
+      <div class="chips">
+        <span class="chip">Individuals</span><span class="chip">Law firms</span><span class="chip">Solo attorneys</span>
+        <span class="chip">Property managers</span><span class="chip">Housing providers</span><span class="chip">Nonprofits</span>
+        <span class="chip">Community organizations</span><span class="chip">Government contractors</span>
+        <span class="chip">Investigators</span><span class="chip">Other process servers</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel shell" id="resource">
+    <div class="panel-hero">
+      <div class="feature">
+        <span class="eyebrow">Binya Resource Collective</span>
+        <h2 class="division-name">Help finding your way through complicated systems.</h2>
+        <p class="slogan">You ain got fa do um lone.</p>
+        <p class="descriptor">
+          Nonclinical case management, resource navigation, benefits support, reentry support,
+          disability and community systems navigation, referral coordination, appointment support,
+          and practical help organizing what comes next.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#resource-services">Explore support</a>
+          <a class="btn secondary" href="#contact">Start an intake</a>
+        </div>
+      </div>
+      <aside class="side-note">
+        <h3>Practical support, not another maze.</h3>
+        <p>
+          Resource Collective is being built to grow into a team of case navigators, resource coordinators,
+          benefits support staff, referral specialists, and community-facing team members.
+        </p>
+        <p>Services are nonclinical and do not substitute for legal representation, psychotherapy, diagnosis, or medical treatment.</p>
+      </aside>
+    </div>
+
+    <div class="services" id="resource-services">
+      <article class="service"><div class="num">01</div><h3>Resource Navigation</h3><p>Finding appropriate community, housing, food, transportation, disability, and support resources.</p></article>
+      <article class="service"><div class="num">02</div><h3>Benefits Support</h3><p>Application organization, document gathering, reminders, and practical help navigating benefit systems.</p></article>
+      <article class="service"><div class="num">03</div><h3>Reentry Support</h3><p>Resource coordination for people returning from incarceration or navigating justice-system transitions.</p></article>
+      <article class="service"><div class="num">04</div><h3>Disability Navigation</h3><p>Support organizing accommodations, referrals, appointments, community supports, and paperwork.</p></article>
+      <article class="service"><div class="num">05</div><h3>Referral Coordination</h3><p>Connecting clients with providers, programs, advocates, and community organizations that fit their needs.</p></article>
+      <article class="service"><div class="num">06</div><h3>Document Organization</h3><p>Helping clients gather, sort, track, and prepare nonlegal paperwork for appointments and applications.</p></article>
+    </div>
+  </section>
+
+  <section class="panel shell" id="wellness">
+    <div class="panel-hero">
+      <div class="feature">
+        <span class="eyebrow">Binya Wellness</span>
+        <h2 class="division-name">Care that makes room for the whole person.</h2>
+        <p class="slogan">Tek care ya body. Tek care ya spirit.</p>
+        <p class="descriptor">
+          Binya Wellness is the clinical and wellness home of the Binya family — built around culturally responsive,
+          trauma-informed, affirming care and future wellness programming. Services are offered only where properly
+          licensed, supervised, credentialed, and legally permitted.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#wellness-services">See the vision</a>
+          <a class="btn secondary" href="#contact">Contact Binya</a>
+        </div>
+      </div>
+      <aside class="side-note">
+        <h3>The wellness side of the house.</h3>
+        <p>
+          Binya Wellness is the broader clinical, educational, and wellness umbrella.
+          Process House and Resource Collective stay clearly separated so people always know what kind of service they are receiving.
+        </p>
+      </aside>
+    </div>
+
+    <div class="services" id="wellness-services">
+      <article class="service"><div class="num">01</div><h3>Clinical Care</h3><p>Therapy and clinical services only within applicable licensure, supervision, and professional requirements.</p></article>
+      <article class="service"><div class="num">02</div><h3>Education + Workshops</h3><p>Future culturally grounded education, skills groups, trainings, and community learning.</p></article>
+      <article class="service"><div class="num">03</div><h3>Evaluations</h3><p>Future evaluation services offered only when properly licensed, qualified, and within scope.</p></article>
+      <article class="service"><div class="num">04</div><h3>Nature-Based Wellness</h3><p>Future ecotherapy, retreat, and land-based programming where legally and professionally appropriate.</p></article>
+      <article class="service"><div class="num">05</div><h3>Community Wellness</h3><p>Programs designed around culturally responsive, affirming, accessible wellness support.</p></article>
+      <article class="service"><div class="num">06</div><h3>Professional Education</h3><p>Future trainings, CE offerings, consultation, and educational materials as qualifications allow.</p></article>
+    </div>
+  </section>
+
+  <section class="shell" id="contact" style="padding:0 0 78px">
+    <div class="feature" style="--accent:var(--gold)">
+      <span class="eyebrow">Start here</span>
+      <h2 class="section-title" style="margin:.2em 0">What kind of help do you need?</h2>
+      <p class="descriptor">
+        Choose the part of Binya that fits what you need. This section can later hold separate intake forms,
+        payment links, and scheduling tools for each division.
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="#process" onclick="showPanel('process')">Process House</a>
+        <a class="btn secondary" href="#resource" onclick="showPanel('resource')">Resource Collective</a>
+        <a class="btn secondary" href="#wellness" onclick="showPanel('wellness')">Wellness</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel shell" id="portal">
+    <div class="panel-hero">
+      <div class="feature">
+        <span class="eyebrow">The North Star</span>
+        <h2 class="division-name">Your way through Binya, all in one protected place.</h2>
+        <p class="slogan">Guidance, appointments, documents, and support—without losing the thread.</p>
+        <p class="descriptor">The North Star is Binya’s secure client space for document exchange, case tasks, appointments, secure messages, and service updates across the Binya family. Sensitive information should be shared here rather than ordinary email whenever possible.</p>
+        <div class="scope-badges"><span class="scope-badge">Process House</span><span class="scope-badge">Resource Collective</span><span class="scope-badge">Wellness</span><span class="scope-badge">Future VA Representation</span></div>
+      </div>
+      <aside class="side-note">
+        <h3>Privacy by design.</h3>
+        <p>The North Star production portal uses private storage, MFA, role-based access, division-level permissions, and audit-capable infrastructure.</p>
+        <p><span id="portal-live-state" class="live-state pending">Checking secure backend…</span></p>
+      </aside>
+    </div>
+
+    <div id="portal-notice" class="portal-notice" hidden></div>
+
+    <div id="portal-login-card" class="portal-grid">
+      <div class="portal-card">
+        <span class="eyebrow">Client sign in</span><h3>Enter The North Star</h3>
+        <p>Use the private account Binya created for you. Public self-signup is intentionally disabled.</p>
+        <form id="portal-login-form" class="portal-form" onsubmit="return portalLogin(event)">
+          <div><label for="portal-email">Email</label><input id="portal-email" required type="email" autocomplete="username" placeholder="you@example.com"></div>
+          <div><label for="portal-password">Password</label><input id="portal-password" required type="password" autocomplete="current-password" placeholder="••••••••••••"></div>
+          <button id="portal-login-submit" class="btn primary" type="submit">Enter The North Star</button>
+          <button class="btn secondary" type="button" onclick="portalRequestReset()">Reset password securely</button>
+        </form>
+        <p class="portal-footnote">Never send your password, MFA code, EBT PIN, bank password, or government-login password to Binya staff.</p>
+      </div>
+      <div class="portal-status">
+        <span class="eyebrow">Protected portal</span><h3>What lives here</h3>
+        <div class="portal-actions">
+          <div class="portal-tile"><h4>Documents</h4><p>Private uploads and downloads.</p></div>
+          <div class="portal-tile"><h4>Requests + Tasks</h4><p>See what is moving and what needs you.</p></div>
+          <div class="portal-tile"><h4>Secure Messages</h4><p>Keep sensitive conversations out of regular email.</p></div>
+          <div class="portal-tile"><h4>Scheduler</h4><p>Book, reschedule, cancel, and keep appointments in one place.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="password-setup-card" class="portal-card hidden" style="margin-top:1.25rem;max-width:620px">
+      <span class="eyebrow">Secure account setup</span><h3 id="password-setup-title">Set your North Star password</h3>
+      <p id="password-setup-copy">Choose a strong password to finish securing your account.</p>
+      <div class="portal-form">
+        <div><label for="new-portal-password">New password</label><input id="new-portal-password" type="password" autocomplete="new-password" minlength="12" placeholder="At least 12 characters"></div>
+        <div><label for="confirm-portal-password">Confirm password</label><input id="confirm-portal-password" type="password" autocomplete="new-password" minlength="12"></div>
+        <button class="btn primary" type="button" onclick="updatePortalPassword()">Save secure password</button>
+      </div>
+    </div>
+
+    <div id="portal-dashboard" class="portal-dashboard hidden">
+      <div class="dash-header">
+        <div><span class="eyebrow">Signed in</span><h2>Welcome, <span id="portal-user-name">client</span>.</h2><p><span id="portal-user-role"></span> • <span id="mfa-status" class="mfa-chip warn">Checking MFA…</span></p></div>
+        <button class="btn secondary" type="button" onclick="portalLogout()">Sign out</button>
+      </div>
+
+      <div id="mfa-enroll-box" class="portal-card mfa-box hidden">
+        <h3>Protect this account with MFA</h3>
+        <p>The North Star requires multi-factor authentication before sensitive records can be opened, uploaded, or messaged.</p>
+        <button id="mfa-enroll-button" class="btn primary" type="button" onclick="enrollMfa()">Set up authenticator app</button>
+        <div id="mfa-existing-step" class="hidden mfa-enroll-step">
+          <label for="mfa-existing-code">Enter the 6-digit code from your authenticator app</label>
+          <input id="mfa-existing-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
+          <button class="btn primary" type="button" onclick="verifyExistingMfa()">Verify and open The North Star</button>
+        </div>
+        <div id="mfa-enroll-step" class="hidden mfa-enroll-step">
+          <img id="mfa-qr" alt="MFA QR code" />
+          <p>Authenticator secret: <code id="mfa-secret"></code></p>
+          <input id="mfa-factor-id" type="hidden" />
+          <label for="mfa-code">Enter the 6-digit code</label>
+          <input id="mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
+          <button class="btn primary" type="button" onclick="verifyMfa()">Verify MFA</button>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="portal-card dash-panel">
+          <div class="dash-title"><div><span class="eyebrow">Documents</span><h3>Secure files</h3></div></div>
+          <div id="client-document-upload" class="upload-box">
+            <label for="document-division">Service area</label><select id="document-division"><option value="">Loading available areas…</option></select>
+            <label for="document-file">Choose document</label><input id="document-file" type="file" />
+            <button class="btn primary" type="button" onclick="uploadDocument()">Upload securely</button>
+          </div>
+          <div id="documents-list" class="dash-list"><p class="empty">Loading…</p></div>
+        </section>
+
+        <section class="portal-card dash-panel">
+          <span class="eyebrow">Requests</span><h3>Tasks</h3>
+          <div id="tasks-list" class="dash-list"><p class="empty">Loading…</p></div>
+        </section>
+
+        <section class="portal-card dash-panel">
+          <span class="eyebrow">Secure messages</span><h3>Message Binya</h3>
+          <div id="client-message-compose" class="message-compose">
+            <label for="message-division">Service area</label><select id="message-division"><option value="">Loading available areas…</option></select>
+            <label for="message-body">Message</label><textarea id="message-body" rows="4" maxlength="10000" placeholder="Write a secure message…"></textarea>
+            <button class="btn primary" type="button" onclick="sendMessage()">Send secure message</button>
+          </div>
+          <div id="messages-list" class="dash-list"><p class="empty">Loading…</p></div>
+        </section>
+
+        <section class="portal-card dash-panel">
+          <span class="eyebrow">Scheduler</span><h3>Book time with Binya</h3>
+          <div class="scheduler-wrap">
+            <div id="client-scheduler-booking">
+            <div class="scheduler-controls">
+              <div><label for="scheduler-service">Service</label><select id="scheduler-service" onchange="loadAvailableSlots()"><option value="">Loading services…</option></select></div>
+              <div><label for="scheduler-window">Show</label><select id="scheduler-window" onchange="loadAvailableSlots()"><option value="14">Next 2 weeks</option><option value="30">Next 30 days</option><option value="60">Next 60 days</option></select></div>
+            </div>
+            <div id="scheduler-slots" class="slot-grid"><p class="empty">Choose a service to see times.</p></div>
+            <div id="scheduler-summary" class="scheduler-summary hidden"></div>
+            <div style="display:flex;gap:.65rem;flex-wrap:wrap"><button id="scheduler-book-btn" class="btn primary hidden" type="button" onclick="bookSelectedSlot()">Confirm appointment</button><button id="scheduler-reschedule-cancel" class="btn secondary hidden" type="button" onclick="cancelRescheduleMode()">Keep original appointment</button></div>
+            <p class="calendar-note">Times are shown in your device’s local timezone. Appointment details remain inside The North Star; calendar downloads use minimal information.</p>
+            </div>
+          </div>
+          <div class="scheduler-divider"></div>
+          <span class="eyebrow">Your appointments</span><h3>Upcoming</h3>
+          <div id="appointments-list" class="dash-list"><p class="empty">Loading…</p></div>
+
+          <div id="team-scheduler" class="team-scheduler role-only">
+            <div class="scheduler-divider"></div>
+            <span class="eyebrow">Team availability</span><h3>Open a time</h3>
+            <div class="team-scheduler-row">
+              <div><label for="team-service">Service</label><select id="team-service"></select></div>
+              <div><label for="team-slot-start">Start</label><input id="team-slot-start" type="datetime-local"></div>
+            </div>
+            <button class="btn secondary" type="button" onclick="createAvailabilitySlot()">Add available time</button>
+            <div id="team-slots-list" class="dash-list"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="clients" style="margin-top:1.25rem"><div><h2>One account, separated records.</h2><p>Permissions stay separated by service lane. Being a Binya client does not automatically make every Binya worker able to see every record.</p></div><div class="chips"><span class="chip">MFA</span><span class="chip">Private storage</span><span class="chip">Row-level security</span><span class="chip">Division permissions</span><span class="chip">Audit-capable records</span><span class="chip">Automatic session controls</span></div></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="shell footer-grid">
+    <div>
+      <strong style="font-family:Georgia,serif;color:var(--cream)">Binya</strong>
+      <div class="tiny">Binya Process House • Binya Resource Collective • Binya Wellness</div>
+    </div>
+    <div class="tiny">
+      Process House does not provide legal representation or legal advice. Resource Collective provides nonclinical support.
+      Wellness services are offered only within applicable licensure, supervision, and scope requirements.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
+<script>
+// The North Star runtime configuration.
+// Safe to serve publicly: the Supabase publishable key is a browser client key.
+// NEVER put the service_role/secret key in this file or any browser code.
+window.BINYA_CONFIG = {
+  supabaseUrl: 'https://geevglgckmjexvnjnodl.supabase.co',
+  supabasePublishableKey: 'sb_publishable_7HWq3CFDgkw6UWZZHqZHXA_PFyD2F96',
+  // Legacy fallback only. New projects should use supabasePublishableKey.
+  supabaseAnonKey: '',
+  portalName: 'The North Star',
+  requireMfaForSensitiveActions: true,
+  allowSensitiveUploads: false // Turn true only AFTER BAA + HIPAA project controls are active and verified.
+};
+
+</script>
+<script>
+/* The North Star client portal - browser application.
+   Requires hosted Supabase + schema.sql. No service-role secret belongs here. */
+
+const cfg = window.BINYA_CONFIG || {};
+const browserKey = cfg.supabasePublishableKey || cfg.supabaseAnonKey || '';
+const configured = Boolean(cfg.supabaseUrl && browserKey);
+let sb = null;
+let currentUser = null;
+let currentProfile = null;
+let passwordUpdateMode = false;
+
+const $ = (id) => document.getElementById(id);
+const esc = (s='') => String(s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+
+function notice(message, kind='info') {
+  const el = $('portal-notice');
+  if (!el) return;
+  el.textContent = message;
+  el.className = `portal-notice ${kind}`;
+  el.hidden = false;
+}
+
+function clearNotice(){ const el=$('portal-notice'); if(el) el.hidden=true; }
+
+async function initPortal(){
+  if (!configured || !window.supabase) {
+    disableLogin();
+    return;
+  }
+  sb = window.supabase.createClient(cfg.supabaseUrl, browserKey, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+
+  await verifyBackendConnection();
+
+  sb.auth.onAuthStateChange((event, session) => {
+    // Defer Supabase calls out of the auth callback to avoid auth-lock reentrancy.
+    setTimeout(() => handleAuthEvent(event, session), 0);
+  });
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) await onSignedIn(session.user);
+  else showLoggedOut();
+}
+
+async function handleAuthEvent(event, session){
+  if(event==='PASSWORD_RECOVERY') passwordUpdateMode=true;
+  if(session?.user){ await onSignedIn(session.user); }
+  else showLoggedOut();
+}
+
+function shouldRequirePasswordSetup(user){
+  return passwordUpdateMode || user?.user_metadata?.needs_password_setup === true;
+}
+
+function showPasswordSetup(recovery=false){
+  $('portal-login-card')?.classList.add('hidden');
+  $('portal-dashboard')?.classList.add('hidden');
+  $('password-setup-card')?.classList.add('hidden');
+  $('password-setup-card')?.classList.remove('hidden');
+  if(recovery){
+    $('password-setup-title').textContent='Choose a new North Star password';
+    $('password-setup-copy').textContent='Your reset link is verified. Set the new password below.';
+  }
+}
+
+async function updatePortalPassword(){
+  if(!sb || !currentUser) return;
+  const pw=$('new-portal-password')?.value || '';
+  const confirmPw=$('confirm-portal-password')?.value || '';
+  if(pw.length<12){ notice('Use a password with at least 12 characters.','warn'); return; }
+  if(pw!==confirmPw){ notice('The passwords do not match.','warn'); return; }
+  const existing={...(currentUser.user_metadata||{}),needs_password_setup:false};
+  const {data,error}=await sb.auth.updateUser({password:pw,data:existing});
+  if(error){ notice('Your password could not be updated. Try a stronger password or contact Binya.','error'); return; }
+  passwordUpdateMode=false;
+  $('new-portal-password').value=''; $('confirm-portal-password').value='';
+  history.replaceState(null,'',`${location.pathname}${location.search}#portal`);
+  notice('Password saved. Finish MFA to unlock The North Star.','success');
+  await onSignedIn(data.user || currentUser);
+}
+
+async function verifyBackendConnection(){
+  if(!sb) return false;
+  try{
+    const { data, error } = await sb.rpc('portal_health');
+    const badge=$('portal-live-state');
+    if(error || data!=='ok'){
+      if(badge){ badge.textContent='Secure backend unavailable'; badge.className='live-state pending'; }
+      notice('The North Star could not verify its secure backend. No credentials or documents were transmitted.','error');
+      return false;
+    }
+    if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
+    return true;
+  }catch(_err){
+    const badge=$('portal-live-state');
+    if(badge){ badge.textContent='Secure backend unavailable'; badge.className='live-state pending'; }
+    notice('The North Star could not reach its secure backend. No credentials or documents were transmitted.','error');
+    return false;
+  }
+}
+
+function disableLogin(){
+  const form=$('portal-login-form');
+  if(form){
+    form.querySelectorAll('input,button').forEach(x=>x.disabled=true);
+    const btn=$('portal-login-submit');
+    if(btn) btn.textContent='Secure sign-in is being connected';
+  }
+  clearNotice();
+  const badge=$('portal-live-state');
+  if(badge){ badge.textContent='Secure client access is being connected'; badge.className='live-state pending'; }
+}
+
+function showLoggedOut(){
+  currentUser=null; currentProfile=null; passwordUpdateMode=false;
+  $('password-setup-card')?.classList.add('hidden');
+  $('portal-login-card')?.classList.remove('hidden');
+  $('portal-dashboard')?.classList.add('hidden');
+  const badge=$('portal-live-state');
+  if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
+}
+
+async function login(event){
+  event.preventDefault(); clearNotice();
+  if(!sb) return false;
+  const email=$('portal-email').value.trim();
+  const password=$('portal-password').value;
+  const btn=$('portal-login-submit');
+  btn.disabled=true; btn.textContent='Signing in…';
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  btn.disabled=false; btn.textContent='Enter The North Star';
+  if(error) notice('Sign-in failed. Check your email/password or use the secure reset flow.','error');
+  $('portal-password').value='';
+  return false;
+}
+
+async function logout(){ if(sb) await sb.auth.signOut(); }
+
+async function requestReset(){
+  if(!sb) return;
+  const email=$('portal-email').value.trim();
+  if(!email){ notice('Enter your email first, then choose password reset.','warn'); return; }
+  const redirectTo = `${location.origin}${location.pathname}`;
+  const { error } = await sb.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error) notice('Password reset could not be started. Contact Binya if this continues.','error');
+  else notice('If that email has a North Star account, a secure reset link has been sent.','success');
+}
+
+async function onSignedIn(user){
+  currentUser=user;
+  const { data, error } = await sb.from('profiles').select('id,display_name,role').eq('id',user.id).single();
+  if(error){ notice('Your account is signed in, but the portal profile is not ready. Contact Binya.','error'); return; }
+  currentProfile=data;
+  if(shouldRequirePasswordSetup(user)){
+    showPasswordSetup(passwordUpdateMode);
+    return;
+  }
+  $('password-setup-card')?.classList.add('hidden');
+  $('portal-login-card')?.classList.add('hidden');
+  $('portal-dashboard')?.classList.remove('hidden');
+  $('portal-user-name').textContent = data.display_name || user.email;
+  $('portal-user-role').textContent = data.role === 'client' ? 'Client' : 'Binya team';
+  await refreshMfaState();
+  const team = ['staff','admin'].includes(data.role);
+  $('team-scheduler')?.classList.toggle('visible', team);
+  $('client-scheduler-booking')?.classList.toggle('hidden', team);
+  $('client-document-upload')?.classList.toggle('hidden', team);
+  $('client-message-compose')?.classList.toggle('hidden', team);
+  await Promise.all([loadPortalDivisions(), loadDocuments(), loadTasks(), loadMessages(), loadAppointments(), loadSchedulerServices()]);
+  if(team) await loadTeamSlots();
+}
+
+async function refreshMfaState(){
+  const { data } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  const aal = data?.currentLevel || 'aal1';
+  const next = data?.nextLevel || aal;
+  const status=$('mfa-status');
+  const box=$('mfa-enroll-box');
+  const enrollBtn=$('mfa-enroll-button');
+  const existing=$('mfa-existing-step');
+  if(aal==='aal2'){
+    status.textContent='MFA active'; status.className='mfa-chip good';
+    box.classList.add('hidden'); existing?.classList.add('hidden');
+  } else {
+    box.classList.remove('hidden');
+    if(next==='aal2'){
+      status.textContent='MFA verification needed'; status.className='mfa-chip warn';
+      enrollBtn?.classList.add('hidden'); existing?.classList.remove('hidden');
+    } else {
+      status.textContent='MFA not enrolled'; status.className='mfa-chip warn';
+      enrollBtn?.classList.remove('hidden'); existing?.classList.add('hidden');
+    }
+  }
+}
+
+async function enrollMfa(){
+  const { data, error } = await sb.auth.mfa.enroll({factorType:'totp',friendlyName:'The North Star'});
+  if(error){ notice('MFA enrollment could not be started.','error'); return; }
+  $('mfa-qr').src = data.totp.qr_code;
+  $('mfa-secret').textContent = data.totp.secret;
+  $('mfa-factor-id').value = data.id;
+  $('mfa-enroll-step').classList.remove('hidden');
+}
+
+async function verifyMfa(){
+  const factorId=$('mfa-factor-id').value;
+  const code=$('mfa-code').value.trim();
+  if(!factorId || !code) return;
+  const challenge=await sb.auth.mfa.challenge({factorId});
+  if(challenge.error){ notice('Could not start MFA verification.','error'); return; }
+  const verify=await sb.auth.mfa.verify({factorId,challengeId:challenge.data.id,code});
+  if(verify.error) notice('That verification code was not accepted.','error');
+  else { notice('MFA is active on your account.','success'); $('mfa-code').value=''; await refreshMfaState(); await Promise.all([loadDocuments(),loadTasks(),loadMessages(),loadAppointments(),loadSchedulerServices()]); if(['staff','admin'].includes(currentProfile?.role)) await loadTeamSlots(); }
+}
+
+async function verifyExistingMfa(){
+  const code=$('mfa-existing-code')?.value.trim();
+  if(!code) return;
+  const {data:factors,error:listErr}=await sb.auth.mfa.listFactors();
+  if(listErr){ notice('MFA verification could not be started.','error'); return; }
+  const factor=factors?.totp?.find(f=>f.status==='verified') || factors?.totp?.[0];
+  if(!factor){ notice('No verified authenticator is attached to this account.','error'); return; }
+  const challenge=await sb.auth.mfa.challenge({factorId:factor.id});
+  if(challenge.error){ notice('MFA verification could not be started.','error'); return; }
+  const verify=await sb.auth.mfa.verify({factorId:factor.id,challengeId:challenge.data.id,code});
+  if(verify.error){ notice('That verification code was not accepted.','error'); return; }
+  $('mfa-existing-code').value=''; notice('The North Star is unlocked.','success');
+  await refreshMfaState();
+  await Promise.all([loadDocuments(),loadTasks(),loadMessages(),loadAppointments(),loadSchedulerServices()]);
+  if(['staff','admin'].includes(currentProfile?.role)) await loadTeamSlots();
+}
+
+async function requireAal2(){
+  const {data}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  if(data?.currentLevel==='aal2') return true;
+  notice('For sensitive actions, finish MFA verification first.','warn');
+  return false;
+}
+
+async function loadPortalDivisions(){
+  const selects=[$('document-division'),$('message-division')].filter(Boolean);
+  if(!selects.length || !sb) return;
+  const {data,error}=await sb.from('division_settings').select('division').eq('client_portal_open',true).order('division');
+  const labels={process:'Process House',resource:'Resource Collective',wellness:'Wellness',va:'VA Representation'};
+  const options=error ? '<option value="">Unavailable</option>' : (data||[]).map(x=>`<option value="${esc(x.division)}">${esc(labels[x.division]||x.division)}</option>`).join('');
+  for(const sel of selects) sel.innerHTML=options || '<option value="">No service areas are open</option>';
+}
+
+async function uploadDocument(){
+  if(!cfg.allowSensitiveUploads){ notice('Sensitive uploads are locked until Binya confirms the BAA and HIPAA-project controls are active.','warn'); return; }
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const file=$('document-file').files[0];
+  const division=$('document-division').value;
+  if(!division){ notice('Choose an available service area.','warn'); return; }
+  if(!file){ notice('Choose a file to upload.','warn'); return; }
+  if(file.size > 25*1024*1024){ notice('That file is over the 25 MB portal limit.','warn'); return; }
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const objectPath=`${currentUser.id}/${division}/${crypto.randomUUID()}_${safeName}`;
+  const up=await sb.storage.from('client-documents').upload(objectPath,file,{upsert:false,contentType:file.type || 'application/octet-stream'});
+  if(up.error){ notice('Upload failed. Nothing was saved.','error'); return; }
+  const row=await sb.from('documents').insert({owner_id:currentUser.id,division,storage_path:objectPath,original_name:file.name,mime_type:file.type,size_bytes:file.size});
+  if(row.error){ await sb.storage.from('client-documents').remove([objectPath]); notice('Upload could not be registered and was rolled back.','error'); return; }
+  $('document-file').value=''; notice('Document uploaded securely.','success'); await loadDocuments();
+}
+
+async function clientNamesFor(ids){
+  if(currentProfile?.role==='client') return {};
+  const unique=[...new Set((ids||[]).filter(Boolean))];
+  if(!unique.length) return {};
+  const {data}=await sb.from('profiles').select('id,display_name').in('id',unique);
+  return Object.fromEntries((data||[]).map(p=>[p.id,p.display_name||'Client']));
+}
+
+async function loadDocuments(){
+  const box=$('documents-list'); if(!box) return;
+  const {data,error}=await sb.from('documents').select('id,owner_id,division,original_name,size_bytes,created_at,storage_path').order('created_at',{ascending:false}).limit(50);
+  if(error){ box.innerHTML='<p>Documents are unavailable.</p>'; return; }
+  const names=await clientNamesFor((data||[]).map(d=>d.owner_id));
+  box.innerHTML = data?.length ? data.map(d=>{
+    const who=currentProfile?.role==='client' ? '' : `${esc(names[d.owner_id]||'Client')} · `;
+    return `<div class="dash-row"><div><strong>${who}${esc(d.original_name)}</strong><small>${esc(d.division)} • ${new Date(d.created_at).toLocaleDateString()}</small></div><button type="button" onclick="downloadDocument('${d.id}')">Download</button></div>`;
+  }).join('') : '<p class="empty">No documents yet.</p>';
+}
+
+async function downloadDocument(id){
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const {data:doc,error}=await sb.from('documents').select('storage_path,original_name').eq('id',id).single();
+  if(error) return notice('Document not found.','error');
+  const {data,error:dlErr}=await sb.storage.from('client-documents').download(doc.storage_path);
+  if(dlErr) return notice('Document download failed.','error');
+  const url=URL.createObjectURL(data); const a=document.createElement('a'); a.href=url; a.download=doc.original_name; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+async function loadTasks(){
+  const box=$('tasks-list');
+  const {data,error}=await sb.from('tasks').select('id,client_id,title,status,due_at,division').order('created_at',{ascending:false}).limit(50);
+  const names=await clientNamesFor((data||[]).map(t=>t.client_id));
+  box.innerHTML = error ? '<p>Tasks are unavailable.</p>' : (data?.length ? data.map(t=>{
+    const who=currentProfile?.role==='client' ? '' : `${esc(names[t.client_id]||'Client')} · `;
+    return `<div class="dash-row"><div><strong>${who}${esc(t.title)}</strong><small>${esc(t.division)}${t.due_at?' • due '+new Date(t.due_at).toLocaleDateString():''}</small></div><span class="status-pill">${esc(t.status)}</span></div>`;
+  }).join('') : '<p class="empty">No open tasks.</p>');
+}
+
+async function loadMessages(){
+  const box=$('messages-list');
+  const {data,error}=await sb.from('messages').select('id,client_id,body,division,sender_id,created_at').order('created_at',{ascending:false}).limit(30);
+  const names=await clientNamesFor((data||[]).map(m=>m.client_id));
+  box.innerHTML = error ? '<p>Messages are unavailable.</p>' : (data?.length ? data.map(m=>{
+    let sender='Binya';
+    if(m.sender_id===currentUser.id) sender='You';
+    else if(currentProfile?.role!=='client' && m.sender_id===m.client_id) sender=names[m.client_id]||'Client';
+    else if(currentProfile?.role!=='client') sender='Binya team';
+    return `<div class="message"><strong>${esc(sender)}</strong><small>${esc(m.division)} • ${new Date(m.created_at).toLocaleString()}</small><p>${esc(m.body)}</p></div>`;
+  }).join('') : '<p class="empty">No secure messages yet.</p>');
+}
+
+async function sendMessage(){
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const body=$('message-body').value.trim(); const division=$('message-division').value;
+  if(!division){ notice('Choose an available service area.','warn'); return; }
+  if(!body) return;
+  const {error}=await sb.from('messages').insert({client_id:currentUser.id,sender_id:currentUser.id,division,body});
+  if(error) notice('Message could not be sent.','error'); else { $('message-body').value=''; notice('Secure message sent.','success'); await loadMessages(); }
+}
+
+async function loadAppointments(){
+  const box=$('appointments-list');
+  let q=sb.from('appointments').select('id,client_id,staff_id,division,starts_at,ends_at,status,label,service_type_id').gte('starts_at',new Date().toISOString()).neq('status','cancelled').order('starts_at').limit(30);
+  if(['staff','admin'].includes(currentProfile?.role) && currentProfile?.role!=='admin') q=q.eq('staff_id',currentUser.id);
+  const {data,error}=await q;
+  window.__binyaAppointments=data||[];
+  let clientNames={};
+  if(!error && ['staff','admin'].includes(currentProfile?.role) && data?.length){
+    const ids=[...new Set(data.map(a=>a.client_id).filter(Boolean))];
+    if(ids.length){
+      const {data:profiles}=await sb.from('profiles').select('id,display_name').in('id',ids);
+      clientNames=Object.fromEntries((profiles||[]).map(p=>[p.id,p.display_name||'Client']));
+    }
+  }
+  box.innerHTML = error ? '<p>Appointments are unavailable.</p>' : (data?.length ? data.map(a=>{
+    const who=currentProfile?.role==='client' ? '' : `${esc(clientNames[a.client_id]||'Client')} · `;
+    return `<div class="dash-row"><div><strong>${who}${esc(a.label || 'Appointment')}</strong><small>${esc(a.division)} • ${new Date(a.starts_at).toLocaleString()}</small><div class="appt-actions">${currentProfile?.role==='client'?`<button type="button" onclick="startReschedule('${a.id}','${a.service_type_id||''}')">Reschedule</button><button class="danger" type="button" onclick="cancelAppointment('${a.id}')">Cancel</button>`:''}<button type="button" onclick="downloadAppointmentIcs('${a.id}')">Add to calendar</button></div></div><span class="status-pill">${esc(a.status)}</span></div>`;
+  }).join('') : '<p class="empty">No upcoming appointments.</p>');
+}
+
+window.portalLogin=login; window.portalLogout=logout; window.portalRequestReset=requestReset;
+window.enrollMfa=enrollMfa; window.verifyMfa=verifyMfa; window.verifyExistingMfa=verifyExistingMfa; window.updatePortalPassword=updatePortalPassword; window.uploadDocument=uploadDocument;
+window.downloadDocument=downloadDocument; window.sendMessage=sendMessage;
+window.loadAvailableSlots=loadAvailableSlots; window.selectSchedulerSlot=selectSchedulerSlot; window.bookSelectedSlot=bookSelectedSlot;
+window.cancelAppointment=cancelAppointment; window.startReschedule=startReschedule; window.rescheduleSelectedSlot=rescheduleSelectedSlot; window.cancelRescheduleMode=cancelRescheduleMode;
+window.downloadAppointmentIcs=downloadAppointmentIcs; window.createAvailabilitySlot=createAvailabilitySlot; window.closeAvailabilitySlot=closeAvailabilitySlot;
+document.addEventListener('DOMContentLoaded',initPortal);
+
+/* ---------------- The North Star scheduler ---------------- */
+let selectedSlotId = null;
+let selectedSlotData = null;
+let schedulerServices = [];
+
+function schedulerServiceById(id){ return schedulerServices.find(s=>s.id===id); }
+
+async function loadSchedulerServices(){
+  const clientSelect=$('scheduler-service');
+  const teamSelect=$('team-service');
+  if(!clientSelect) return;
+  const {data,error}=await sb.from('service_types')
+    .select('id,division,name,description,duration_minutes,active')
+    .eq('active',true).order('division').order('name');
+  if(error){ clientSelect.innerHTML='<option value="">Scheduler unavailable</option>'; return; }
+  schedulerServices=data||[];
+  const options=['<option value="">Choose a service…</option>'].concat(schedulerServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+  clientSelect.innerHTML=options;
+  if(teamSelect){
+    let teamServices=schedulerServices;
+    if(currentProfile?.role==='staff'){
+      const {data:perms}=await sb.from('staff_service_permissions').select('service_type_id').eq('staff_id',currentUser.id).eq('active',true);
+      const allowed=new Set((perms||[]).map(x=>x.service_type_id));
+      teamServices=schedulerServices.filter(s=>allowed.has(s.id));
+    }
+    teamSelect.innerHTML=['<option value="">Choose a service…</option>'].concat(teamServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+  }
+  if(currentProfile?.role==='client') await loadAvailableSlots();
+}
+
+async function loadAvailableSlots(){
+  const box=$('scheduler-slots'); if(!box || !sb) return;
+  selectedSlotId=null; selectedSlotData=null;
+  $('scheduler-summary')?.classList.add('hidden'); $('scheduler-book-btn')?.classList.add('hidden');
+  const serviceId=$('scheduler-service')?.value;
+  if(!serviceId){ box.innerHTML='<p class="empty">Choose a service to see times.</p>'; return; }
+  const days=Number($('scheduler-window')?.value||14);
+  const end=new Date(Date.now()+days*86400000);
+  const {data,error}=await sb.rpc('list_available_slots',{p_service_type_id:serviceId,p_until:end.toISOString()});
+  if(error){ box.innerHTML='<p class="empty">Available times could not be loaded.</p>'; return; }
+  if(!data?.length){ box.innerHTML='<p class="empty">No open times in this window yet. Check back or message Binya.</p>'; return; }
+  box.innerHTML=data.map(slot=>{
+    const dt=new Date(slot.starts_at);
+    return `<button class="slot-btn" type="button" data-slot="${slot.id}" onclick="selectSchedulerSlot('${slot.id}')"><strong>${esc(dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))}</strong><small>${esc(dt.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}))}</small></button>`;
+  }).join('');
+  window.__binyaSlots=data;
+}
+
+function selectSchedulerSlot(id){
+  const data=(window.__binyaSlots||[]).find(x=>x.id===id); if(!data) return;
+  selectedSlotId=id; selectedSlotData=data;
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.toggle('selected',b.dataset.slot===id));
+  const svc=schedulerServiceById(data.service_type_id);
+  const summary=$('scheduler-summary');
+  summary.innerHTML=`<strong>${esc(svc?.name||'Appointment')}</strong><br>${esc(new Date(data.starts_at).toLocaleString())}<br><small>${esc(svc?.division||data.division)} · ${svc?.duration_minutes||''} minutes</small>`;
+  summary.classList.remove('hidden'); $('scheduler-book-btn').classList.remove('hidden');
+}
+
+async function bookSelectedSlot(){
+  if(window.__rescheduleAppointment){ notice('Finish or cancel the current reschedule first.','warn'); return; }
+  if(!selectedSlotId) return;
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const btn=$('scheduler-book-btn'); btn.disabled=true; btn.textContent='Booking…';
+  const {data,error}=await sb.rpc('book_appointment',{p_slot_id:selectedSlotId});
+  btn.disabled=false; btn.textContent='Confirm appointment';
+  if(error){ notice(error.message?.includes('already booked')?'That time was just taken. Choose another slot.':'Appointment could not be booked.','error'); await loadAvailableSlots(); return; }
+  notice('Appointment confirmed.','success');
+  selectedSlotId=null; selectedSlotData=null; $('scheduler-summary').classList.add('hidden'); btn.classList.add('hidden');
+  await Promise.all([loadAvailableSlots(),loadAppointments()]);
+}
+
+async function cancelAppointment(id){
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  if(!confirm('Cancel this appointment?')) return;
+  const {error}=await sb.rpc('cancel_appointment',{p_appointment_id:id});
+  if(error) notice('Appointment could not be cancelled.','error');
+  else { notice('Appointment cancelled. The time is available again.','success'); await Promise.all([loadAppointments(),loadAvailableSlots()]); }
+}
+
+async function startReschedule(id,serviceId){
+  const sel=$('scheduler-service'); if(sel){ sel.value=serviceId; await loadAvailableSlots(); }
+  notice('Choose a new time above. Your current appointment stays reserved until the new time is confirmed.','info');
+  window.__rescheduleAppointment=id;
+  const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm new time'; btn.onclick=rescheduleSelectedSlot; }
+  $('scheduler-reschedule-cancel')?.classList.remove('hidden');
+  document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function cancelRescheduleMode(){
+  window.__rescheduleAppointment=null;
+  selectedSlotId=null; selectedSlotData=null;
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('selected'));
+  $('scheduler-summary')?.classList.add('hidden');
+  const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm appointment'; btn.onclick=bookSelectedSlot; btn.classList.add('hidden'); }
+  $('scheduler-reschedule-cancel')?.classList.add('hidden');
+  notice('Your original appointment is unchanged.','info');
+}
+
+async function rescheduleSelectedSlot(){
+  if(!selectedSlotId || !window.__rescheduleAppointment) return;
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const btn=$('scheduler-book-btn'); btn.disabled=true; btn.textContent='Rescheduling…';
+  const {error}=await sb.rpc('reschedule_appointment',{p_appointment_id:window.__rescheduleAppointment,p_new_slot_id:selectedSlotId});
+  btn.disabled=false; btn.textContent='Confirm appointment'; btn.onclick=bookSelectedSlot;
+  if(error){ notice('Appointment could not be rescheduled. Your original time is still reserved.','error'); return; }
+  window.__rescheduleAppointment=null; $('scheduler-reschedule-cancel')?.classList.add('hidden'); notice('Appointment moved to the new time.','success');
+  await Promise.all([loadAppointments(),loadAvailableSlots()]);
+}
+
+function downloadAppointmentIcs(id){
+  const a=(window.__binyaAppointments||[]).find(x=>x.id===id); if(!a) return;
+  const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Binya//The North Star//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:Binya appointment','DESCRIPTION:Open The North Star for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='binya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+async function createAvailabilitySlot(){
+  if(!['staff','admin'].includes(currentProfile?.role)) return;
+  if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
+  const serviceId=$('team-service')?.value; const local=$('team-slot-start')?.value;
+  if(!serviceId || !local){ notice('Choose a service and start time.','warn'); return; }
+  const start=new Date(local); if(Number.isNaN(start.getTime()) || start<=new Date()){ notice('Choose a future start time.','warn'); return; }
+  const {error}=await sb.rpc('create_availability_slot',{p_service_type_id:serviceId,p_starts_at:start.toISOString()});
+  if(error) notice('That availability could not be added.','error');
+  else { $('team-slot-start').value=''; notice('Available time added.','success'); await Promise.all([loadTeamSlots(),loadAvailableSlots()]); }
+}
+
+async function loadTeamSlots(){
+  const box=$('team-slots-list'); if(!box || !['staff','admin'].includes(currentProfile?.role)) return;
+  const {data,error}=await sb.from('availability_slots').select('id,starts_at,ends_at,active,service_types(name)').eq('staff_id',currentUser.id).gte('starts_at',new Date().toISOString()).order('starts_at').limit(40);
+  box.innerHTML=error?'<p class="empty">Availability unavailable.</p>':(data?.length?data.map(s=>`<div class="dash-row"><div><strong>${esc(s.service_types?.name||'Appointment')}</strong><small>${esc(new Date(s.starts_at).toLocaleString())}</small></div><button type="button" onclick="closeAvailabilitySlot('${s.id}')">Close</button></div>`).join(''):'<p class="empty">No future availability opened.</p>');
+}
+
+async function closeAvailabilitySlot(id){
+  if(!['staff','admin'].includes(currentProfile?.role)) return;
+  const {error}=await sb.rpc('close_availability_slot',{p_slot_id:id});
+  if(error) notice('That time could not be closed. It may already be booked.','error'); else { notice('Availability closed.','success'); await Promise.all([loadTeamSlots(),loadAvailableSlots()]); }
+}
+
+</script>
+</body>
+</html>
