@@ -291,7 +291,7 @@
         </div>
       </a>
       <div class="controls">
-        <a class="portal-login-btn" href="#portal" onclick="if(window.showPanel){window.showPanel('portal')}">The North Star</a>
+        <a class="portal-login-btn" href="/northstar.html#portal">The North Star</a>
         <select class="language" aria-label="Language" title="Additional translated editions will launch after consistent funding." disabled>
           <option selected>English</option>
         </select>
@@ -309,7 +309,7 @@
 </header>
 
 <main id="top">
-  <section class="hero shell">
+  <section class="hero shell" id="home">
     <span class="eyebrow">Practical help, rooted in community</span>
     <h1>Real help for paperwork, resources, and wellness.</h1>
     <p class="hero-copy">
@@ -553,9 +553,9 @@
         payment links, and scheduling tools for each division.
       </p>
       <div class="cta-row">
-        <a class="btn primary" href="javascript:showPanel('process')">Process House</a>
-        <a class="btn secondary" href="javascript:showPanel('resource')">Resource Collective</a>
-        <a class="btn secondary" href="javascript:showPanel('wellness')">Wellness</a>
+        <a class="btn primary" href="#process" onclick="showPanel('process')">Process House</a>
+        <a class="btn secondary" href="#resource" onclick="showPanel('resource')">Resource Collective</a>
+        <a class="btn secondary" href="#wellness" onclick="showPanel('wellness')">Wellness</a>
       </div>
     </div>
   </section>
