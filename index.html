@@ -196,7 +196,8 @@
   
     .portal-login-btn{position:relative;z-index:2;pointer-events:auto;display:inline-block;border:1px solid rgba(255,255,255,.22);background:var(--cream);color:#17110a;border-radius:999px;padding:.68rem 1rem;font-weight:800;cursor:pointer;letter-spacing:.01em}
     .portal-login-btn:hover{transform:translateY(-1px)}
-    #portal{scroll-margin-top:92px}\n    #portal:target{display:block!important}
+    #portal{scroll-margin-top:92px}
+    #portal:target{display:block!important}
     .portal-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:1.2rem;margin-top:1.25rem}
     .portal-card,.portal-status,.portal-tile{background:rgba(21,18,14,.92);color:var(--cream);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
     .portal-card{padding:1.5rem}.portal-card h3,.portal-status h3{margin-top:0}.portal-status{padding:1.25rem;background:rgba(29,24,18,.94)}
@@ -264,11 +265,13 @@
     });
 
     window.addEventListener('hashchange', function() {
-    const hash = (location.hash || '').slice(1);
-    if (['home','about','process','resource','wellness','portal'].includes(hash)) {
-      window.showPanel(hash);
-    }
-  });\n\n    const hash = (location.hash || '#home').slice(1);
+      const hash = (location.hash || '').slice(1);
+      if (['home','about','process','resource','wellness','portal'].includes(hash)) {
+        window.showPanel(hash);
+      }
+    });
+
+    const hash = (location.hash || '#home').slice(1);
     const allowed = ['home','about','process','resource','wellness','portal'];
     window.showPanel(allowed.includes(hash) ? hash : 'home');
   });
