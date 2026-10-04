@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>The North Star | Binya</title>
+  <style>
+    :root{
+      --bg:#0c0b09;--panel:#15120e;--panel2:#1d1812;--gold:#d8a24a;--cream:#f3e7d2;
+      --green:#556b45;--teal:#1d6264;--rust:#b65326;--muted:#b9ad9a;--line:#3a3023;
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{margin:0;background:radial-gradient(circle at 10% 0%,rgba(182,83,38,.12),transparent 28%),var(--bg);color:var(--cream);font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:20;background:rgba(12,11,9,.94);border-bottom:1px solid rgba(216,162,74,.18);backdrop-filter:blur(14px)}
+    .shell{width:min(1160px,calc(100% - 34px));margin:auto}
+    .bar{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:13px;text-decoration:none}
+    .mark{width:42px;height:42px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;color:var(--gold);background:linear-gradient(145deg,#1a160f,#0c0b09)}
+    .brand strong{display:block;font-family:Georgia,serif;letter-spacing:.04em}
+    .brand small{color:var(--muted);text-transform:uppercase;letter-spacing:.11em}
+    .btn{appearance:none;border:1px solid var(--gold);border-radius:999px;padding:.72rem 1rem;font-weight:800;cursor:pointer;background:var(--gold);color:#17110a;text-decoration:none;font:inherit}
+    .btn.secondary{background:transparent;color:var(--cream);border-color:var(--line)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+    main{padding:38px 0 80px}
+    .eyebrow{color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.16em;font-size:.74rem}
+    h1,h2,h3{font-family:Georgia,serif}
+    h1{font-size:clamp(2.4rem,5vw,4.8rem);line-height:.98;margin:.18em 0 .2em}
+    .lead{color:#d7cbb9;line-height:1.7;max-width:760px}
+    .card{background:rgba(21,18,14,.94);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:1.4rem}
+    .gate{max-width:760px;margin:54px auto 0}
+    .notice{margin:1rem 0;padding:.85rem 1rem;border:1px solid var(--line);border-radius:14px;background:#100e0b;color:#d7cbb9}
+    .notice.error{border-color:#8f5148;color:#ffd4ce}
+    .notice.success{border-color:rgba(85,107,69,.8);color:#d9efcc}
+    .hidden{display:none!important}
+    .dashboard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:1rem}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+    .full{grid-column:1/-1}
+    .section-title{margin:.15rem 0 .75rem}
+    .row{padding:.8rem 0;border-top:1px solid rgba(58,48,35,.8)}
+    .row:first-child{border-top:0}
+    .row strong{display:block}
+    .row small{color:var(--muted)}
+    label{display:block;font-weight:700;margin:.6rem 0 .3rem}
+    input,select,textarea{width:100%;padding:.8rem;border:1px solid var(--line);border-radius:12px;background:#100e0b;color:var(--cream);font:inherit}
+    textarea{min-height:120px;resize:vertical}
+    .actions{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:.9rem}
+    .status{display:inline-flex;padding:.32rem .55rem;border-radius:999px;border:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+    .security{border-color:rgba(29,98,100,.5);background:rgba(29,98,100,.12)}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}.dashboard-head{flex-direction:column}.brand small{display:none}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="shell bar">
+    <a class="brand" href="/">
+      <span class="mark">B</span>
+      <span><strong>The North Star</strong><small>Binya secure portal</small></span>
+    </a>
+    <button id="sign-out-btn" class="btn secondary hidden" type="button">Sign out</button>
+  </div>
+</header>
+
+<main class="shell">
+  <section id="auth-gate" class="gate card">
+    <span class="eyebrow">Protected access</span>
+    <h1>The North Star</h1>
+    <p class="lead">Sign in to your private Binya portal. Public account creation is disabled. Multi-factor authentication is required for portal access.</p>
+    <div id="gate-notice" class="notice security">No health information should be entered until Binya marks this AWS environment ready for PHI.</div>
+    <div class="actions">
+      <button id="sign-in-btn" class="btn" type="button">Secure sign in</button>
+      <a class="btn secondary" href="https://binya-wellness.onrender.com/">Back to Binya</a>
+    </div>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="dashboard-head">
+      <div>
+        <span class="eyebrow">The North Star</span>
+        <h1 style="font-size:clamp(2.2rem,4vw,3.8rem)">Your secure Binya workspace.</h1>
+        <p id="user-summary" class="lead"></p>
+      </div>
+      <span id="security-state" class="status">Checking security…</span>
+    </div>
+
+    <div id="app-notice" class="notice hidden"></div>
+
+    <div class="grid">
+      <section class="card">
+        <h2 class="section-title">Tasks</h2>
+        <div id="tasks-list"><p class="lead">Loading…</p></div>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">Appointments</h2>
+        <div id="appointments-list"><p class="lead">Loading…</p></div>
+      </section>
+
+      <section class="card full">
+        <h2 class="section-title">Secure messages</h2>
+        <div id="messages-list"><p class="lead">Loading…</p></div>
+        <label for="message-division">Service area</label>
+        <select id="message-division">
+          <option value="process">Process House</option>
+          <option value="resource">Resource Collective</option>
+          <option value="wellness">Wellness</option>
+          <option value="va">VA Representation</option>
+        </select>
+        <label for="message-body">Message</label>
+        <textarea id="message-body" maxlength="5000" placeholder="Write a secure message"></textarea>
+        <div class="actions"><button id="send-message-btn" class="btn" type="button">Send secure message</button></div>
+      </section>
+
+      <section class="card full">
+        <h2 class="section-title">Documents</h2>
+        <div id="documents-list"><p class="lead">Loading…</p></div>
+        <div id="upload-panel" class="hidden">
+          <label for="document-division">Service area</label>
+          <select id="document-division">
+            <option value="process">Process House</option>
+            <option value="resource">Resource Collective</option>
+            <option value="wellness">Wellness</option>
+            <option value="va">VA Representation</option>
+          </select>
+          <label for="document-file">Choose a document</label>
+          <input id="document-file" type="file" accept=".pdf,.jpg,.jpeg,.png,.docx">
+          <div class="actions"><button id="upload-btn" class="btn" type="button">Upload securely</button></div>
+        </div>
+        <div id="upload-locked" class="notice security">Sensitive uploads remain locked until the HIPAA go-live checklist is complete.</div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
