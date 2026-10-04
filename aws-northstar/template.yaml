@@ -407,6 +407,8 @@ Resources:
       EnableLogFileValidation: true
 
 Outputs:
+  PortalDistributionId:
+    Value: !Ref PortalDistribution
   PortalUrl:
     Value: !Sub https://${PortalDistribution.DomainName}/
   PortalBucketName:
