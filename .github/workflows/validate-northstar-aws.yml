@@ -1,0 +1,27 @@
+name: Validate North Star AWS
+
+on:
+  push:
+    paths:
+      - "aws-northstar/**"
+      - ".github/workflows/validate-northstar-aws.yml"
+  pull_request:
+    paths:
+      - "aws-northstar/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aws-northstar
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/setup-sam@v2
+      - name: SAM validate
+        run: sam validate --template-file template.yaml
+      - name: SAM build
+        run: sam build --template-file template.yaml
