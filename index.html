@@ -137,6 +137,17 @@
     .service h3{font-size:1.28rem;margin:9px 0}
     .service p{color:#c6b9a5;line-height:1.58;margin-bottom:0}
 
+    .pricing-block{margin-top:30px;border-top:1px solid var(--line);padding-top:27px}
+    .pricing-head{display:flex;justify-content:space-between;gap:18px;align-items:end;flex-wrap:wrap;margin-bottom:14px}
+    .pricing-head p{color:#c6b9a5;max-width:720px;line-height:1.58;margin:0}
+    .price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .price-card{border:1px solid var(--line);border-radius:20px;padding:22px;background:rgba(18,15,12,.84)}
+    .price-card h3{font-size:1.28rem;margin:0 0 10px}
+    .price-row{display:flex;justify-content:space-between;gap:18px;padding:10px 0;border-top:1px solid rgba(58,48,35,.72);color:#d7cbb9}
+    .price-row:first-of-type{border-top:0}
+    .price-row strong{color:var(--cream);white-space:nowrap}
+    .price-note{color:var(--muted);font-size:.86rem;line-height:1.55;margin:12px 0 0}
+
     .clients{margin-top:30px;border-top:1px solid var(--line);padding-top:27px;display:grid;grid-template-columns:.85fr 1.15fr;gap:30px}
     .clients h2,.section-title{font-size:clamp(2rem,3.5vw,3.1rem);line-height:1.03;margin:0;max-width:700px}
     .chips{display:flex;flex-wrap:wrap;gap:9px;align-content:flex-start}
@@ -182,7 +193,7 @@
     #wellness{--accent:var(--teal)}
 
     @media(max-width:850px){
-      .brand-stack,.services,.about-grid,.founder-grid{grid-template-columns:1fr}
+      .brand-stack,.services,.about-grid,.founder-grid,.price-grid{grid-template-columns:1fr}
       .founder-facts{grid-template-columns:1fr}
       .panel-hero,.clients{grid-template-columns:1fr}
       .hero{padding-top:42px}
@@ -462,6 +473,31 @@
       <article class="service"><div class="num">06</div><h3>Professional Accounts</h3><p>Streamlined intake and billing for law firms, organizations, agencies, and repeat clients.</p></article>
     </div>
 
+    <div class="pricing-block" aria-label="Process House pricing at a glance">
+      <div class="pricing-head">
+        <div><span class="eyebrow">Los Angeles pricing</span><h2 class="section-title">Clear rates before dispatch.</h2></div>
+        <p>Routine through same-day service is calibrated for Los Angeles travel, traffic, scheduling, and field time. Up to three attempts are included in the core tiers.</p>
+      </div>
+      <div class="price-grid">
+        <article class="price-card">
+          <h3>Process serving</h3>
+          <div class="price-row"><span>Routine</span><strong>$145</strong></div>
+          <div class="price-row"><span>Priority / 48-hour target</span><strong>$185</strong></div>
+          <div class="price-row"><span>Rush / 24-hour target</span><strong>$235</strong></div>
+          <div class="price-row"><span>Same-day target</span><strong>$275+</strong></div>
+          <p class="price-note">Registered-agent service starts at $110. Successful personal service is never guaranteed; the fee pays for professional attempts, updates, and documentation.</p>
+        </article>
+        <article class="price-card">
+          <h3>Field + court support</h3>
+          <div class="price-row"><span>Additional person, same address</span><strong>$50</strong></div>
+          <div class="price-row"><span>4th+ attempt</span><strong>$45</strong></div>
+          <div class="price-row"><span>Court filing / courier</span><strong>$75+</strong></div>
+          <div class="price-row"><span>Wait / stakeout (2-hour minimum)</span><strong>$95/hr</strong></div>
+          <p class="price-note">Government, witness, parking, toll, unusual travel, and similar pass-through charges are separate only when disclosed. Community Access may be available for eligible individual orders; professional/B2B accounts use standard pricing.</p>
+        </article>
+      </div>
+    </div>
+
     <div class="clients">
       <div><h2>Who Process House can help</h2></div>
       <div class="chips">
@@ -506,6 +542,31 @@
       <article class="service"><div class="num">04</div><h3>Disability Navigation</h3><p>Support organizing accommodations, referrals, appointments, community supports, and paperwork.</p></article>
       <article class="service"><div class="num">05</div><h3>Referral Coordination</h3><p>Connecting clients with providers, programs, advocates, and community organizations that fit their needs.</p></article>
       <article class="service"><div class="num">06</div><h3>Document Organization</h3><p>Helping clients gather, sort, track, and prepare nonlegal paperwork for appointments and applications.</p></article>
+    </div>
+
+    <div class="pricing-block" aria-label="Resource Collective pricing at a glance">
+      <div class="pricing-head">
+        <div><span class="eyebrow">Pricing at a glance</span><h2 class="section-title">Start free. Pay for the level of help you need.</h2></div>
+        <p>A free 15-minute triage helps identify the right service. Community Access uses self-attestation when standard pricing would create a financial or practical barrier.</p>
+      </div>
+      <div class="price-grid">
+        <article class="price-card">
+          <h3>Navigation</h3>
+          <div class="price-row"><span>15-minute “Where Do I Start?” triage</span><strong>Free</strong></div>
+          <div class="price-row"><span>30-minute Navigation Session</span><strong>$45 / $15 CA</strong></div>
+          <div class="price-row"><span>60-minute Navigation + Action Map</span><strong>$85 / $30 CA</strong></div>
+          <div class="price-row"><span>90-minute Complex Systems Intake</span><strong>$125 / $45 CA</strong></div>
+          <p class="price-note">CA = Community Access. No protected identity is required; self-attestation is normally enough.</p>
+        </article>
+        <article class="price-card">
+          <h3>Ongoing coordination</h3>
+          <div class="price-row"><span>Nonclinical resource coordination</span><strong>$75/hr / $30 CA</strong></div>
+          <div class="price-row"><span>4-hour one-month bundle</span><strong>$280 / $100 CA</strong></div>
+          <div class="price-row"><span>8-hour one-month bundle</span><strong>$520 / $190 CA</strong></div>
+          <div class="price-row"><span>Targeted referral match</span><strong>Free</strong></div>
+          <p class="price-note">Low-cost itemized services cover one defined task or the listed session time. If the scope grows, Binya explains the next option and price before additional paid work begins.</p>
+        </article>
+      </div>
     </div>
   </section>
 
