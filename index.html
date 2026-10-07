@@ -147,6 +147,12 @@
     .price-row:first-of-type{border-top:0}
     .price-row strong{color:var(--cream);white-space:nowrap}
     .price-note{color:var(--muted);font-size:.86rem;line-height:1.55;margin:12px 0 0}
+    .pricing-jump{margin-top:24px;border:1px solid rgba(216,162,74,.32);border-radius:20px;padding:18px 20px;background:linear-gradient(120deg,rgba(216,162,74,.07),rgba(29,98,100,.05))}
+    .pricing-jump-inner{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+    .pricing-jump h3{margin:0 0 5px;font-size:1.28rem}
+    .pricing-jump p{margin:0;color:#cbbdaa;line-height:1.5;max-width:720px}
+    .pricing-jump .cta-row{margin-top:0}
+    .pricing-jump .btn{white-space:nowrap}
 
     .clients{margin-top:30px;border-top:1px solid var(--line);padding-top:27px;display:grid;grid-template-columns:.85fr 1.15fr;gap:30px}
     .clients h2,.section-title{font-size:clamp(2rem,3.5vw,3.1rem);line-height:1.03;margin:0;max-width:700px}
@@ -313,7 +319,7 @@
       <button class="tab" data-target="about" role="tab" aria-selected="false">About Binya</button>
       <button class="tab" data-target="process" role="tab" aria-selected="false">Process House</button>
       <button class="tab" data-target="resource" role="tab" aria-selected="false">Resource Collective</button>
-      <a class="tab" href="/services.html" role="link">Find Help + Pricing</a>
+      <a class="tab" href="/services.html" role="link">Pricing Menu</a>
       <button class="tab" data-target="wellness" role="tab" aria-selected="false">Wellness</button>
       <a id="northstar-nav-link" class="tab" href="https://binya-north-star.onrender.com/" role="link">The North Star</a>
     </nav>
@@ -346,7 +352,14 @@
         <p><em>Tek care ya body. Tek care ya spirit.</em></p>
       </article>
     </div>
-  </section>
+  
+    <div class="pricing-jump" data-pricing-jump="home">
+      <div class="pricing-jump-inner">
+        <div><h3>Pricing menu</h3><p>Not sure where to start? Use the guided pricing menu to choose the problem first, then see only the services and prices that fit.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html">Open pricing menu</a></div>
+      </div>
+    </div>
+</section>
 
   <section class="panel shell" id="about">
     <div class="panel-hero">
@@ -439,7 +452,14 @@
         </div>
       </article>
     </div>
-  </section>
+  
+    <div class="pricing-jump" data-pricing-jump="about">
+      <div class="pricing-jump-inner">
+        <div><h3>Pricing menu</h3><p>See Binya’s current Standard, Community Access, and $0 options without having to read the whole service catalog at once.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html">See services + prices</a></div>
+      </div>
+    </div>
+</section>
 
   <section class="panel shell" id="process">
     <div class="panel-hero">
@@ -452,7 +472,7 @@
           for attorneys, property managers, organizations, and everyday people who need paperwork handled correctly and on time.
         </p>
         <div class="cta-row">
-          <a class="btn primary" href="/services.html?view=process">Find the right help</a>
+          <a class="btn primary" href="/services.html?view=process">Pricing menu</a>
           <a class="btn secondary" href="#contact">Request a serve</a>
         </div>
       </div>
@@ -508,7 +528,14 @@
         <span class="chip">Investigators</span><span class="chip">Other process servers</span>
       </div>
     </div>
-  </section>
+  
+    <div class="pricing-jump" data-pricing-jump="process">
+      <div class="pricing-jump-inner">
+        <div><h3>Process House pricing menu</h3><p>See routine, priority, rush, same-day, court-run, courier, and field-support pricing together with plain-language descriptions.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html?view=process">Open Process House prices</a></div>
+      </div>
+    </div>
+</section>
 
   <section class="panel shell" id="resource">
     <div class="panel-hero">
@@ -522,7 +549,7 @@
           and practical help organizing what comes next.
         </p>
         <div class="cta-row">
-          <a class="btn primary" href="/services.html">Find the right help</a>
+          <a class="btn primary" href="/services.html">Pricing menu</a>
           <a class="btn secondary" href="#contact">Start an intake</a>
         </div>
       </div>
@@ -569,7 +596,14 @@
         </article>
       </div>
     </div>
-  </section>
+  
+    <div class="pricing-jump" data-pricing-jump="resource">
+      <div class="pricing-jump-inner">
+        <div><h3>Resource Collective pricing menu</h3><p>Choose your problem area first, then compare Standard, Community Access, and free options for the services that actually fit.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html">Find help + prices</a></div>
+      </div>
+    </div>
+</section>
 
   <section class="panel shell" id="wellness">
     <div class="panel-hero">
@@ -604,7 +638,14 @@
       <article class="service"><div class="num">05</div><h3>Community Wellness</h3><p>Programs designed around culturally responsive, affirming, accessible wellness support.</p></article>
       <article class="service"><div class="num">06</div><h3>Professional Education</h3><p>Future trainings, CE offerings, consultation, and educational materials as qualifications allow.</p></article>
     </div>
-  </section>
+  
+    <div class="pricing-jump" data-pricing-jump="wellness">
+      <div class="pricing-jump-inner">
+        <div><h3>Pricing menu</h3><p>See what is currently bookable across Binya and what it costs. Clinical Wellness pricing is added only when the applicable service is legally and professionally active.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html">See current pricing</a></div>
+      </div>
+    </div>
+</section>
 
   <section class="shell" id="contact" style="padding:0 0 78px">
     <div class="feature" style="--accent:var(--gold)">
@@ -620,7 +661,14 @@
         <a class="btn secondary" href="#wellness" onclick="showPanel('wellness')">Wellness</a>
       </div>
     </div>
-  </section>
+  
+    <div class="pricing-jump" data-pricing-jump="contact">
+      <div class="pricing-jump-inner">
+        <div><h3>Want to see the price first?</h3><p>Open the guided pricing menu before starting an intake. You can filter to $0 options or Community Access if cost is the barrier.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html">Open pricing menu</a></div>
+      </div>
+    </div>
+</section>
 
   <section class="panel shell" id="portal">
     <div class="panel-hero">
