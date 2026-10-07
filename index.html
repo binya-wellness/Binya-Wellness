@@ -617,7 +617,7 @@
           licensed, supervised, credentialed, and legally permitted.
         </p>
         <div class="cta-row">
-          <a class="btn primary" href="#wellness-services">See the vision</a>
+          <a class="btn primary" href="#wellness-services">Explore support areas</a>
           <a class="btn secondary" href="#contact">Contact Binya</a>
         </div>
       </div>
@@ -630,15 +630,46 @@
       </aside>
     </div>
 
-    <div class="services" id="wellness-services">
-      <article class="service"><div class="num">01</div><h3>Clinical Care</h3><p>Therapy and clinical services only within applicable licensure, supervision, and professional requirements.</p></article>
-      <article class="service"><div class="num">02</div><h3>Education + Workshops</h3><p>Future culturally grounded education, skills groups, trainings, and community learning.</p></article>
-      <article class="service"><div class="num">03</div><h3>Evaluations</h3><p>Future evaluation services offered only when properly licensed, qualified, and within scope.</p></article>
-      <article class="service"><div class="num">04</div><h3>Nature-Based Wellness</h3><p>Future ecotherapy, retreat, and land-based programming where legally and professionally appropriate.</p></article>
-      <article class="service"><div class="num">05</div><h3>Community Wellness</h3><p>Programs designed around culturally responsive, affirming, accessible wellness support.</p></article>
-      <article class="service"><div class="num">06</div><h3>Professional Education</h3><p>Future trainings, CE offerings, consultation, and educational materials as qualifications allow.</p></article>
+    <div id="wellness-services">
+      <span class="eyebrow">Developing care • Not yet bookable</span>
+      <h2 class="section-title">What are you looking for support with?</h2>
+      <p>Pick what feels closest. You don’t need a diagnosis or the perfect words.</p>
+      <div class="cta-row" aria-label="Explore support areas"><button type="button" class="btn secondary" data-wellness-choice="trauma" aria-controls="wellness-match">Trauma / things that happened to me</button>
+<button type="button" class="btn secondary" data-wellness-choice="nd" aria-controls="wellness-match">ADHD / autism / executive function</button>
+<button type="button" class="btn secondary" data-wellness-choice="therapy" aria-controls="wellness-match">Anxiety / mood / overwhelm</button>
+<button type="button" class="btn secondary" data-wellness-choice="therapy" aria-controls="wellness-match">Relationships</button>
+<button type="button" class="btn secondary" data-wellness-choice="queer" aria-controls="wellness-match">LGBTQIA+ identity / coming out / gender</button>
+<button type="button" class="btn secondary" data-wellness-choice="harm" aria-controls="wellness-match">Substance use / harm reduction</button>
+<button type="button" class="btn secondary" data-wellness-choice="therapy" aria-controls="wellness-match">Justice involvement / reentry</button>
+<button type="button" class="btn secondary" data-wellness-choice="therapy" aria-controls="wellness-match">Psychosis / unusual experiences</button>
+<button type="button" class="btn secondary" data-wellness-choice="therapy" aria-controls="wellness-match">I’m not sure what I need</button>
+</div><div class="side-note" id="wellness-match" role="status" aria-live="polite" style="margin-top:20px">Choose a topic to see a possible care direction. Therapy through Binya is not currently available to book.</div>
+      <div class="services"><article class="service" id="wellness-therapy"><div class="num">01</div><h3>Therapy / Clinical Care</h3><p>Space to explore mood, anxiety, relationships, life transitions, reentry, and unusual experiences. Any future care will depend on the clinician’s training, supervision, and practice setting.</p><p><strong>Coming soon / Not yet bookable</strong></p></article>
+<article class="service" id="wellness-nd"><div class="num">02</div><h3>Neurodivergent-Affirming Care</h3><p>Support that works with your brain: ADHD, autistic adulthood, executive function, sensory needs, communication differences, and burnout. Your access needs belong in the conversation.</p><p><strong>Coming soon / Not yet bookable</strong></p></article>
+<article class="service" id="wellness-trauma"><div class="num">03</div><h3>Trauma-Informed Care</h3><p>Move at your own pace. Future care will make room for safety, choice, culture, and what you need after difficult experiences, without promising a particular outcome.</p><p><strong>Coming soon / Not yet bookable</strong></p></article>
+<article class="service" id="wellness-queer"><div class="num">04</div><h3>LGBTQIA+ / Queer-Affirming Care</h3><p>Room for lesbian, trans, nonbinary, questioning, and broader LGBTQIA+ experiences, including the lives and cultures of Black, Indigenous, and QTBIPOC people.</p><p><strong>Coming soon / Not yet bookable</strong></p></article>
+<article class="service" id="wellness-harm"><div class="num">05</div><h3>Harm Reduction</h3><p>A nonjudgmental, client-led approach to substance use, safety, and change. Future clinical support will follow your goals and the limits of the practice setting.</p><p><strong>Coming soon / Not yet bookable</strong></p></article>
+</div>
+      <aside class="side-note"><h3>Available now</h3><p>Explore current nonclinical resource navigation through the Resource Collective. This is practical help finding resources, rather than psychotherapy. See the pricing menu for scope and availability.</p><a class="btn secondary" href="/services.html">Explore resource support</a></aside>
+      <h2 class="section-title">Future wellness programs</h2>
+      <p><strong>Coming later:</strong> ecotherapy and nature-based wellness; equine work; retreats; psychedelic-assisted therapy and integration where lawful and appropriately trained; continuing education and professional training; immigration evaluations; forensic consultation; group practice; and supervision after legally eligible.</p>
+      <p>These programs are in development. No clinical appointments, clinical fees, or future-program bookings are offered here. Availability will be announced after the relevant employment, supervision, licensure, training, and approvals are confirmed.</p>
+      <p>Please keep health histories and private documents out of website contact forms. The North Star remains a non-PHI preview; sensitive uploads are off.</p>
     </div>
-  
+    <script>
+      document.querySelectorAll('[data-wellness-choice]').forEach(button=>button.addEventListener('click',()=>{
+        const card=document.getElementById('wellness-'+button.dataset.wellnessChoice);
+        const result=document.getElementById('wellness-match');
+        result.replaceChildren();
+        const title=document.createElement('h3'); title.textContent=card.querySelector('h3').textContent;
+        const copy=document.createElement('p'); copy.textContent=card.querySelector('p').textContent;
+        const status=document.createElement('p'); status.textContent='Coming soon / Not yet bookable. No clinical fees are published yet.';
+        result.append(title,copy,status);
+        document.querySelectorAll('[data-wellness-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+        result.scrollIntoView({behavior:'smooth',block:'nearest'});
+      }));
+    </script>
+
     <div class="pricing-jump" data-pricing-jump="wellness">
       <div class="pricing-jump-inner">
         <div><h3>Pricing menu</h3><p>See what is currently bookable across Binya and what it costs. Clinical Wellness pricing is added only when the applicable service is legally and professionally active.</p></div>
