@@ -308,7 +308,7 @@
         </div>
       </a>
       <div class="controls">
-        <a id="northstar-main-link" class="portal-login-btn" href="https://binya-north-star.onrender.com/">The North Star</a>
+        <a id="northstar-main-link" class="portal-login-btn" href="https://binya-north-star.onrender.com/">Do'step</a>
         <select class="language" aria-label="Language" title="Additional translated editions will launch after consistent funding." disabled>
           <option selected>English</option>
         </select>
@@ -321,7 +321,7 @@
       <button class="tab" data-target="resource" role="tab" aria-selected="false">Resource Collective</button>
       <a class="tab" href="/services.html" role="link">Pricing Menu</a>
       <button class="tab" data-target="wellness" role="tab" aria-selected="false">Wellness</button>
-      <a id="northstar-nav-link" class="tab" href="https://binya-north-star.onrender.com/" role="link">The North Star</a>
+      <a id="northstar-nav-link" class="tab" href="https://binya-north-star.onrender.com/" role="link">Do'step</a>
     </nav>
   </div>
 </header>
@@ -701,7 +701,7 @@
       </div>
       <p><strong>Also in development:</strong> ecotherapy and nature-based wellness; equine work; retreats; psychedelic-assisted therapy and integration where lawful and appropriately trained; forensic consultation; group practice; EMDR, somatic and sex-therapy training; Oregon psilocybin facilitation; immigration-evaluation training; court-program training; and expanded Spanish/ASL capacity.</p>
       <p>Planned ranges are development targets, not guaranteed final prices. Final pricing may change based on credentials, program approval, location, travel, court involvement, materials, staffing or scope. Psychoeducation products are educational and do not replace individualized medical, mental-health or legal advice.</p>
-      <p>Please keep health histories and private documents out of website contact forms. The North Star remains a non-PHI preview; sensitive uploads are off.</p>
+      <p>Please keep health histories and private documents out of website contact forms. Do'step remains a non-PHI preview; sensitive uploads are off.</p>
     </div>
     <script>
       document.querySelectorAll('[data-wellness-choice]').forEach(button=>button.addEventListener('click',()=>{
@@ -751,15 +751,15 @@
   <section class="panel shell" id="portal">
     <div class="panel-hero">
       <div class="feature">
-        <span class="eyebrow">The North Star</span>
-        <h2 class="division-name">Your way through Binya, all in one protected place.</h2>
+        <span class="eyebrow">Do'step</span>
+        <h2 class="division-name">Your way through Kumbaya, all in one protected place.</h2>
         <p class="slogan">Guidance, appointments, documents, and support—without losing the thread.</p>
-        <p class="descriptor">The North Star is Binya’s secure client space for document exchange, case tasks, appointments, secure messages, and service updates across the Binya family. Sensitive information should be shared here rather than ordinary email whenever possible.</p>
+        <p class="descriptor">Do'step is Kumbaya’s secure client space for document exchange, case tasks, appointments, secure messages, and service updates across the Kumbaya family. Sensitive information should be shared here rather than ordinary email whenever possible.</p>
         <div class="scope-badges"><span class="scope-badge">Process House</span><span class="scope-badge">Resource Collective</span><span class="scope-badge">Wellness</span><span class="scope-badge">Future VA Representation</span></div>
       </div>
       <aside class="side-note">
         <h3>Privacy by design.</h3>
-        <p>The North Star production portal uses private storage, MFA, role-based access, division-level permissions, and audit-capable infrastructure.</p>
+        <p>Do'step production portal uses private storage, MFA, role-based access, division-level permissions, and audit-capable infrastructure.</p>
         <p><span id="portal-live-state" class="live-state pending">Checking secure backend…</span></p>
       </aside>
     </div>
@@ -768,12 +768,12 @@
 
     <div id="portal-login-card" class="portal-grid">
       <div class="portal-card">
-        <span class="eyebrow">Client sign in</span><h3>Enter The North Star</h3>
-        <p>Use the private account Binya created for you. Public self-signup is intentionally disabled.</p>
+        <span class="eyebrow">Client sign in</span><h3>Enter Do'step</h3>
+        <p>Use the private account Kumbaya created for you. Public self-signup is intentionally disabled.</p>
         <form id="portal-login-form" class="portal-form" onsubmit="return portalLogin(event)">
           <div><label for="portal-email">Email</label><input id="portal-email" required type="email" autocomplete="username" placeholder="you@example.com"></div>
           <div><label for="portal-password">Password</label><input id="portal-password" required type="password" autocomplete="current-password" placeholder="••••••••••••"></div>
-          <button id="portal-login-submit" class="btn primary" type="submit">Enter The North Star</button>
+          <button id="portal-login-submit" class="btn primary" type="submit">Enter Do'step</button>
           <button class="btn secondary" type="button" onclick="portalRequestReset()">Reset password securely</button>
         </form>
         <p class="portal-footnote">Never send your password, MFA code, EBT PIN, bank password, or government-login password to Binya staff.</p>
@@ -790,7 +790,7 @@
     </div>
 
     <div id="password-setup-card" class="portal-card hidden" style="margin-top:1.25rem;max-width:620px">
-      <span class="eyebrow">Secure account setup</span><h3 id="password-setup-title">Set your North Star password</h3>
+      <span class="eyebrow">Secure account setup</span><h3 id="password-setup-title">Set your Do'step password</h3>
       <p id="password-setup-copy">Choose a strong password to finish securing your account.</p>
       <div class="portal-form">
         <div><label for="new-portal-password">New password</label><input id="new-portal-password" type="password" autocomplete="new-password" minlength="12" placeholder="At least 12 characters"></div>
@@ -807,12 +807,12 @@
 
       <div id="mfa-enroll-box" class="portal-card mfa-box hidden">
         <h3>Protect this account with MFA</h3>
-        <p>The North Star requires multi-factor authentication before sensitive records can be opened, uploaded, or messaged.</p>
+        <p>Do'step requires multi-factor authentication before sensitive records can be opened, uploaded, or messaged.</p>
         <button id="mfa-enroll-button" class="btn primary" type="button" onclick="enrollMfa()">Set up authenticator app</button>
         <div id="mfa-existing-step" class="hidden mfa-enroll-step">
           <label for="mfa-existing-code">Enter the 6-digit code from your authenticator app</label>
           <input id="mfa-existing-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
-          <button class="btn primary" type="button" onclick="verifyExistingMfa()">Verify and open The North Star</button>
+          <button class="btn primary" type="button" onclick="verifyExistingMfa()">Verify and open Do'step</button>
         </div>
         <div id="mfa-enroll-step" class="hidden mfa-enroll-step">
           <img id="mfa-qr" alt="MFA QR code" />
@@ -861,7 +861,7 @@
             <div id="scheduler-slots" class="slot-grid"><p class="empty">Choose a service to see times.</p></div>
             <div id="scheduler-summary" class="scheduler-summary hidden"></div>
             <div style="display:flex;gap:.65rem;flex-wrap:wrap"><button id="scheduler-book-btn" class="btn primary hidden" type="button" onclick="bookSelectedSlot()">Confirm appointment</button><button id="scheduler-reschedule-cancel" class="btn secondary hidden" type="button" onclick="cancelRescheduleMode()">Keep original appointment</button></div>
-            <p class="calendar-note">Times are shown in your device’s local timezone. Appointment details remain inside The North Star; calendar downloads use minimal information.</p>
+            <p class="calendar-note">Times are shown in your device’s local timezone. Appointment details remain inside Do'step; calendar downloads use minimal information.</p>
             </div>
           </div>
           <div class="scheduler-divider"></div>
@@ -902,7 +902,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
 <script>
-// The North Star runtime configuration.
+// Do'step runtime configuration.
 // Safe to serve publicly: the Supabase publishable key is a browser client key.
 // NEVER put the service_role/secret key in this file or any browser code.
 window.BINYA_CONFIG = {
@@ -910,14 +910,14 @@ window.BINYA_CONFIG = {
   supabasePublishableKey: 'sb_publishable_7HWq3CFDgkw6UWZZHqZHXA_PFyD2F96',
   // Legacy fallback only. New projects should use supabasePublishableKey.
   supabaseAnonKey: '',
-  portalName: 'The North Star',
+  portalName: 'Do'step',
   requireMfaForSensitiveActions: true,
   allowSensitiveUploads: false // Turn true only AFTER BAA + HIPAA project controls are active and verified.
 };
 
 </script>
 <script>
-/* The North Star client portal - browser application.
+/* Do'step client portal - browser application.
    Requires hosted Supabase + schema.sql. No service-role secret belongs here. */
 
 const cfg = window.BINYA_CONFIG || {};
@@ -978,7 +978,7 @@ function showPasswordSetup(recovery=false){
   $('password-setup-card')?.classList.add('hidden');
   $('password-setup-card')?.classList.remove('hidden');
   if(recovery){
-    $('password-setup-title').textContent='Choose a new North Star password';
+    $('password-setup-title').textContent='Choose a new Do'step password';
     $('password-setup-copy').textContent='Your reset link is verified. Set the new password below.';
   }
 }
@@ -995,7 +995,7 @@ async function updatePortalPassword(){
   passwordUpdateMode=false;
   $('new-portal-password').value=''; $('confirm-portal-password').value='';
   history.replaceState(null,'',`${location.pathname}${location.search}#portal`);
-  notice('Password saved. Finish MFA to unlock The North Star.','success');
+  notice('Password saved. Finish MFA to unlock Do'step.','success');
   await onSignedIn(data.user || currentUser);
 }
 
@@ -1006,7 +1006,7 @@ async function verifyBackendConnection(){
     const badge=$('portal-live-state');
     if(error || data!=='ok'){
       if(badge){ badge.textContent='Secure backend unavailable'; badge.className='live-state pending'; }
-      notice('The North Star could not verify its secure backend. No credentials or documents were transmitted.','error');
+      notice('Do'step could not verify its secure backend. No credentials or documents were transmitted.','error');
       return false;
     }
     if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
@@ -1014,7 +1014,7 @@ async function verifyBackendConnection(){
   }catch(_err){
     const badge=$('portal-live-state');
     if(badge){ badge.textContent='Secure backend unavailable'; badge.className='live-state pending'; }
-    notice('The North Star could not reach its secure backend. No credentials or documents were transmitted.','error');
+    notice('Do'step could not reach its secure backend. No credentials or documents were transmitted.','error');
     return false;
   }
 }
@@ -1048,7 +1048,7 @@ async function login(event){
   const btn=$('portal-login-submit');
   btn.disabled=true; btn.textContent='Signing in…';
   const { error } = await sb.auth.signInWithPassword({ email, password });
-  btn.disabled=false; btn.textContent='Enter The North Star';
+  btn.disabled=false; btn.textContent='Enter Do'step';
   if(error) notice('Sign-in failed. Check your email/password or use the secure reset flow.','error');
   $('portal-password').value='';
   return false;
@@ -1114,7 +1114,7 @@ async function refreshMfaState(){
 }
 
 async function enrollMfa(){
-  const { data, error } = await sb.auth.mfa.enroll({factorType:'totp',friendlyName:'The North Star'});
+  const { data, error } = await sb.auth.mfa.enroll({factorType:'totp',friendlyName:'Do'step'});
   if(error){ notice('MFA enrollment could not be started.','error'); return; }
   $('mfa-qr').src = data.totp.qr_code;
   $('mfa-secret').textContent = data.totp.secret;
@@ -1144,7 +1144,7 @@ async function verifyExistingMfa(){
   if(challenge.error){ notice('MFA verification could not be started.','error'); return; }
   const verify=await sb.auth.mfa.verify({factorId:factor.id,challengeId:challenge.data.id,code});
   if(verify.error){ notice('That verification code was not accepted.','error'); return; }
-  $('mfa-existing-code').value=''; notice('The North Star is unlocked.','success');
+  $('mfa-existing-code').value=''; notice('Do'step is unlocked.','success');
   await refreshMfaState();
   await Promise.all([loadDocuments(),loadTasks(),loadMessages(),loadAppointments(),loadSchedulerServices()]);
   if(['staff','admin'].includes(currentProfile?.role)) await loadTeamSlots();
@@ -1271,7 +1271,7 @@ window.cancelAppointment=cancelAppointment; window.startReschedule=startReschedu
 window.downloadAppointmentIcs=downloadAppointmentIcs; window.createAvailabilitySlot=createAvailabilitySlot; window.closeAvailabilitySlot=closeAvailabilitySlot;
 document.addEventListener('DOMContentLoaded',initPortal);
 
-/* ---------------- The North Star scheduler ---------------- */
+/* ---------------- Do'step scheduler ---------------- */
 let selectedSlotId = null;
 let selectedSlotData = null;
 let schedulerServices = [];
@@ -1383,7 +1383,7 @@ async function rescheduleSelectedSlot(){
 function downloadAppointmentIcs(id){
   const a=(window.__binyaAppointments||[]).find(x=>x.id===id); if(!a) return;
   const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Binya//The North Star//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:Binya appointment','DESCRIPTION:Open The North Star for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Binya//Do'step//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:Binya appointment','DESCRIPTION:Open Do'step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
   const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='binya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
