@@ -736,16 +736,8 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         <section class="portal-card dash-panel">
           <span class="eyebrow">Scheduler</span><h3>Book time with Binya</h3>
           <div class="scheduler-wrap">
-            <div id="client-scheduler-booking">
-            <div class="scheduler-controls">
-              <div><label for="scheduler-service">Service</label><select id="scheduler-service" onchange="loadAvailableSlots()"><option value="">Loading services…</option></select></div>
-              <div><label for="scheduler-window">Show</label><select id="scheduler-window" onchange="loadAvailableSlots()"><option value="14">Next 2 weeks</option><option value="30">Next 30 days</option><option value="60">Next 60 days</option></select></div>
-            </div>
-            <div id="scheduler-slots" class="slot-grid"><p class="empty">Choose a service to see times.</p></div>
-            <div id="scheduler-summary" class="scheduler-summary hidden"></div>
-            <div style="display:flex;gap:.65rem;flex-wrap:wrap"><button id="scheduler-book-btn" class="btn primary hidden" type="button" onclick="bookSelectedSlot()">Confirm appointment</button><button id="scheduler-reschedule-cancel" class="btn secondary hidden" type="button" onclick="cancelRescheduleMode()">Keep original appointment</button></div>
-            <p class="calendar-note">Times are shown in your device’s local timezone. Appointment details remain inside Do’step; calendar downloads use minimal information.</p>
-            </div>
+            <div id="client-scheduler-booking" style="padding:12px 0"><p>Only free 15-minute introductory calls may be booked directly. Paid services require an accepted quote and verified payment before KUMBAYA sends private scheduling instructions.</p><p><a class="btn primary" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Book free 15-minute introduction</a> <a class="btn secondary" href="https://kumbaya.cloud/services.html">Request a paid service quote</a></p><p class="fine">Do not enter payment details or hardship proof in Calendly.</p></div>
+div>
           </div>
           <div class="scheduler-divider"></div>
           <span class="eyebrow">Your appointments</span><h3>Upcoming</h3>
@@ -1214,6 +1206,8 @@ function selectSchedulerSlot(id){
 }
 
 async function bookSelectedSlot(){
+  notice('Direct paid-service scheduling is disabled; request a quote and pay first.','warn');return;
+
   if(window.__rescheduleAppointment){ notice('Finish or cancel the current reschedule first.','warn'); return; }
   if(!selectedSlotId) return;
   if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
