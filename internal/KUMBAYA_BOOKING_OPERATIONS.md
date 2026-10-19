@@ -2,6 +2,16 @@
 
 Last audited: 2026-10-19. This document is internal operational guidance, **not** a statement that automatic checkout or scheduling is live.
 
+## Preferred native Calendly + Stripe path (2026-10-19 update)
+
+Calendly documents a native Stripe integration: connected Calendly owner selects Integrations & apps → Stripe → Connect live account; then in each eligible event type's editor choose More options → Payment → Require payment to book → Stripe → USD rate. This is a **Calendly Dashboard configuration, not supported by the available Calendly API connection**. Calendly states a user must connect their own Stripe account (admins cannot connect it for them). Do not label these paid events active until settings are individually verified and a test checkout is completed. Source: https://calendly.com/help/calendly-stripe
+
+- Fixed-price standalone appointments: use native pay-to-book, only after rate/duration, legal eligibility, modality/location and sales-tax decisions are validated. A customer should not be able to book before paying.
+- Dynamic/travel/custom/discounted, regulated or not-yet-operational services: keep quote-first, not freely bookable. Use approved Stripe hosted invoices and manual scheduling until a secure credentialed workflow is functional.
+- Do not simultaneously invoice separately and collect the same amount in Calendly. Reconcile Stripe payment records, refunds and changes manually.
+- Native Calendly payment integration is distinct from the deployed Supabase Edge Function. Do not activate a redundant webhook system for bookings that are fully managed and paid via Calendly.
+- Proton Calendar remains optional; business appointments are managed in Calendly.
+
 ## Current verified configuration
 
 - Stripe live account `acct_1USNOtAwJxP3zGBh`: charges and payouts enabled.
