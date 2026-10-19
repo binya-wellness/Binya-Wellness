@@ -157,7 +157,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 @media(max-width:650px){body.reader-mode .reader-guide{padding:10px 12px}body.reader-mode p{line-height:1.7}}
 
 .legal-review-note{margin:22px auto 38px;padding-block:18px;border-top:2px solid #b18e5a;border-bottom:1px solid var(--line)}.legal-review-note h2{font-size:1.3rem;color:#e9bd70;margin:0 0 12px}.legal-review-note p{font-size:.9rem;line-height:1.65;max-width:100ch;margin:9px 0;color:#eee0ca}.legal-review-note strong{color:#b8dedb}body.reader-mode .legal-review-note{background:#1d2b2d;border-left:5px solid #76cacb;padding:18px}body.reader-mode .legal-review-note p{max-width:72ch}
-</style>
+.quote-request{border:1px solid var(--gold);background:rgba(216,162,74,.1);color:var(--cream);border-radius:12px;padding:9px 12px;cursor:pointer;font-weight:800;white-space:nowrap}.quote-request:hover,.quote-request:focus-visible{background:var(--gold);color:#17110a;outline:2px solid var(--cream);outline-offset:2px}\n</style>
 </head>
 <body>
 <header>
@@ -209,7 +209,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
           <button class="filter" data-mode="process" type="button">Process Haus</button><button class="filter" data-mode="resources" type="button">Right Hand Th’am</button><button class="filter" data-mode="education" type="button">Eddycashun</button><button class="filter" data-mode="clinical" type="button">Cyaam</button>
         </div>
       </div>
-      <p id="result-count" class="count"></p>
+      <p id="result-count" class="count"></p>\n      <p class="fine" style="margin-top:12px">Each service now has a request-a-quote control. It opens a prefilled email in your device’s mail app; sending the email is your choice. This is not a payment or booking. Currently inactive, credential-gated and coming-soon services are inquiries only. Only the free 15-minute Calendly introductory call can be booked immediately.</p>
       <div id="menu" class="menu"></div>
     </section>
 
@@ -412,8 +412,8 @@ function render(){
       <summary><span class="cat-title">${escHtml(pretty(section.title))}</span><span class="cat-count">${items.length} option${items.length===1?'':'s'}</span></summary>
       ${section.status?`<p class="status-note"><strong>Status:</strong> ${escHtml(section.status)}</p>`:''}
       <div class="table-wrap"><table>
-        <thead><tr><th>Service</th><th>Standard</th><th>Community Access</th></tr></thead>
-        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> $15 per approved 30 minutes, both tiers.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td></tr>`).join('')}</tbody>
+        <thead><tr><th>Service</th><th>Standard</th><th>Community Access</th><th>Request</th></tr></thead>
+        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> $15 per approved 30 minutes, both tiers.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td><td><button class="quote-request" type="button" data-section="${escHtml(section.title)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${/^free$|^\$0\b/i.test(String(item.standard).trim())?'Ask about service':'Request quote'}</button></td></tr>`).join('')}</tbody>
       </table></div>
       ${section.note?`<p class="category-note">${escHtml(section.note)}</p>`:''}
     </details>`;
@@ -421,6 +421,14 @@ function render(){
   menuEl.innerHTML=html||'<div class="empty">No services match that choice. Try another lane or search term.</div>';
   countEl.textContent=total+` option${total===1?'':'s'} shown`;
 }
+// Quote requests use the user's own mail app: no sensitive data is collected on this site.
+menuEl.addEventListener('click',function(e){
+ const btn=e.target.closest('button.quote-request');if(!btn)return;
+ const section=btn.dataset.section||'',service=btn.dataset.service||'',price=btn.dataset.price||'',status=btn.dataset.status||'';
+ const subject='KUMBAYA service quote request — '+service;
+ const lines=['Hello KUMBAYA,','', 'I would like to request a quote for:', 'Service: '+service,'Division: '+section,'Published standard price: '+price,'',status?'Current status: '+status:'','Please confirm whether this service is currently available, the scope, any additional charges, and the payment steps before scheduling.','','Preferred service date or timeframe:','General area (do not include private records):','Accessibility or contact preference (optional):','','I understand this request does not create a booking. Paid work requires an accepted itemized quote and cleared payment, followed by manual confirmation.','','Please do not send hardship proof, payment-card information, medical files or government identification by ordinary email.'].filter(Boolean);
+ window.location.href='mailto:kumbaya.cloud@proton.me?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\\n'));
+});
 function openBrowse(newMode='all',focusSearch=false){
   selectedSections=null;mode=newMode;searchEl.value='';browseEl.classList.add('active');setFilterButton(newMode);render();
   setTimeout(()=>{document.getElementById('result-count').scrollIntoView({behavior:'smooth',block:'start'});if(focusSearch)searchEl.focus();},80);
