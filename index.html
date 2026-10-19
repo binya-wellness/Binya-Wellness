@@ -96,7 +96,13 @@
 
     .mini-card{display:flex;flex-direction:column;color:inherit;text-decoration:none;min-height:0;cursor:default}
     .division-card-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-    .division-card-link{display:inline-block;align-self:flex-start;margin-top:auto;position:relative;top:14px;padding:9px 13px;border:1px solid var(--accent,var(--gold));border-radius:999px;font-size:.85rem;font-weight:800;color:var(--cream)}
+    .service-chip-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:17px;align-items:flex-start}
+    .service-chip{position:relative}
+    .service-chip summary{list-style:none;cursor:pointer;border:1px solid var(--accent,var(--gold));border-radius:999px;padding:7px 11px;font-size:.79rem;font-weight:700;color:var(--cream);background:rgba(255,255,255,.035);transition:background .18s ease}
+    .service-chip summary::-webkit-details-marker{display:none}
+    .service-chip summary:hover,.service-chip[open] summary{background:rgba(216,162,74,.14)}
+    .service-chip summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+    .service-chip p{font-size:.83rem;line-height:1.45;margin:8px 0 4px;padding:10px;border-left:2px solid var(--accent,var(--gold));background:rgba(0,0,0,.2);border-radius:8px;max-width:270px}
 
     .panel{display:none;padding:24px 0 78px;animation:fade .28s ease}
     .panel.active{display:block}
@@ -344,27 +350,62 @@
       <article class="mini-card" style="--accent:var(--gold)">
         <small>Legal support</small><h3>Process Haus</h3>
         <p>Process serving, legal document preparation, notary services, court filing support, and legal logistics that make navigating the legal system more accessible.</p>
-        <a class="division-card-link" href="#process" onclick="showPanel('process')">Legal services & details →</a>
+        <div class="service-chip-list" aria-label="Process Haus service topics">
+          <details class="service-chip"><summary>Process Serving</summary><p>Delivery of legal papers and service logistics.</p></details>
+          <details class="service-chip"><summary>Notary Services</summary><p>Notarial appointments and document notarization, where authorized.</p></details>
+          <details class="service-chip"><summary>Court Filings</summary><p>Filing and courthouse-run logistics.</p></details>
+          <details class="service-chip"><summary>Document Preparation</summary><p>Nonattorney document preparation within applicable authorization.</p></details>
+          <details class="service-chip"><summary>Legal Courier</summary><p>Pickup, delivery, and document transport.</p></details>
+          <details class="service-chip"><summary>Case Logistics</summary><p>Deadlines, status updates, and service coordination.</p></details>
+        </div>
       </article>
       <article class="mini-card" style="--accent:var(--rust)">
         <small>Resources and navigation</small><h3>Right Hand Th’am</h3>
         <p>Personalized resource navigation, benefits assistance, housing and employment support, advocacy, and connections to community services.</p>
-        <a class="division-card-link" href="#resource" onclick="showPanel('resource')">Resource support options →</a>
+        <div class="service-chip-list" aria-label="Right Hand Th’am service topics">
+          <details class="service-chip"><summary>Benefits Help</summary><p>Help navigating public benefit applications and paperwork.</p></details>
+          <details class="service-chip"><summary>Housing Resources</summary><p>Finding housing programs and practical next steps.</p></details>
+          <details class="service-chip"><summary>Employment Support</summary><p>Job-search resources and work-readiness navigation.</p></details>
+          <details class="service-chip"><summary>VA Resources</summary><p>Finding veteran-related programs and paperwork support.</p></details>
+          <details class="service-chip"><summary>Reentry Support</summary><p>Community reintegration resources and referrals.</p></details>
+          <details class="service-chip"><summary>Resource Referrals</summary><p>Connections to local programs and providers.</p></details>
+        </div>
       </article>
       <article class="mini-card" style="--accent:var(--green)">
         <small>Learn and grow</small><h3>Eddycashun</h3>
         <p>Accessible education through books, workbooks, learning kits, courses, workshops, professional training, and future continuing education units (CEUs).</p>
-        <a class="division-card-link" href="/services.html">Education information →</a>
+        <div class="service-chip-list" aria-label="Eddycashun service topics">
+          <details class="service-chip"><summary>Books</summary><p>Readable educational publications and guides.</p></details>
+          <details class="service-chip"><summary>Workbooks</summary><p>Guided exercises and take-home learning materials.</p></details>
+          <details class="service-chip"><summary>Learning Kits</summary><p>Practical tools grouped around a learning goal.</p></details>
+          <details class="service-chip"><summary>Workshops</summary><p>Interactive classes and community learning sessions.</p></details>
+          <details class="service-chip"><summary>Online Courses</summary><p>Self-paced and structured learning materials.</p></details>
+          <details class="service-chip"><summary>Future CEUs</summary><p>Continuing-education programming planned for a later phase; not currently offered.</p></details>
+        </div>
       </article>
       <article class="mini-card" style="--accent:var(--teal)">
         <small>Therapy and mental health</small><h3>Cyaam</h3>
         <p>Trauma-informed, culturally responsive therapy and mental-health services supporting individual healing, relationships, identity, and emotional well-being, subject to applicable clinical licensing and supervision requirements.</p>
-        <a class="division-card-link" href="#wellness" onclick="showPanel('wellness')">Mental-health support →</a>
+        <div class="service-chip-list" aria-label="Cyaam service topics">
+          <details class="service-chip"><summary>Individual Therapy</summary><p>One-on-one therapeutic support, subject to clinical availability.</p></details>
+          <details class="service-chip"><summary>Trauma Support</summary><p>Trauma-informed care and recovery-oriented services.</p></details>
+          <details class="service-chip"><summary>ADHD &amp; Autism</summary><p>Neurodivergence-affirming mental-health support.</p></details>
+          <details class="service-chip"><summary>Relationships</summary><p>Support with connection, communication, and relational stress.</p></details>
+          <details class="service-chip"><summary>LGBTQIA+ Care</summary><p>Identity-affirming mental-health services.</p></details>
+          <details class="service-chip"><summary>Harm Reduction</summary><p>Nonjudgmental support around substance use and related concerns.</p></details>
+        </div>
       </article>
       <article class="mini-card" style="--accent:var(--gold)">
         <small>Client portal</small><h3>Do’step</h3>
         <p>A centralized client portal for managing appointments, paperwork, service requests, payments, communication, and access to KUMBAYA services as these features become available.</p>
-        <a class="division-card-link" href="https://binya-north-star.onrender.com/">Client portal access →</a>
+        <div class="service-chip-list" aria-label="Do’step service topics">
+          <details class="service-chip"><summary>Appointments</summary><p>View scheduling information as this feature becomes available.</p></details>
+          <details class="service-chip"><summary>Documents</summary><p>Find available forms and document information.</p></details>
+          <details class="service-chip"><summary>Service Requests</summary><p>Follow service requests when enabled.</p></details>
+          <details class="service-chip"><summary>Messages</summary><p>Access portal communications when enabled.</p></details>
+          <details class="service-chip"><summary>Payments</summary><p>Access payment features once available.</p></details>
+          <details class="service-chip"><summary>Case Updates</summary><p>Check available service-status information.</p></details>
+        </div>
       </article>
     </div>
   
