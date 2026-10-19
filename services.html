@@ -427,7 +427,7 @@ menuEl.addEventListener('click',function(e){
  const section=btn.dataset.section||'',service=btn.dataset.service||'',price=btn.dataset.price||'',status=btn.dataset.status||'';
  const subject='KUMBAYA service quote request — '+service;
  const lines=['Hello KUMBAYA,','', 'I would like to request a quote for:', 'Service: '+service,'Division: '+section,'Published standard price: '+price,'',status?'Current status: '+status:'','Please confirm whether this service is currently available, the scope, any additional charges, and the payment steps before scheduling.','','Preferred service date or timeframe:','General area (do not include private records):','Accessibility or contact preference (optional):','','I understand this request does not create a booking. Paid work requires an accepted itemized quote and cleared payment, followed by manual confirmation.','','Please do not send hardship proof, payment-card information, medical files or government identification by ordinary email.'].filter(Boolean);
- window.location.href='mailto:kumbaya.cloud@proton.me?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\\n'));
+ window.location.href='mailto:kumbaya.cloud@proton.me?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(lines.join('\n'));
 });
 function openBrowse(newMode='all',focusSearch=false){
   selectedSections=null;mode=newMode;searchEl.value='';browseEl.classList.add('active');setFilterButton(newMode);render();
