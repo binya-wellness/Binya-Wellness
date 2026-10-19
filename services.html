@@ -129,6 +129,7 @@ p{overflow-wrap:break-word}a{overflow-wrap:anywhere}
 .guide .steps button.step:focus-visible{
  outline:3px solid #fff0d0!important;outline-offset:3px;
 }
+.scope-note{margin-top:7px;color:#e5cb96;line-height:1.5;font-size:.85rem}.scope-note strong{color:#f3e7d2}#extra-time-policy{border:1px solid var(--line);border-radius:12px;padding:14px 17px;line-height:1.65;background:rgba(216,162,74,.07)}
 </style>
 </head>
 <body>
@@ -195,6 +196,7 @@ p{overflow-wrap:break-word}a{overflow-wrap:anywhere}
         <a class="btn secondary" href="/#contact">Contact KUMBAYA</a>
       </div>
     </div>
+    <p class="fine" id="extra-time-policy"><strong>Included time and additional support:</strong> Each service below specifies an included session duration or defined task limit. Additional client-directed administrative support beyond that limit is $15 for each approved 30-minute block (Standard and Community Access). We explain the new scope and obtain approval <strong>before</strong> extending work; no automatic extension, retroactive overtime charge, or charge for an unapproved block. The additional-time rate does not replace listed flat fees, government or third-party charges, mileage, printing charges, legal/clinical professional fees, or separate credential-gated service requirements. Free resources and referrals stay free within their stated scope.</p>
     <p class="fine"><strong>Current menu:</strong> October 5, 2026 legal-safe operating version. Low-cost and itemized services cover one defined task or the listed session time. Credential-gated services are not bookable until the required credential or registration is active.</p>
   </section>
 </main>
@@ -321,6 +323,23 @@ function matchesMode(section,item){
   if(mode==='clinical') return /FUTURE REGULATED WELLNESS/.test(section.title);
   return true;
 }
+
+// Pricing scope: every row makes its included session time or task boundary explicit.
+// Flat-fee deliverables keep their existing defined deliverable, not an invented deadline for completion.
+function includedScope(section,item){
+ const title=String(item.service||'');
+ const price=String(item.standard||'');
+ const found=title.match(/(?:^|[^\d])(15|20|30|45|60|75|90|120)[- ]minute\b/i);
+ if(found)return found[1]+' minutes included';
+ const hour=title.match(/(?:^|[^\d])(1|1\.5|2)[- ]hour\b/i);
+ if(hour)return (Number(hour[1])*60)+' minutes included';
+ if(/\/\s*30\s*min/i.test(price)||/\/\s*30\s*min/i.test(String(item.community||'')))return '30-minute billing block';
+ if(/^free$|^\$0\b/i.test(price)&&/^free$|^\$0\b/i.test(String(item.community||'')))return 'One free starting-point conversation or referral, up to 30 minutes; optional added support quoted separately';
+ if(/PROCESS HOUSE|PROCESS HAUS|PROCESS SERVER|SERVICE OF PROCESS/i.test(section.title))return 'One specified service-of-process assignment at the listed address / attempt allowance; optional additional support only with approval';
+ if(/per page|\/page|per copy|\/copy|per form|\/form|per document|\/document|per filing|\/filing|per address|\/address|per attempt|\/attempt/i.test(title+' '+price))return 'One listed unit or defined task; optional added administrative time in approved 30-minute blocks';
+ return 'One defined service task, including up to 30 minutes of client-directed administrative support; added time only by approval';
+}
+
 function render(){
   browseEl.classList.add('active');
   const q=searchEl.value.trim().toLowerCase();
@@ -343,7 +362,7 @@ function render(){
       ${section.status?`<p class="status-note"><strong>Status:</strong> ${escHtml(section.status)}</p>`:''}
       <div class="table-wrap"><table>
         <thead><tr><th>Service</th><th>Standard</th><th>Community Access</th></tr></thead>
-        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td></tr>`).join('')}</tbody>
+        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> $15 per approved 30 minutes, both tiers.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td></tr>`).join('')}</tbody>
       </table></div>
       ${section.note?`<p class="category-note">${escHtml(section.note)}</p>`:''}
     </details>`;
