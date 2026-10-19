@@ -1033,15 +1033,10 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         <section class="portal-card dash-panel">
           <span class="eyebrow">Scheduler</span><h3>Book time with Binya</h3>
           <div class="scheduler-wrap">
-            <div id="client-scheduler-booking">
-            <div class="scheduler-controls">
-              <div><label for="scheduler-service">Service</label><select id="scheduler-service" onchange="loadAvailableSlots()"><option value="">Loading services…</option></select></div>
-              <div><label for="scheduler-window">Show</label><select id="scheduler-window" onchange="loadAvailableSlots()"><option value="14">Next 2 weeks</option><option value="30">Next 30 days</option><option value="60">Next 60 days</option></select></div>
-            </div>
-            <div id="scheduler-slots" class="slot-grid"><p class="empty">Choose a service to see times.</p></div>
-            <div id="scheduler-summary" class="scheduler-summary hidden"></div>
-            <div style="display:flex;gap:.65rem;flex-wrap:wrap"><button id="scheduler-book-btn" class="btn primary hidden" type="button" onclick="bookSelectedSlot()">Confirm appointment</button><button id="scheduler-reschedule-cancel" class="btn secondary hidden" type="button" onclick="cancelRescheduleMode()">Keep original appointment</button></div>
-            <p class="calendar-note">Times are shown in your device’s local timezone. Appointment details remain inside Do’step; calendar downloads use minimal information.</p>
+            <div id="client-scheduler-booking" class="booking-policy-gate" style="padding:12px 0">
+              <p>Book a <strong>free 15-minute introduction</strong> directly through Calendly. For all paid services, browse the service catalog and request a quote first. A paid appointment is arranged privately <strong>only after</strong> your quote is approved and payment is confirmed.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:14px"><a class="btn primary" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Book free introduction</a><a class="btn secondary" href="/services.html">Request a paid-service quote</a></div>
+              <p class="fine" style="margin-top:12px">Do not send hardship documents, medical information, payment card details or government ID through public scheduling.</p>
             </div>
           </div>
           <div class="scheduler-divider"></div>
@@ -1511,6 +1506,8 @@ function selectSchedulerSlot(id){
 }
 
 async function bookSelectedSlot(){
+  notice('Public paid-service booking is disabled. Request a quote and complete payment first.','warn');return;
+
   if(window.__rescheduleAppointment){ notice('Finish or cancel the current reschedule first.','warn'); return; }
   if(!selectedSlotId) return;
   if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
