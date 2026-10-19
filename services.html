@@ -42,17 +42,30 @@
     @media(max-width:900px){.problem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lane-grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}}
     @media(max-width:620px){.problem-grid{grid-template-columns:1fr}.guide-body{padding:18px}.guide-top{align-items:flex-start;flex-direction:column}.topbar{align-items:flex-start;padding:13px 0}.brand-copy span{display:none}h1{font-size:clamp(2.45rem,12vw,4rem)}.shortcut{align-items:flex-start;flex-direction:column}.tabs{padding-bottom:10px}}
     @media print{header,.guide,.start-strip,.toolbar,.bottom-actions .btn{display:none!important}.browse{display:block!important}.shell{max-width:none;padding:0}.hero{padding-top:0}body{background:white;color:black}.hero-copy,.fine,.category-note,.status-note,.count{color:#333}details.category{background:white;border-color:#bbb;box-shadow:none}details.category>.table-wrap,details.category>.category-note,details.category>.status-note{display:block!important}table{min-width:0}th{background:#eee;color:#222}th,td{border-color:#ccc;color:#111}.free,.ca{color:#111}}
-  </style>
+  
+/* KUMBAYA continuity + reader accessibility */
+html{scroll-padding-top:155px} section[id], .panel[id], #guide, #browse, #contact{scroll-margin-top:155px}
+body{line-height:1.55} .hero{padding-top:28px} .panel{padding-top:14px} .feature,.side-note,.about-card{padding:clamp(17px,2.4vw,27px)}
+.hero-copy,.descriptor{max-width:680px;line-height:1.5}.mini-card p,.service p{line-height:1.48}.culture-band p{line-height:1.52}
+.reader-toggle{border:1px solid var(--gold);color:var(--cream);background:#15120e;border-radius:999px;padding:9px 13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.reader-toggle[aria-pressed="true"]{background:var(--gold);color:#17110a}
+body.reader-mode{font-family:Verdana,Arial,sans-serif;letter-spacing:.025em;line-height:1.85}
+body.reader-mode h1,body.reader-mode h2,body.reader-mode h3{font-family:Verdana,Arial,sans-serif;letter-spacing:normal;line-height:1.3}
+body.reader-mode p,body.reader-mode .descriptor,body.reader-mode .hero-copy{line-height:1.9;max-width:68ch}
+body.reader-mode .mini-card,body.reader-mode .service,body.reader-mode .feature{padding:24px}
+body.reader-mode .tabs{gap:12px} body.reader-mode .tab,body.reader-mode button{font-size:1rem}
+@media(max-width:650px){html{scroll-padding-top:125px}section[id],.panel[id],#guide,#browse{scroll-margin-top:125px}.topbar{gap:8px}.controls{flex-wrap:wrap}.reader-toggle{font-size:.8rem;padding:7px 10px}}
+</style>
 </head>
 <body>
 <header>
   <div class="shell">
     <div class="topbar">
       <a class="brand" href="/"><div class="mark">K</div><div class="brand-copy"><strong>KUMBAYA</strong><span>Legal access • Resources • Education • Care</span></div></a>
-      <div class="controls"><a class="portal-login-btn" href="https://binya-north-star.onrender.com/">Do’step</a></div>
+      <div class="controls"><button type="button" class="reader-toggle" data-reader-toggle aria-pressed="false" aria-label="Toggle ADHD and dyslexia reading layout">Reading Mode</button><a class="portal-login-btn" href="https://binya-north-star.onrender.com/">Do’step</a></div>
     </div>
     <nav class="tabs" aria-label="KUMBAYA website sections">
-      <a class="tab" href="/#home">Home</a><a class="tab" href="/#about">About KUMBAYA</a><a class="tab" href="/#process">Process Haus</a><a class="tab" href="/#resource">Right Hand Th’am</a>
+      <a class="tab" href="/#home">Home</a><a class="tab" href="/#about">About</a><a class="tab" href="/#process">Process Haus</a><a class="tab" href="/#resource">Right Hand Th’am</a>
       <a class="tab active" href="/services.html" aria-current="page">Pricing Menu</a><a class="tab" href="/#home">Eddycashun</a><a class="tab" href="/#wellness">Cyaam</a><a class="tab" href="https://binya-north-star.onrender.com/">Do’step</a>
     </nav>
   </div>
@@ -62,9 +75,9 @@
   <section class="hero shell">
     <span class="eyebrow">KUMBAYA services</span>
     <h1>What do you need help with?</h1>
-    <p class="hero-copy">You do not have to read the whole menu. Pick the problem that sounds closest. We’ll narrow it down, then show only the services that fit.</p>
+    
     <div class="start-strip">
-      <button class="pill-action primary" id="start-guide" type="button">Help me choose</button>
+      <button class="pill-action primary" id="start-guide" type="button">1. What’s going on?</button>
       <button class="pill-action" id="free-now" type="button">Show me $0 options</button>
       <button class="pill-action" id="search-now" type="button">I know what I need</button>
       <button class="pill-action" id="browse-all" type="button">Browse the full menu</button>
@@ -74,9 +87,9 @@
       <div class="guide-top">
         <strong>Find the right lane</strong>
         <div class="steps" aria-label="Three-step service finder">
-          <span class="step active" id="step-1">1 · What’s going on?</span>
-          <span class="step" id="step-2">2 · Pick a lane</span>
-          <span class="step" id="step-3">3 · Choose a service</span>
+          <button class="step active" id="step-1" type="button" onclick="showProblems();scrollGuide()">1 · What’s going on?</button>
+          <button class="step" id="step-2" type="button" onclick="if(selectedGuide){chooseProblem(selectedGuide.id);scrollGuide()}else{showProblems();scrollGuide()}">2 · Pick a lane</button>
+          <button class="step" id="step-3" type="button" onclick="document.getElementById('browse').classList.add('active');document.getElementById('browse').scrollIntoView({behavior:'smooth',block:'start'})">3 · Choose a service</button>
         </div>
       </div>
       <div class="guide-body" id="guide-body"></div>
@@ -90,7 +103,7 @@
           <button class="filter" data-mode="free-standard" type="button">$0 for everyone</button>
           <button class="filter" data-mode="free-community" type="button">$0 with Community Access</button>
           <button class="filter" data-mode="community" type="button">Community Access</button>
-          <button class="filter" data-mode="process" type="button">Process Haus</button>
+          <button class="filter" data-mode="process" type="button">Process Haus</button><button class="filter" data-mode="resources" type="button">Right Hand Th’am</button><button class="filter" data-mode="education" type="button">Eddycashun</button><button class="filter" data-mode="clinical" type="button">Cyaam</button>
         </div>
       </div>
       <p id="result-count" class="count"></p>
@@ -147,7 +160,7 @@ let selectedSections=null;
 let selectedGuide=null;
 
 function isFree(v){return /^Free(?:-|$)/i.test(String(v||''));}
-function isProcess(section){return section.title.startsWith('BINYA PROCESS HOUSE');}
+function isProcess(section){return section.title.includes('PROCESS HOUSE')||section.title.includes('PROCESS HAUS');}
 function communityAvailable(v){return String(v||'').trim()!=='-';}
 function pretty(title){return TITLES[title]||title;}
 function escHtml(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
@@ -177,7 +190,7 @@ function chooseProblem(id){
         <button class="lane" type="button" data-free="free-community"><strong>$0 with Community Access</strong><span>Includes services that become free at the Community Access rate.</span></button>
       </div>
       <div class="shortcut"><div><strong>Not sure what you need?</strong><p>The 15-minute “Where Do I Start?” triage and targeted referral match are free for everyone.</p></div><button class="pill-action primary" id="free-triage" type="button">Show Start Here</button></div>`;
-    document.getElementById('back-problems').onclick=showProblems;
+    document.getElementById('back-problems').onclick=()=>{showProblems();scrollGuide()};
     guideBody.querySelectorAll('[data-free]').forEach(b=>b.onclick=()=>showFree(b.dataset.free));
     document.getElementById('free-triage').onclick=()=>showSection('START HERE - SYSTEMS NAVIGATION');
     return;
@@ -198,11 +211,11 @@ function showSection(title){
   guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-lanes">← Back</button><span class="choice-label">${selectedGuide?escHtml(selectedGuide.label):'Service finder'}</span></div>
     <h2 class="guide-heading">${escHtml(pretty(title))}</h2>
     <p class="guide-copy">Here are the options in this lane. Each service has a short plain-language description, with Standard and Community Access prices shown together.</p>`;
-  document.getElementById('back-lanes').onclick=()=>selectedGuide?chooseProblem(selectedGuide.id):showProblems();
+  document.getElementById('back-lanes').onclick=()=>{if(selectedGuide)chooseProblem(selectedGuide.id);else showProblems();scrollGuide()};
   browseEl.classList.add('active');
   setFilterButton('all');
   render();
-  setTimeout(()=>browseEl.scrollIntoView({behavior:'smooth',block:'start'}),80);
+  scrollGuide();
 }
 function showFree(which){
   selectedSections=null; mode=which; searchEl.value=''; setStep(3); setFilterButton(which);
@@ -221,6 +234,9 @@ function matchesMode(section,item){
   if(mode==='free-community') return isFree(item.community);
   if(mode==='community') return communityAvailable(item.community);
   if(mode==='process') return isProcess(section);
+  if(mode==='resources') return !isProcess(section) && !/EDUCATION \+ IP STUDIO|FUTURE REGULATED WELLNESS/.test(section.title);
+  if(mode==='education') return /EDUCATION \+ IP STUDIO/.test(section.title);
+  if(mode==='clinical') return /FUTURE REGULATED WELLNESS/.test(section.title);
   return true;
 }
 function render(){
@@ -229,6 +245,9 @@ function render(){
   for(const section of MENU){
     if(selectedSections&&!selectedSections.includes(section.title)) continue;
     if(mode==='process'&&!isProcess(section)) continue;
+    if(mode==='resources'&&(isProcess(section)||/EDUCATION \+ IP STUDIO|FUTURE REGULATED WELLNESS/.test(section.title))) continue;
+    if(mode==='education'&&!/EDUCATION \+ IP STUDIO/.test(section.title)) continue;
+    if(mode==='clinical'&&!/FUTURE REGULATED WELLNESS/.test(section.title)) continue;
     const items=section.items.filter(item=>{
       const hay=(section.title+' '+item.service+' '+item.standard+' '+item.community).toLowerCase();
       return matchesMode(section,item)&&(!q||hay.includes(q));
@@ -266,5 +285,7 @@ document.getElementById('browse-all').onclick=()=>openBrowse('all',false);
 const params=new URLSearchParams(location.search);
 if(params.get('view')==='process'){chooseProblem('process');scrollGuide();} else {showProblems();}
 </script>
-</body>
+<script>
+(function(){function initReader(){document.querySelectorAll('[data-reader-toggle]').forEach(btn=>btn.addEventListener('click',()=>{const on=!document.body.classList.contains('reader-mode');document.body.classList.toggle('reader-mode',on);document.querySelectorAll('[data-reader-toggle]').forEach(b=>b.setAttribute('aria-pressed',String(on)));try{localStorage.setItem('kumbaya-reader-mode',on?'on':'off')}catch(e){}}));try{if(localStorage.getItem('kumbaya-reader-mode')==='on'){document.body.classList.add('reader-mode');document.querySelectorAll('[data-reader-toggle]').forEach(b=>b.setAttribute('aria-pressed','true'))}}catch(e){}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initReader);else initReader()})();
+</script></body>
 </html>
