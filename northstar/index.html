@@ -257,7 +257,22 @@
     body.northstar-app .brand-copy span{
       display:block;
     }
-  </style>
+  
+/* Five-sweep: accessible focus, anchored sections and calmer reading */
+:root{--sticky-offset:150px}html{scroll-padding-top:var(--sticky-offset)}[id]{scroll-margin-top:var(--sticky-offset)}
+:where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid #eec77c;outline-offset:3px}
+.reader-toggle{border:1px solid var(--gold);border-radius:999px;padding:9px 12px;color:var(--cream);background:#15120e;font:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap}
+.reader-toggle[aria-pressed="true"]{background:var(--gold);color:#17110a}
+.reader-guide{border:1px solid var(--line);padding:16px 18px;border-radius:16px;background:rgba(216,162,74,.08);margin:12px 0 20px}
+.reader-guide[hidden]{display:none!important}.reader-guide h2{font-size:1.15rem;margin:0 0 9px}.reader-guide p{margin:6px 0;line-height:1.6}
+body.reader-mode{font-family:Verdana,Arial,sans-serif;line-height:1.85;letter-spacing:.02em}
+body.reader-mode h1,body.reader-mode h2,body.reader-mode h3{font-family:Verdana,Arial,sans-serif;letter-spacing:normal;line-height:1.3}
+body.reader-mode p,body.reader-mode li{max-width:68ch;line-height:1.85}
+body.reader-mode :is(.mini-card,.feature,.side-note,.category,.guide,.about-card){box-shadow:none}
+body.reader-mode .culture-band{max-width:850px}
+@media(max-width:690px){:root{--sticky-offset:170px}.topbar{flex-wrap:wrap}.reader-toggle{padding:7px 10px}.hero{padding-top:24px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 
 <script>
 (function () {
@@ -330,7 +345,7 @@
           <span>Do’step • Client Portal</span>
         </div>
       </a>
-      <div class="controls">
+      <div class="controls"><button class="reader-toggle" type="button" data-reader-toggle aria-pressed="false">ADHD / Dyslexia Mode</button>
         <a class="portal-login-btn" href="https://binya-wellness.onrender.com/">Back to KUMBAYA</a>
       </div>
     </div>
@@ -338,6 +353,7 @@
 </header>
 
 <main id="top">
+<aside class="reader-guide" data-reader-guide hidden aria-label="ADHD and dyslexia reading support"><h2>Reading support</h2><p>Read one section at a time. Use the short service buttons to see details only when you need them.</p><p>Reading Mode uses a simpler font, extra line spacing, and clearer focus indicators. Switch it off any time.</p></aside>
   <section class="hero shell" id="home">
     <span class="eyebrow">KUMBAYA Client Access</span>
     <h1>Do’step</h1>
@@ -348,7 +364,7 @@
   <section class="panel shell" id="about">
     <div class="panel-hero">
       <div class="feature">
-        <span class="eyebrow">About Binya</span>
+        <span class="eyebrow">About KUMBAYA</span>
         <h2 class="division-name">Rooted in culture. Built for everyday people.</h2>
         <p class="descriptor">
           Binya was built around a simple idea: people deserve support that feels human.
@@ -441,7 +457,7 @@
   <section class="panel shell" id="process">
     <div class="panel-hero">
       <div class="feature">
-        <span class="eyebrow">Binya Process House</span>
+        <span class="eyebrow">Process Haus</span>
         <h2 class="division-name">Court support without the courthouse attitude.</h2>
         <p class="slogan">De paper got fa move. We move um.</p>
         <p class="descriptor">
@@ -456,7 +472,7 @@
       <aside class="side-note">
         <h3>For one job or a hundred.</h3>
         <p>
-          Use Process House for one-time service or set up a recurring professional account.
+          Use Process Haus for one-time service or set up a recurring professional account.
           The long-term plan includes trained servers, runners, intake support, dispatch, and account management.
         </p>
       </aside>
@@ -472,7 +488,7 @@
     </div>
 
     <div class="clients">
-      <div><h2>Who Process House can help</h2></div>
+      <div><h2>Who Process Haus can help</h2></div>
       <div class="chips">
         <span class="chip">Individuals</span><span class="chip">Law firms</span><span class="chip">Solo attorneys</span>
         <span class="chip">Property managers</span><span class="chip">Housing providers</span><span class="chip">Nonprofits</span>
@@ -485,7 +501,7 @@
   <section class="panel shell" id="resource">
     <div class="panel-hero">
       <div class="feature">
-        <span class="eyebrow">Binya Resource Collective</span>
+        <span class="eyebrow">Right Hand Th’am</span>
         <h2 class="division-name">Help finding your way through complicated systems.</h2>
         <p class="slogan">You ain got fa do um lone.</p>
         <p class="descriptor">
@@ -501,7 +517,7 @@
       <aside class="side-note">
         <h3>Practical support, not another maze.</h3>
         <p>
-          Resource Collective is being built to grow into a team of case navigators, resource coordinators,
+          Right Hand Th’am is being built to grow into a team of case navigators, resource coordinators,
           benefits support staff, referral specialists, and community-facing team members.
         </p>
         <p>Services are nonclinical and do not substitute for legal representation, psychotherapy, diagnosis, or medical treatment.</p>
@@ -521,11 +537,11 @@
   <section class="panel shell" id="wellness">
     <div class="panel-hero">
       <div class="feature">
-        <span class="eyebrow">Binya Wellness</span>
+        <span class="eyebrow">Cyaam</span>
         <h2 class="division-name">Care that makes room for the whole person.</h2>
         <p class="slogan">Tek care ya body. Tek care ya spirit.</p>
         <p class="descriptor">
-          Binya Wellness is the clinical and wellness home of the Binya family — built around culturally responsive,
+          Cyaam is the clinical and wellness home of the Binya family — built around culturally responsive,
           trauma-informed, affirming care and future wellness programming. Services are offered only where properly
           licensed, supervised, credentialed, and legally permitted.
         </p>
@@ -537,8 +553,8 @@
       <aside class="side-note">
         <h3>The wellness side of the house.</h3>
         <p>
-          Binya Wellness is the broader clinical, educational, and wellness umbrella.
-          Process House and Resource Collective stay clearly separated so people always know what kind of service they are receiving.
+          Cyaam is the broader clinical, educational, and wellness umbrella.
+          Process Haus and Right Hand Th’am stay clearly separated so people always know what kind of service they are receiving.
         </p>
       </aside>
     </div>
@@ -562,8 +578,8 @@
         payment links, and scheduling tools for each division.
       </p>
       <div class="cta-row">
-        <a class="btn primary" href="#process" onclick="showPanel('process')">Process House</a>
-        <a class="btn secondary" href="#resource" onclick="showPanel('resource')">Resource Collective</a>
+        <a class="btn primary" href="#process" onclick="showPanel('process')">Process Haus</a>
+        <a class="btn secondary" href="#resource" onclick="showPanel('resource')">Right Hand Th’am</a>
         <a class="btn secondary" href="#wellness" onclick="showPanel('wellness')">Wellness</a>
       </div>
     </div>
@@ -576,7 +592,7 @@
         <h2 class="division-name">Your way through Kumbaya, all in one protected place.</h2>
         <p class="slogan">Guidance, appointments, documents, and support—without losing the thread.</p>
         <p class="descriptor">Do'step is Kumbaya’s secure client space for document exchange, case tasks, appointments, secure messages, and service updates across the Kumbaya family. Sensitive information should be shared here rather than ordinary email whenever possible.</p>
-        <div class="scope-badges"><span class="scope-badge">Process House</span><span class="scope-badge">Resource Collective</span><span class="scope-badge">Wellness</span><span class="scope-badge">Future VA Representation</span></div>
+        <div class="scope-badges"><span class="scope-badge">Process Haus</span><span class="scope-badge">Right Hand Th’am</span><span class="scope-badge">Wellness</span><span class="scope-badge">Future VA Representation</span></div>
       </div>
       <aside class="side-note">
         <h3>Privacy by design.</h3>
@@ -711,11 +727,11 @@
 <footer>
   <div class="shell footer-grid">
     <div>
-      <strong style="font-family:Georgia,serif;color:var(--cream)">Binya</strong>
-      <div class="tiny">Binya Process House • Binya Resource Collective • Binya Wellness</div>
+      <strong style="font-family:Georgia,serif;color:var(--cream)">KUMBAYA</strong>
+      <div class="tiny">Process Haus • Right Hand Th’am • Eddycashun • Cyaam • Do’step</div>
     </div>
     <div class="tiny">
-      Process House does not provide legal representation or legal advice. Resource Collective provides nonclinical support.
+      Process Haus does not provide legal representation or legal advice. Right Hand Th’am provides nonclinical support.
       Wellness services are offered only within applicable licensure, supervision, and scope requirements.
     </div>
   </div>
@@ -982,7 +998,7 @@ async function loadPortalDivisions(){
   const selects=[$('document-division'),$('message-division')].filter(Boolean);
   if(!selects.length || !sb) return;
   const {data,error}=await sb.from('division_settings').select('division').eq('client_portal_open',true).order('division');
-  const labels={process:'Process House',resource:'Resource Collective',wellness:'Wellness',va:'VA Representation'};
+  const labels={process:'Process Haus',resource:'Right Hand Th’am',wellness:'Wellness',va:'VA Representation'};
   const options=error ? '<option value="">Unavailable</option>' : (data||[]).map(x=>`<option value="${esc(x.division)}">${esc(labels[x.division]||x.division)}</option>`).join('');
   for(const sel of selects) sel.innerHTML=options || '<option value="">No service areas are open</option>';
 }
@@ -1232,5 +1248,7 @@ async function closeAvailabilitySlot(id){
 }
 
 </script>
-</body>
+<script>
+(function(){function ready(){const key='kumbaya-reader-mode';let enabled=false;try{enabled=localStorage.getItem(key)==='on'}catch(e){};function sync(){document.body.classList.toggle('reader-mode',enabled);document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.setAttribute('aria-pressed',String(enabled)));document.querySelectorAll('[data-reader-guide]').forEach(x=>x.hidden=!enabled)}document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.addEventListener('click',()=>{enabled=!enabled;try{localStorage.setItem(key,enabled?'on':'off')}catch(e){}sync()}));sync();const header=document.querySelector('header');function setOffset(){if(header)document.documentElement.style.setProperty('--sticky-offset',Math.ceil(header.getBoundingClientRect().height+20)+'px')}setOffset();window.addEventListener('resize',setOffset)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready()})();
+</script></body>
 </html>
