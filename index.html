@@ -94,6 +94,10 @@
     .mini-card h3{font-size:1.45rem;margin:9px 0 8px}
     .mini-card p{margin:0;color:#cbbdaa;line-height:1.55}
 
+    .mini-card{display:block;color:inherit;text-decoration:none;min-height:0}
+    .mini-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+    .division-card-link{display:inline-block;margin-top:16px;padding:9px 13px;border:1px solid var(--accent,var(--gold));border-radius:999px;font-size:.85rem;font-weight:800;color:var(--cream)}
+
     .panel{display:none;padding:24px 0 78px;animation:fade .28s ease}
     .panel.active{display:block}
     @keyframes fade{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -303,12 +307,12 @@
       <a class="brand" href="#home" onclick="showPanel('home')">
         <div class="mark">K</div>
         <div class="brand-copy">
-          <strong>Kumbaya</strong>
+          <strong>KUMBAYA</strong>
           <span>Come by here • Gullah Geechee rooted</span>
         </div>
       </a>
       <div class="controls">
-        <a id="northstar-main-link" class="portal-login-btn" href="https://binya-north-star.onrender.com/">Do'step</a>
+        <a id="northstar-main-link" class="portal-login-btn" href="https://binya-north-star.onrender.com/">Do’step</a>
         <select class="language" aria-label="Language" title="Additional translated editions will launch after consistent funding." disabled>
           <option selected>English</option>
         </select>
@@ -317,11 +321,12 @@
     <nav class="tabs" aria-label="Kumbaya website sections" role="tablist">
       <button class="tab active" data-target="home" role="tab" aria-selected="true">Home</button>
       <button class="tab" data-target="about" role="tab" aria-selected="false">About Kumbaya</button>
-      <button class="tab" data-target="process" role="tab" aria-selected="false">Process House</button>
-      <button class="tab" data-target="resource" role="tab" aria-selected="false">Resource Collective</button>
+      <button class="tab" data-target="process" role="tab" aria-selected="false">Process Haus</button>
+      <button class="tab" data-target="resource" role="tab" aria-selected="false">Right Hand Th’am</button>
       <a class="tab" href="/services.html" role="link">Pricing Menu</a>
-      <button class="tab" data-target="wellness" role="tab" aria-selected="false">Wellness</button>
-      <a id="northstar-nav-link" class="tab" href="https://binya-north-star.onrender.com/" role="link">Do'step</a>
+      <a class="tab" href="/services.html">Eddycashun</a>
+      <button class="tab" data-target="wellness" role="tab" aria-selected="false">Cyaam</button>
+      <a id="northstar-nav-link" class="tab" href="https://binya-north-star.onrender.com/" role="link">Do’step</a>
     </nav>
   </div>
 </header>
@@ -331,10 +336,44 @@
     <span class="eyebrow">Practical help, rooted in community</span>
     <h1>Real help for paperwork, resources, and wellness.</h1>
     <p class="hero-copy">
-      Kumbaya is one home for practical support, resources, learning, and care. Pick what you need today,
+      KUMBAYA brings together legal access, community resources, education, mental healthcare, and client-centered support. Pick what you need today,
       without having to already know the system.
     </p>
 
+    <div class="brand-stack" aria-label="Choose the kind of help you need">
+      <a class="mini-card" style="--accent:var(--gold)" href="#process" onclick="showPanel('process')">
+        <small>Legal support</small><h3>Process Haus</h3>
+        <p>Process serving, legal document preparation, notary services, court filing support, and legal logistics that make navigating the legal system more accessible.</p>
+        <span class="division-card-link">Explore Process Haus →</span>
+      </a>
+      <a class="mini-card" style="--accent:var(--rust)" href="#resource" onclick="showPanel('resource')">
+        <small>Resources and navigation</small><h3>Right Hand Th’am</h3>
+        <p>Personalized resource navigation, benefits assistance, housing and employment support, advocacy, and connections to community services.</p>
+        <span class="division-card-link">Find support →</span>
+      </a>
+      <a class="mini-card" style="--accent:var(--green)" href="/services.html">
+        <small>Learn and grow</small><h3>Eddycashun</h3>
+        <p>Accessible education through books, workbooks, learning kits, courses, workshops, professional training, and future continuing education units (CEUs).</p>
+        <span class="division-card-link">Explore education →</span>
+      </a>
+      <a class="mini-card" style="--accent:var(--teal)" href="#wellness" onclick="showPanel('wellness')">
+        <small>Therapy and mental health</small><h3>Cyaam</h3>
+        <p>Trauma-informed, culturally responsive therapy and mental-health services supporting individual healing, relationships, identity, and emotional well-being, subject to applicable clinical licensing and supervision requirements.</p>
+        <span class="division-card-link">Explore Cyaam →</span>
+      </a>
+      <a class="mini-card" style="--accent:var(--gold)" href="https://binya-north-star.onrender.com/">
+        <small>Client portal</small><h3>Do’step</h3>
+        <p>A centralized client portal for managing appointments, paperwork, service requests, payments, communication, and access to KUMBAYA services as these features become available.</p>
+        <span class="division-card-link">Open client portal →</span>
+      </a>
+    </div>
+  
+    <div class="pricing-jump" data-pricing-jump="home">
+      <div class="pricing-jump-inner">
+        <div><h3>Pricing menu</h3><p>Not sure where to start? Use the guided pricing menu to choose the problem first, then see only the services and prices that fit.</p></div>
+        <div class="cta-row"><a class="btn primary" href="/services.html">Open pricing menu</a></div>
+      </div>
+    </div>
     <div class="culture-band" style="margin-top:26px">
       <span class="eyebrow">A Gullah Geechee spiritual</span>
       <h3 style="font-size:clamp(1.75rem,3vw,2.55rem);margin:.35em 0 .3em">“Come by here.”</h3>
@@ -360,30 +399,6 @@
       </div>
     </div>
 
-    <div class="brand-stack">
-      <article class="mini-card" style="--accent:var(--gold)" onclick="showPanel('process')">
-        <small>Court + document support</small>
-        <h3>Binya Process House</h3>
-        <p><em>De paper got fa move. We move um.</em></p>
-      </article>
-      <article class="mini-card" style="--accent:var(--rust)" onclick="showPanel('resource')">
-        <small>Community navigation</small>
-        <h3>Binya Resource Collective</h3>
-        <p><em>You ain got fa do um lone.</em></p>
-      </article>
-      <article class="mini-card" style="--accent:var(--teal)" onclick="showPanel('wellness')">
-        <small>Clinical + wellness</small>
-        <h3>Binya Wellness</h3>
-        <p><em>Tek care ya body. Tek care ya spirit.</em></p>
-      </article>
-    </div>
-  
-    <div class="pricing-jump" data-pricing-jump="home">
-      <div class="pricing-jump-inner">
-        <div><h3>Pricing menu</h3><p>Not sure where to start? Use the guided pricing menu to choose the problem first, then see only the services and prices that fit.</p></div>
-        <div class="cta-row"><a class="btn primary" href="/services.html">Open pricing menu</a></div>
-      </div>
-    </div>
 </section>
 
   <section class="panel shell" id="about">
