@@ -291,6 +291,32 @@ p{overflow-wrap:break-word}a{overflow-wrap:anywhere}
 @media(max-width:760px){.topbar{flex-wrap:wrap}.controls{margin-left:auto}.brand-copy span{font-size:.65rem}.tabs{padding-bottom:11px}.mini-card,.feature,.side-note,.about-card,.service,.price-card{padding:clamp(15px,3vw,21px)}}
 @media(max-width:480px){.brand-copy strong{font-size:1rem}.brand-copy span{max-width:180px;white-space:normal}.controls{width:100%;justify-content:flex-end}.hero h1{line-height:1.1}.service-chip-list,.subservice-chip-list{gap:7px}}
 
+
+/* Easy Read: distinct, calm section colors and less crowded text. Only in reader mode. */
+body.reader-mode{--read-gold:#e6b95e;--read-teal:#76cacb;--read-green:#a6d483;--read-rust:#efaa82;--read-violet:#c1a8f0;background:#11100f;color:#f6eee0}
+body.reader-mode .reader-guide{background:#192e30;border:2px solid #76cacb;color:#f4f6f2;max-width:760px;padding:12px 17px;margin:8px auto 16px}
+body.reader-mode .reader-guide h2{color:#9ee5e4;margin:0 0 3px;font-family:Verdana,Arial,sans-serif;font-size:1.1rem}
+body.reader-mode .reader-guide p{margin:2px 0;line-height:1.55}
+body.reader-mode .reader-guide strong{color:#ffda8b}
+body.reader-mode .eyebrow,body.reader-mode .kicker{color:var(--read-teal)!important}
+body.reader-mode h1{color:#fff0d0!important}
+body.reader-mode h2,body.reader-mode .cat-title{color:var(--read-gold)!important}
+body.reader-mode h3{color:var(--read-green)!important}
+body.reader-mode .tab.active,body.reader-mode .step.active{box-shadow:0 0 0 2px #f6d088}
+body.reader-mode .feature,body.reader-mode .mini-card,body.reader-mode .category,body.reader-mode .service,body.reader-mode .price-card,body.reader-mode .about-card,body.reader-mode .side-note{border-left:5px solid var(--read-teal);background-color:#1b211f}
+body.reader-mode .feature:nth-of-type(3n+2),body.reader-mode .mini-card:nth-of-type(3n+2),body.reader-mode .category:nth-of-type(3n+2),body.reader-mode .service:nth-of-type(3n+2){border-left-color:var(--read-rust);background-color:#282019}
+body.reader-mode .feature:nth-of-type(3n),body.reader-mode .mini-card:nth-of-type(3n),body.reader-mode .category:nth-of-type(3n),body.reader-mode .service:nth-of-type(3n){border-left-color:var(--read-violet);background-color:#24202e}
+body.reader-mode .service-name,body.reader-mode .category summary{color:#f8eac8!important;font-weight:750}
+body.reader-mode .service-desc{line-height:1.65;max-width:64ch}
+body.reader-mode .scope-note{color:#b2dfc3}
+body.reader-mode .guide-body{background:#1a2222}
+body.reader-mode .problem,body.reader-mode .lane{border-color:#76cacb;background:#1b2d2e;color:#f8eee2}
+body.reader-mode .filter.active{background:#e6b95e!important;color:#16130f!important;-webkit-text-fill-color:#16130f!important}
+body.reader-mode :is(button,a,summary):focus-visible{outline:3px solid #9ee5e4!important;outline-offset:3px}
+body.reader-mode .reader-toggle[aria-pressed=true]{background:#e6b95e;color:#15120e}
+body.reader-mode p,body.reader-mode li{max-width:65ch}
+@media(max-width:650px){body.reader-mode .reader-guide{padding:10px 12px}body.reader-mode p{line-height:1.7}}
+
 </style>
 
 <script>
@@ -372,7 +398,7 @@ p{overflow-wrap:break-word}a{overflow-wrap:anywhere}
 </header>
 
 <main id="top">
-<aside class="reader-guide" data-reader-guide hidden aria-label="ADHD and dyslexia reading support"><h2>Reading support</h2><p>Read one section at a time. Use the short service buttons to see details only when you need them.</p><p>Reading Mode uses a simpler font, extra line spacing, and clearer focus indicators. Switch it off any time.</p></aside>
+<aside class="reader-guide" data-reader-guide hidden aria-label="ADHD and dyslexia reading support"><h2>Easy Read is on</h2><p><strong>1.</strong> Pick a topic. <strong>2.</strong> Open what you need. <strong>3.</strong> Take your time.</p></aside>
   <section class="hero shell" id="home">
     <span class="eyebrow">KUMBAYA Client Access</span>
     <h1>Do’step</h1>
