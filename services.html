@@ -113,6 +113,22 @@ p{overflow-wrap:break-word}a{overflow-wrap:anywhere}
 .guide .steps button.step{display:inline-flex!important;justify-content:center;align-items:center;min-height:40px;padding:9px 13px!important;border-radius:999px;white-space:normal;text-align:center;box-shadow:none!important;background-color:#19150f!important;color:#f3e7d2!important;-webkit-text-fill-color:#f3e7d2!important;border-color:#806a49!important;opacity:1!important;cursor:pointer}
 .guide .steps button.step.active{background-color:#d8a24a!important;color:#17110a!important;-webkit-text-fill-color:#17110a!important;border-color:#d8a24a!important}
 @media(max-width:650px){.guide .steps button.step{font-size:.76rem!important;flex:1 1 145px;min-width:0}}
+
+/* Pricing step hover: legible in Safari and every browser */
+@media(hover:hover){
+ .guide .steps button.step:hover:not(.active){
+   background:#3b2e1d!important;color:#fff4df!important;
+   -webkit-text-fill-color:#fff4df!important;border-color:#e9b85c!important;
+   box-shadow:0 0 0 2px rgba(216,162,74,.22)!important;
+ }
+ .guide .steps button.step.active:hover{
+   background:#f0bd66!important;color:#17110a!important;
+   -webkit-text-fill-color:#17110a!important;border-color:#f0bd66!important;
+ }
+}
+.guide .steps button.step:focus-visible{
+ outline:3px solid #fff0d0!important;outline-offset:3px;
+}
 </style>
 </head>
 <body>
