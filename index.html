@@ -796,7 +796,7 @@ p{overflow-wrap:break-word}a{overflow-wrap:anywhere}
         </p>
         <div class="cta-row">
           <a class="btn primary" href="#wellness-services">Explore support areas</a>
-          <a class="btn secondary" href="#contact">Contact Binya</a>
+          <a class="btn secondary" href="#contact">Contact KUMBAYA</a>
         </div>
       </div>
       <aside class="side-note">
@@ -1215,14 +1215,14 @@ async function requestReset(){
   if(!email){ notice('Enter your email first, then choose password reset.','warn'); return; }
   const redirectTo = `${location.origin}${location.pathname}`;
   const { error } = await sb.auth.resetPasswordForEmail(email,{redirectTo});
-  if(error) notice('Password reset could not be started. Contact Binya if this continues.','error');
+  if(error) notice('Password reset could not be started. Contact KUMBAYA if this continues.','error');
   else notice('If that email has a North Star account, a secure reset link has been sent.','success');
 }
 
 async function onSignedIn(user){
   currentUser=user;
   const { data, error } = await sb.from('profiles').select('id,display_name,role').eq('id',user.id).single();
-  if(error){ notice('Your account is signed in, but the portal profile is not ready. Contact Binya.','error'); return; }
+  if(error){ notice('Your account is signed in, but the portal profile is not ready. Contact KUMBAYA.','error'); return; }
   currentProfile=data;
   if(shouldRequirePasswordSetup(user)){
     showPasswordSetup(passwordUpdateMode);
