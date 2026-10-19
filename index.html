@@ -257,6 +257,19 @@
     .portal-dashboard{margin-top:1.25rem}.dash-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1rem}.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.dash-panel{background:rgba(21,18,14,.92);color:var(--cream)}.dash-list{display:grid;gap:.65rem;margin-top:1rem}.dash-row,.message{display:flex;justify-content:space-between;gap:1rem;padding:.8rem;border:1px solid var(--line);border-radius:14px;background:#100e0b}.dash-row small,.message small{display:block;color:var(--muted);margin-top:.2rem}.dash-row button{border:1px solid var(--line);background:transparent;color:var(--cream);border-radius:999px;padding:.4rem .7rem}.message{display:block}.message p{margin:.55rem 0 0;white-space:pre-wrap}.empty{color:var(--muted)}
     .upload-box,.message-compose{display:grid;gap:.65rem;margin-top:.75rem}.upload-box select,.upload-box input,.message-compose select,.message-compose textarea,.mfa-enroll-step input{width:100%;padding:.75rem;border:1px solid var(--line);border-radius:12px;background:#0f0d0a;color:var(--cream);font:inherit}.mfa-box{margin-bottom:1rem;background:rgba(29,24,18,.96);color:var(--cream)}.mfa-enroll-step{margin-top:1rem}.mfa-enroll-step img{max-width:220px;background:#fff;padding:8px;border-radius:12px}.mfa-enroll-step code{word-break:break-all}.status-pill{background:rgba(29,98,100,.18);color:#a9d6d6;height:max-content}
     @media(max-width:850px){.dashboard-grid{grid-template-columns:1fr}.dash-header{flex-direction:column}.dash-row{align-items:flex-start}}
+
+/* KUMBAYA continuity + reader accessibility */
+html{scroll-padding-top:155px} section[id], .panel[id], #guide, #browse, #contact{scroll-margin-top:155px}
+body{line-height:1.55} .hero{padding-top:28px} .panel{padding-top:14px} .feature,.side-note,.about-card{padding:clamp(17px,2.4vw,27px)}
+.hero-copy,.descriptor{max-width:680px;line-height:1.5}.mini-card p,.service p{line-height:1.48}.culture-band p{line-height:1.52}
+.reader-toggle{border:1px solid var(--gold);color:var(--cream);background:#15120e;border-radius:999px;padding:9px 13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.reader-toggle[aria-pressed="true"]{background:var(--gold);color:#17110a}
+body.reader-mode{font-family:Verdana,Arial,sans-serif;letter-spacing:.025em;line-height:1.85}
+body.reader-mode h1,body.reader-mode h2,body.reader-mode h3{font-family:Verdana,Arial,sans-serif;letter-spacing:normal;line-height:1.3}
+body.reader-mode p,body.reader-mode .descriptor,body.reader-mode .hero-copy{line-height:1.9;max-width:68ch}
+body.reader-mode .mini-card,body.reader-mode .service,body.reader-mode .feature{padding:24px}
+body.reader-mode .tabs{gap:12px} body.reader-mode .tab,body.reader-mode button{font-size:1rem}
+@media(max-width:650px){html{scroll-padding-top:125px}section[id],.panel[id],#guide,#browse{scroll-margin-top:125px}.topbar{gap:8px}.controls{flex-wrap:wrap}.reader-toggle{font-size:.8rem;padding:7px 10px}}
 </style>
 
 <script>
@@ -330,7 +343,7 @@
           <span>Come by here • Gullah Geechee rooted</span>
         </div>
       </a>
-      <div class="controls">
+      <div class="controls"><button type="button" class="reader-toggle" data-reader-toggle aria-pressed="false" aria-label="Toggle ADHD and dyslexia reading layout">Reading Mode</button>
         <a id="northstar-main-link" class="portal-login-btn" href="https://binya-north-star.onrender.com/">Do’step</a>
         <select class="language" aria-label="Language" title="Additional translated editions will launch after consistent funding." disabled>
           <option selected>English</option>
@@ -353,7 +366,7 @@
 <main id="top">
   <section class="hero shell" id="home">
     <span class="eyebrow">Practical help, rooted in community</span>
-    <h1>Real help for paperwork, resources, and wellness.</h1>
+    <h1>Legal help. Resources. Learning. Care.</h1>
     <p class="hero-copy">
       KUMBAYA brings together legal access, community resources, education, mental healthcare, and client-centered support. Pick what you need today,
       without having to already know the system.
@@ -1516,5 +1529,7 @@ async function closeAvailabilitySlot(id){
 }
 
 </script>
-</body>
+<script>
+(function(){function initReader(){document.querySelectorAll('[data-reader-toggle]').forEach(btn=>btn.addEventListener('click',()=>{const on=!document.body.classList.contains('reader-mode');document.body.classList.toggle('reader-mode',on);document.querySelectorAll('[data-reader-toggle]').forEach(b=>b.setAttribute('aria-pressed',String(on)));try{localStorage.setItem('kumbaya-reader-mode',on?'on':'off')}catch(e){}}));try{if(localStorage.getItem('kumbaya-reader-mode')==='on'){document.body.classList.add('reader-mode');document.querySelectorAll('[data-reader-toggle]').forEach(b=>b.setAttribute('aria-pressed','true'))}}catch(e){}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initReader);else initReader()})();
+</script></body>
 </html>
