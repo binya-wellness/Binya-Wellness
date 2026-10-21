@@ -157,7 +157,34 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 @media(max-width:650px){body.reader-mode .reader-guide{padding:10px 12px}body.reader-mode p{line-height:1.7}}
 
 .legal-review-note{margin:22px auto 38px;padding-block:18px;border-top:2px solid #b18e5a;border-bottom:1px solid var(--line)}.legal-review-note h2{font-size:1.3rem;color:#e9bd70;margin:0 0 12px}.legal-review-note p{font-size:.9rem;line-height:1.65;max-width:100ch;margin:9px 0;color:#eee0ca}.legal-review-note strong{color:#b8dedb}body.reader-mode .legal-review-note{background:#1d2b2d;border-left:5px solid #76cacb;padding:18px}body.reader-mode .legal-review-note p{max-width:72ch}
-.quote-request{border:1px solid var(--gold);background:rgba(216,162,74,.1);color:var(--cream);border-radius:12px;padding:9px 12px;cursor:pointer;font-weight:800;white-space:nowrap}.quote-request:hover,.quote-request:focus-visible{background:var(--gold);color:#17110a;outline:2px solid var(--cream);outline-offset:2px}\n</style>
+.quote-request{border:1px solid var(--gold);background:rgba(216,162,74,.1);color:var(--cream);border-radius:12px;padding:9px 12px;cursor:pointer;font-weight:800;white-space:nowrap}.quote-request:hover,.quote-request:focus-visible{background:var(--gold);color:#17110a;outline:2px solid var(--cream);outline-offset:2px}\n
+/* Process Haus pre-purchase price calculator — no payment endpoint */
+.ph-calculator{margin:24px auto 30px;border:1px solid var(--line);border-radius:24px;background:var(--panel);padding:clamp(18px,3vw,30px)}
+.ph-calculator h2{font-size:clamp(1.7rem,3vw,2.35rem);margin:0 0 8px}
+.ph-calculator p{color:#d1c4b1;line-height:1.55;margin:0 0 15px}
+.ph-calculator-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:20px}
+.ph-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.ph-field{display:grid;gap:6px;min-width:0}.ph-field.ph-wide{grid-column:1/-1}
+.ph-field label,.ph-field legend{font-size:.87rem;font-weight:750;color:var(--cream)}
+.ph-field select,.ph-field input{width:100%;min-height:46px;padding:9px 12px;border:1px solid #806a49;border-radius:12px;background:#100e0b;color:var(--cream);font:inherit}
+.ph-field input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--gold)}
+.ph-check{display:flex;gap:10px;align-items:flex-start;line-height:1.35;color:var(--cream);font-size:.92rem}
+.ph-check input{flex:0 0 20px;margin:1px 0 0}
+.ph-addon-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ph-calc-panel[hidden]{display:none!important}
+.ph-output{border:1px solid rgba(216,162,74,.45);border-radius:19px;padding:20px;background:#100e0b;align-self:start}
+.ph-out-label{color:var(--muted);font-size:.84rem}
+.ph-total{font-family:Georgia,serif;color:#f1cf89;font-size:clamp(2rem,4vw,2.65rem);font-weight:bold;line-height:1.1;margin:7px 0 14px}
+.ph-line{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.89rem}
+.ph-line span:first-child{color:#cdbfae}.ph-line strong{text-align:right;color:var(--cream)}
+.ph-note{font-size:.82rem!important;margin:11px 0!important;color:#cbbca8!important}
+.ph-warning{border-left:3px solid var(--gold);padding:8px 12px;background:rgba(216,162,74,.08);font-size:.86rem;color:#f3dfb9}
+.ph-calculator .btn{margin-top:15px}
+@media(max-width:810px){.ph-calculator-grid{grid-template-columns:1fr}}
+@media(max-width:550px){.ph-fields,.ph-addon-grid{grid-template-columns:1fr}}
+@media print{.ph-calculator{display:none!important}}
+
+</style>
 </head>
 <body>
 <header>
@@ -181,7 +208,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
     
     <div class="start-strip">
       <button class="pill-action primary" id="start-guide" type="button">Who all over there</button>
-      <button class="pill-action" id="free-now" type="button">Show me $0 options</button>
+      <a class="pill-action" href="#process-calculator">Calculate Process Haus fees</a> <button class="pill-action" id="free-now" type="button">Show me $0 options</button>
       <button class="pill-action" id="search-now" type="button">I know what I need</button>
       <button class="pill-action" id="browse-all" type="button">Browse the full menu</button>
     </div>
@@ -196,6 +223,73 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         </div>
       </div>
       <div class="guide-body" id="guide-body"></div>
+    </section>
+
+
+    <section class="shell ph-calculator" id="process-calculator" aria-labelledby="ph-calculator-title">
+      <span class="eyebrow">Process Haus • transparent pricing</span>
+      <h2 id="ph-calculator-title">Calculate your price before you buy.</h2>
+      <p>Choose the service and optional extras to see an itemized total. No sign-in, no payment and no sensitive case details are needed to calculate. This tool does not submit an order or confirm service availability.</p>
+      <div class="ph-calculator-grid">
+        <div class="ph-fields">
+          <div class="ph-field ph-wide">
+            <label for="ph-service">What do you need?</label>
+            <select id="ph-service"><option value="serve">Process serving</option><option value="notary">Mobile notary (not yet bookable)</option><option value="courier">Court filing / courier logistics</option></select>
+          </div>
+          <div class="ph-field">
+            <label for="ph-region">Service area</label>
+            <select id="ph-region"><option value="la">Los Angeles launch pricing</option><option value="alameda">Alameda County (planned; rate confirmation pending)</option><option value="other">Other California area (individual review)</option></select>
+          </div>
+          <div class="ph-field">
+            <label for="ph-tier">Price tier</label>
+            <select id="ph-tier"><option value="standard">Standard</option><option value="community">Community Access</option></select>
+          </div>
+          <div id="ph-serve-panel" class="ph-calc-panel ph-wide">
+            <div class="ph-fields">
+              <div class="ph-field ph-wide">
+                <label for="ph-speed">Service level (first person / address)</label>
+                <select id="ph-speed">
+                  <option value="Routine service">Routine • 3–5 business days</option>
+                  <option value="Priority / 48-hour target">Priority • 48-hour target</option>
+                  <option value="Rush / 24-hour target">Rush • 24-hour target</option>
+                  <option value="Same-day target when accepted">Same-day • when accepted</option>
+                  <option value="Registered-agent location">Registered agent • routine</option>
+                </select>
+              </div>
+              <div class="ph-field"><label for="ph-persons">People at same address</label><input id="ph-persons" type="number" min="1" max="20" value="1" step="1" inputmode="numeric"></div>
+              <div class="ph-field"><label for="ph-attempts">Extra attempts after included three</label><input id="ph-attempts" type="number" min="0" max="20" value="0" step="1" inputmode="numeric"></div>
+              <div class="ph-field"><label for="ph-add-address">New-address redispatches</label><input id="ph-add-address" type="number" min="0" max="10" value="0" step="1" inputmode="numeric"></div>
+              <div class="ph-field"><label for="ph-wait-hours">Stakeout / wait hours (2-hour minimum if selected)</label><input id="ph-wait-hours" type="number" min="0" max="24" value="0" step="1" inputmode="numeric"></div>
+              <div class="ph-field ph-wide">
+                <div class="ph-addon-grid" aria-label="Optional add-ons">
+                  <label class="ph-check"><input id="ph-window" type="checkbox">Requested 2-hour window</label>
+                  <label class="ph-check"><input id="ph-after" type="checkbox">After-hours attempt</label>
+                  <label class="ph-check"><input id="ph-weekend" type="checkbox">Weekend / holiday attempt</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ph-notary-panel" class="ph-calc-panel ph-wide" hidden>
+            <div class="ph-fields">
+              <div class="ph-field"><label for="ph-signatures">Acknowledgment signatures / jurats</label><input id="ph-signatures" type="number" min="1" max="30" step="1" value="1" inputmode="numeric"></div>
+              <div class="ph-field"><label for="ph-travel">Optional travel distance from Downtown LA</label>
+                <select id="ph-travel"><option value="none">No travel charge (meet at agreed location)</option><option value="0">0–5 miles</option><option value="1">5–10 miles</option><option value="2">10–20 miles</option><option value="outside">Outside published zone</option></select>
+              </div>
+            </div>
+          </div>
+          <div id="ph-courier-panel" class="ph-calc-panel ph-wide" hidden>
+            <p class="ph-note">Local courier / court filing starts at the published amount. Court filing charges, tolls, postage, third-party expenses and any exceptional travel are disclosed separately before approval.</p>
+          </div>
+        </div>
+        <div class="ph-output" aria-live="polite" aria-atomic="true">
+          <div class="ph-out-label" id="ph-price-label">Calculated published price</div>
+          <div class="ph-total" id="ph-price-total">$145.00</div>
+          <div id="ph-price-lines" aria-label="Itemized fees"></div>
+          <p id="ph-price-status" class="ph-warning">Credential-gated services are not yet available for online purchase.</p>
+          <p class="ph-note">Included process-serving attempts are billed for the work, not a guaranteed successful serve. Applicable government, witness, parking, toll, certified-copy, printing or other third-party costs are not silently added; any such costs require disclosure and approval before a charge.</p>
+          <a class="btn secondary" href="/services.html?view=process#browse">View the complete Process Haus fee schedule</a>
+        </div>
+      </div>
     </section>
 
     <section class="browse" id="browse">
@@ -230,7 +324,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 <h2>Chargeback and financial-risk prevention</h2>
 <p class="fine">KUMBAYA records a dated accepted quote, client authorization, service description, payment receipt, and communications; maintains timestamped service logs, lawful proof of service, delivery confirmation or approved print proof as appropriate; confirms the client's approved contact and delivery details; uses secure processor-hosted payment links with available verification/3-D Secure; and sends clear business-name descriptors and itemized receipts. Higher-risk, unusually large or rushed orders may require identity/order verification through a privacy-conscious process before acceptance. Never photograph payment cards or retain unnecessary ID copies, sensitive benefit documents or client case files for payment disputes. No collection of prohibited card surcharges or undisclosed dispute fees. If a client disputes a charge, first offer a written reconciliation and appropriate correction; respond promptly to processor evidence deadlines using only necessary data. A posted policy does not bar a customer from filing a legitimate chargeback or guarantee a merchant will win one.</p>
 </section>
-<section class="shell" aria-label="Free introduction booking" style="margin:20px auto;padding:18px 22px;border:1px solid var(--line);border-radius:18px;background:var(--panel)"><h2 style="margin-top:0">Book a free 15-minute introduction</h2><p class="fine">Ask what KUMBAYA can help with and learn about next steps. Free introductory calls do not include paid navigation, document work, notary services, or legal or clinical advice. For paid services, request a written quote first; booking is confirmed separately after payment. Do not put sensitive documents or financial-hardship proof into Calendly.</p><p><a class="btn" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Book the free 15-minute call</a></p></section>
+<section class="shell" aria-label="Free introduction booking" style="margin:20px auto;padding:18px 22px;border:1px solid var(--line);border-radius:18px;background:var(--panel)"><h2 style="margin-top:0">Book a free 15-minute introduction</h2><p class="fine">Ask what KUMBAYA can help with and learn about next steps. Free introductory calls do not include paid navigation, document work, notary services, or legal or clinical advice. For eligible published-price services, use the Process Haus calculator before checkout. Quotes are reserved for exceptional or unpriced work; all charges require prior approval. Do not put sensitive documents or financial-hardship proof into Calendly.</p><p><a class="btn" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Book the free 15-minute call</a></p></section>
 <section class="shell" aria-label="Request and payment workflow" style="margin:20px auto;padding:18px 22px;border:1px solid var(--line);border-radius:18px;background:var(--panel)"><h2 style="margin-top:0">How to request a service — manual approval stage</h2><p class="fine"><strong>1.</strong> Select a listed available service; request a written quote using the KUMBAYA contact link below. Include the service, desired date, and general location or scope; do not send medical records, identification documents, account passwords, financial evidence, or credit-card details in the initial request. <strong>2.</strong> KUMBAYA confirms eligibility, credentials and capacity, any Community Access documents through an approved secure channel, any taxes/travel/third-party fees, cancellation rights and exact total. <strong>3.</strong> After you accept the quote, KUMBAYA sends an itemized invoice from its connected live Stripe account using a secure Stripe-hosted payment page. <strong>4.</strong> KUMBAYA verifies the paid invoice in Stripe before issuing a private, single-use paid-session scheduling link, or separately arranging a non-appointment fulfillment. Only a confirmed cleared payment and affirmative booking confirmation establish a paid reservation. No checkout, uploading sensitive proof or instant booking is enabled on this website yet.</p><p class="fine"><strong>Consumer legal-rights checkpoint:</strong> certain consumer contracts agreed in person away from regular business premises (including some in-home mobile engagements) may carry a statutory 3-business-day cooling-off cancellation right, or 5 business days for buyers age 65 or over, with required notices and exceptions. KUMBAYA reviews whether the law applies before taking payment or starting work and does not start covered work before its applicable cancellation period unless an independently valid legal exception applies. No website refund rule overrides statutory cancellation rights. <a href="https://www.dca.ca.gov/publications/legal_guides/k_9.shtml" target="_blank" rel="noopener">California consumer cancellation guide</a>.</p><p class="fine"><strong>Data and payment safety:</strong> Community Access proof is not accepted through this static site or the unverified Do’step portal. Staff track discount-hours used and dollars discounted in a private ledger before approving a quote; only written acceptance and paid processor receipts establish bookings. Monthly discounts cannot exceed the posted caps. There is no automatic renewal, stored payment-card number, instant credit-card capture, client login or automated eligibility determination here.</p></section>
 <div class="bottom-actions">
       <div>
@@ -449,5 +543,77 @@ if(params.get('view')==='process'){chooseProblem('process');scrollGuide();} else
 </script>
 <script>
 (function(){function ready(){const key='kumbaya-reader-mode';let enabled=false;try{enabled=localStorage.getItem(key)==='on'}catch(e){};function sync(){document.body.classList.toggle('reader-mode',enabled);document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.setAttribute('aria-pressed',String(enabled)));document.querySelectorAll('[data-reader-guide]').forEach(x=>x.hidden=!enabled)}document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.addEventListener('click',()=>{enabled=!enabled;try{localStorage.setItem(key,enabled?'on':'off')}catch(e){}sync()}));sync();const header=document.querySelector('header');function setOffset(){if(header)document.documentElement.style.setProperty('--sticky-offset',Math.ceil(header.getBoundingClientRect().height+20)+'px')}setOffset();window.addEventListener('resize',setOffset)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready()})();
+
+/* Price preview is read-only. Checkout remains inactive until credential and payments approval. */
+(function initProcessHausCalculator(){
+  const $=id=>document.getElementById(id);
+  const root=$('process-calculator');if(!root)return;
+  const process=MENU.find(section=>section.title.includes('PROCESS HOUSE') && section.items && section.items.some(x=>x.service==='Routine service'));
+  const notary=MENU.find(section=>section.title.includes('PROCESS HAUS — MOBILE NOTARY'));
+  if(!process || !notary) {$('ph-price-status').textContent='Fee data is temporarily unavailable; please see the published rate card.';return;}
+  const item=(section,name)=>section.items.find(x=>x.service===name);
+  const amount=(entry,tier)=>{
+    const match=String(entry?.[tier]||'').match(/\$\s*(\d+(?:\.\d+)?)/);
+    return match?Number(match[1]):null;
+  };
+  const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+  const int=(id,min,max)=>{const n=Number($(id).value);return Number.isFinite(n)?Math.min(max,Math.max(min,Math.trunc(n))):min};
+  function update(){
+    const service=$('ph-service').value,tier=$('ph-tier').value,region=$('ph-region').value;
+    for(const kind of ['serve','notary','courier']) $('ph-'+kind+'-panel').hidden=(kind!==service);
+    const entries=[];let total=0,minimum=false,notes=[];
+    const add=(label,charge)=>{
+      if(!Number.isFinite(charge))return;
+      total+=charge;
+      entries.push({label,charge});
+    };
+    if(service==='serve'){
+      const speed=$('ph-speed').value,base=item(process,speed),people=int('ph-persons',1,20);
+      add(speed,amount(base,tier));
+      const extraPerson=people-1;
+      if(extraPerson)add('Additional '+extraPerson+' person(s) at same address',extraPerson*amount(item(process,'Additional person, same address'),tier));
+      const attempts=int('ph-attempts',0,20);
+      if(attempts)add('Additional attempt(s) × '+attempts,attempts*amount(item(process,'4th+ attempt'),tier));
+      const newAddresses=int('ph-add-address',0,10);
+      if(newAddresses){add('Redispatch to new address (minimum) × '+newAddresses,newAddresses*amount(item(process,'New address / redispatch'),tier));minimum=true;notes.push('New-address redispatch is published as a starting price.');}
+      const hrs=int('ph-wait-hours',0,24);
+      if(hrs){const billable=Math.max(2,hrs);add('Stakeout / waiting · '+billable+' billable hr',billable*amount(item(process,'Wait/stakeout — 2-hour minimum'),tier));}
+      for(const [control,label] of [['ph-window','Client-requested 2-hour window'],['ph-after','After-hours request'],['ph-weekend','Weekend/holiday request']]){
+        if($(control).checked)add(label,amount(item(process,label),tier));
+      }
+      if(speed==='Same-day target when accepted'){minimum=true;notes.push('Same-day requests start at this amount and require capacity confirmation before dispatch.');}
+      if(speed==='Registered-agent location')notes.push('Registered-agent price assumes a confirmed commercial agent location.');
+    }else if(service==='notary'){
+      const signatures=int('ph-signatures',1,30);
+      const cap=amount(item(notary,'California acknowledgment or jurat (per notarized signature)'),tier);
+      add('Maximum notarial fee × '+signatures,cap*signatures);
+      const travel=$('ph-travel').value;
+      const travels=['Mobile travel — DTLA / within 5 miles','Mobile travel — 5 to 10 miles','Mobile travel — 10 to 20 miles'];
+      if(['0','1','2'].includes(travel))add('Optional agreed mobile travel',amount(notary.items.find(x=>x.service===travels[Number(travel)]),tier));
+      if(travel==='outside'){minimum=true;notes.push('Outside-zone travel needs a separately approved amount.');}
+      notes.push('Notary figures show maximum permitted fees for these acts, not a compulsory fee. Mobile notary remains inactive until commissioning.');
+    }else{
+      const courier=item(process,'Court filing/courier');
+      add('Local court filing / courier starting price',amount(courier,tier));
+      minimum=true;notes.push('Filing/courier is published from this amount; court and third-party costs are not included.');
+    }
+    if(region==='alameda')notes.push('Alameda County launch is planned. These Los Angeles-based figures are illustrative, not an approved Alameda County price.');
+    if(region==='other'){minimum=true;notes.push('Outside the currently priced launch area: travel and local service pricing require review.');}
+    const label=service==='notary'?'Maximum published notarial and selected travel charges':minimum||region!=='la'?'Published starting estimate':'Calculated published base fees';
+    $('ph-price-label').textContent=label;
+    $('ph-price-total').textContent=(minimum||region!=='la'?'From ':'')+money(total);
+    $('ph-price-lines').replaceChildren(...entries.map(e=>{
+      const line=document.createElement('div'),name=document.createElement('span'),price=document.createElement('strong');
+      line.className='ph-line';name.textContent=e.label;price.textContent=money(e.charge);line.append(name,price);return line;
+    }));
+    const status=service==='notary'?'Not yet bookable: California commission and operational checks required.':
+      service==='serve'?'Not yet bookable: registered process server and operational checks required.':
+      'Not yet bookable online: eligibility and exact dispatch details require confirmation.';
+    $('ph-price-status').textContent=status+(notes.length?' '+notes.join(' '):'');
+  }
+  root.querySelectorAll('input,select').forEach(el=>{el.addEventListener('change',update);el.addEventListener('input',update);});
+  update();
+})();
+
 </script></body>
 </html>
