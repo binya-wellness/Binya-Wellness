@@ -1,0 +1,134 @@
+{
+  "START HERE - SYSTEMS NAVIGATION::15-minute 'Where Do I Start?' triage": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/30min",
+    "minutes": 15,
+    "paid": false,
+    "price": "Free"
+  },
+  "START HERE - SYSTEMS NAVIGATION::30-minute Systems Navigation Session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-30-minute-systems-navigation-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$15"
+  },
+  "START HERE - SYSTEMS NAVIGATION::90-minute Complex Systems Intake": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-90-minute-complex-systems-intake",
+    "minutes": 90,
+    "paid": true,
+    "price": "$125"
+  },
+  "START HERE - SYSTEMS NAVIGATION::Document organization session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-document-organization-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$45"
+  },
+  "PEER SUPPORT - PRIVATE-PAY / NONCLINICAL::30-minute Peer Check-In": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-30-minute-peer-check-in",
+    "minutes": 30,
+    "paid": true,
+    "price": "$40"
+  },
+  "PEER SUPPORT - PRIVATE-PAY / NONCLINICAL::60-minute Peer Support Session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-60-minute-peer-support-session",
+    "minutes": 60,
+    "paid": true,
+    "price": "$65"
+  },
+  "PEER SUPPORT - PRIVATE-PAY / NONCLINICAL::15-minute accountability / follow-through check-in": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-15-min-accountability-check-in",
+    "minutes": 15,
+    "paid": true,
+    "price": "$20"
+  },
+  "PEER SUPPORT - PRIVATE-PAY / NONCLINICAL::Peer-supported agency call - client-directed": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-peer-supported-agency-call",
+    "minutes": 30,
+    "paid": true,
+    "price": "$40 / 30 min"
+  },
+  "PEER SUPPORT - PRIVATE-PAY / NONCLINICAL::Trauma-resource peer session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-trauma-resource-peer-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$25"
+  },
+  "PUBLIC BENEFITS & INCOME-BASED ASSISTANCE - ONE LOW ACCESS PRICE::Agency call assistance - client-directed": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-agency-call-assistance",
+    "minutes": 30,
+    "paid": true,
+    "price": "$10 / 30 min"
+  },
+  "SSI PAPERWORK & NAVIGATION - ONE LOW ACCESS PRICE::SSI 'Where Do I Start?' session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-ssi-where-do-i-start-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$15"
+  },
+  "SSI PAPERWORK & NAVIGATION - ONE LOW ACCESS PRICE::SSA call support - client-directed": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-ssa-call-support-ssi",
+    "minutes": 30,
+    "paid": true,
+    "price": "$10 / 30 min"
+  },
+  "SSDI PAPERWORK & NAVIGATION::SSDI Navigation Session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-ssdi-navigation-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$55"
+  },
+  "SSDI PAPERWORK & NAVIGATION::SSA call support - client-directed": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-ssa-call-support-ssdi",
+    "minutes": 30,
+    "paid": true,
+    "price": "$30 / 30 min"
+  },
+  "NEURODIVERGENT FAMILY, IEP, 504 & ACCOMMODATION SUPPORT::Neurodivergent parent/caregiver 'Where Do I Start?' session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-neurodivergent-parent-intro",
+    "minutes": 30,
+    "paid": true,
+    "price": "$45"
+  },
+  "NEURODIVERGENT FAMILY, IEP, 504 & ACCOMMODATION SUPPORT::Parent/caregiver burnout peer-support session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-parent-caregiver-burnout-peer-support-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$45"
+  },
+  "NEURODIVERGENT FAMILY, IEP, 504 & ACCOMMODATION SUPPORT::Parallel paperwork / body-doubling session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-parallel-paperwork-body-doubling-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$40"
+  },
+  "FAMILY ACCESS::Family Systems Navigation Session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-family-systems-navigation-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$60"
+  },
+  "IMMIGRANT COMMUNITY ACCESS - GENERAL RESOURCES / DOCUMENT LOGISTICS::General document organization session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-general-document-organization-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$45"
+  },
+  "REENTRY ACCESS::Reentry 'Where Do I Start?' session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-reentry-where-do-i-start-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$40"
+  },
+  "SUBSTANCE USE & HARM REDUCTION ACCESS::Peer-supported treatment call": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-peer-supported-treatment-call",
+    "minutes": 30,
+    "paid": true,
+    "price": "$30"
+  },
+  "TRAFFICKING SURVIVOR ACCESS::Peer-support session": {
+    "url": "https://calendly.com/kumbaya-cloud-proton/kumbaya-peer-support-session",
+    "minutes": 30,
+    "paid": true,
+    "price": "$45"
+  }
+}
