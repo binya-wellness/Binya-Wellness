@@ -651,8 +651,8 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 
     <div id="portal-login-card" class="portal-grid">
       <div class="portal-card">
-        <span class="eyebrow">Client sign in</span><h3>Enter Do’step</h3>
-        <p>Use the private account Kumbaya created for you. Public self-signup is intentionally disabled.</p>
+        <span class="eyebrow">KUMBAYA account sign in</span><h3>Enter Do’step</h3>
+        <p>Clients, staff, and administrators sign in here with their existing KUMBAYA account. Public self-signup is intentionally disabled.</p>
         <form id="portal-login-form" class="portal-form" onsubmit="return portalLogin(event)">
           <div><label for="portal-email">Email</label><input id="portal-email" required type="email" autocomplete="username" placeholder="you@example.com"></div>
           <div><label for="portal-password">Password</label><input id="portal-password" required type="password" autocomplete="current-password" placeholder="••••••••••••"></div>
@@ -971,7 +971,7 @@ async function onSignedIn(user){
   $('portal-login-card')?.classList.add('hidden');
   $('portal-dashboard')?.classList.remove('hidden');
   $('portal-user-name').textContent = data.display_name || user.email;
-  $('portal-user-role').textContent = data.role === 'client' ? 'Client' : 'KUMBAYA team';
+  $('portal-user-role').textContent = data.role === 'admin' ? 'KUMBAYA Administrator' : data.role === 'client' ? 'Client' : 'KUMBAYA team';
   await refreshMfaState();
   const team = ['staff','admin'].includes(data.role);
   $('team-account-settings')?.classList.toggle('hidden',!team);
