@@ -318,6 +318,26 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 @media(max-width:650px){body.reader-mode .reader-guide{padding:10px 12px}body.reader-mode p{line-height:1.7}}
 
 .legal-review-note{margin:22px auto 38px;padding-block:18px;border-top:2px solid #b18e5a;border-bottom:1px solid var(--line)}.legal-review-note h2{font-size:1.3rem;color:#e9bd70;margin:0 0 12px}.legal-review-note p{font-size:.9rem;line-height:1.65;max-width:100ch;margin:9px 0;color:#eee0ca}.legal-review-note strong{color:#b8dedb}body.reader-mode .legal-review-note{background:#1d2b2d;border-left:5px solid #76cacb;padding:18px}body.reader-mode .legal-review-note p{max-width:72ch}
+
+/* KUMBAYA × Do’step design cohesion: tailored service studio */
+:root{--portal-focus:rgba(216,162,74,.55)}
+#portal .portal-card,#portal .dash-panel{border:1px solid rgba(216,162,74,.24);border-radius:23px;background:linear-gradient(155deg,rgba(31,25,18,.96),rgba(16,14,11,.98));box-shadow:0 15px 38px rgba(0,0,0,.23)}
+#portal .dashboard-grid{gap:22px}
+#portal .dash-panel{padding:clamp(20px,2.4vw,30px)}
+#portal .dash-panel h3,#portal .portal-card h3{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.025em;line-height:1.15}
+#portal .dash-panel .eyebrow{color:#e9b962;letter-spacing:.14em}
+#portal .dash-list{margin-top:15px}
+#portal .dash-row{border:1px solid rgba(216,162,74,.14);border-radius:13px;background:rgba(255,255,255,.025);padding:13px}
+#portal button.btn,#portal .btn{min-height:44px;font-weight:800;line-height:1.25;border-radius:13px;transition:filter .15s,transform .15s}
+#portal button.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+#portal button.btn.secondary{color:#f6e9d5;background:#342619;border:1px solid #aa813f}
+#portal button.btn.primary{background:#e5ac4d;color:#1b1308}
+#portal input,#portal select,#portal textarea{min-height:44px;border-radius:12px;border:1px solid #766147;background:#17130f;color:#f7ead7;padding:10px 12px}
+#portal input:focus-visible,#portal select:focus-visible,#portal textarea:focus-visible,#portal button:focus-visible{outline:3px solid var(--portal-focus);outline-offset:2px}
+#portal label{color:#e9ddce;font-weight:650}
+#portal .empty{background:rgba(216,162,74,.045);border:1px dashed rgba(216,162,74,.35);border-radius:13px;padding:16px;color:#d4c6b4}
+@media(max-width:690px){#portal .dash-panel{padding:19px}#portal .dashboard-grid{gap:15px}}
+
 </style>
 
 <script>
@@ -1186,7 +1206,7 @@ async function loadSchedulerServices(){
     .eq('active',true).order('division').order('name');
   if(error){ if(clientSelect) clientSelect.innerHTML='<option value="">Scheduler unavailable</option>'; if(teamSelect) teamSelect.innerHTML='<option value="">Scheduler unavailable</option>'; notice('Scheduling services could not be loaded.','error'); return; }
   schedulerServices=data||[];
-  const options=['<option value="">Choose a service…</option>'].concat(schedulerServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+  const options=['<option value="">Choose a service…</option>'].concat(schedulerServices.map(s=>`<option value="${s.id}">${esc(({resource:'Resource navigation',process:'Process Haus',wellness:'Cyaam / Wellness',va:'Veteran resources'})[s.division]||s.division)} · ${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
   if(clientSelect) clientSelect.innerHTML=options;
   if(teamSelect){
     let teamServices=schedulerServices;
@@ -1195,7 +1215,7 @@ async function loadSchedulerServices(){
       const allowed=new Set((perms||[]).map(x=>x.service_type_id));
       teamServices=schedulerServices.filter(s=>allowed.has(s.id));
     }
-    teamSelect.innerHTML=['<option value="">Choose a service…</option>'].concat(teamServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+    teamSelect.innerHTML=['<option value="">Choose a service…</option>'].concat(teamServices.map(s=>`<option value="${s.id}">${esc(({resource:'Resource navigation',process:'Process Haus',wellness:'Cyaam / Wellness',va:'Veteran resources'})[s.division]||s.division)} · ${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
   }
   if(currentProfile?.role==='client') await loadAvailableSlots();
 }
