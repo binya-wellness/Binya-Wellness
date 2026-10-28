@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer"><title>KUMBAYA | Secure Do’step Password Recovery</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#100e0b;color:#f3e7d2;font:16px/1.55 system-ui,sans-serif;display:grid;place-items:center;padding:24px}
+main{width:min(100%,510px);padding:32px;border:1px solid #6b502f;border-radius:18px;background:#1d1812}h1{font:700 2rem Georgia,serif;margin:0 0 10px;color:#e6b663}p{color:#d8cbb8}
+label{display:block;margin-top:16px;font-weight:650}input{width:100%;padding:14px;border-radius:9px;border:1px solid #aa8b59;background:#fff9e9;color:#211b13;font:inherit}
+button{display:block;width:100%;margin-top:20px;padding:14px;border:0;border-radius:9px;background:#d8a24a;color:#19130b;font:700 1rem system-ui;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}a{color:#efbf76}#status{padding:12px;border-radius:8px;background:#31251c;margin:18px 0}section[hidden]{display:none}
+</style></head><body><main><h1>KUMBAYA · Do’step</h1><p>Secure account password recovery</p>
+<div id="status" role="status" aria-live="polite">Checking your recovery link…</div>
+<section id="request" hidden><p>Request a fresh single-use recovery link. Open it in this same browser.</p><form id="requestForm"><label for="email">Account email</label><input id="email" type="email" autocomplete="email" required><button type="submit">Send recovery email</button></form></section>
+<section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
+<section id="success" hidden><p>Your password has been updated. You can now return to Do’step.</p><p><a href="https://dostep.kumbaya.cloud/">Open Do’step sign in</a></p></section>
+<p><small>Never share a recovery link, password, or verification code. KUMBAYA will never ask you to send these by email.</small></p>
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script><script>
+(() => {
+"use strict";
+const supabaseUrl="https://geevglgckmjexvnjnodl.supabase.co";
+const supabaseKey="sb_publishable_7HWq3CFDgkw6UWZZHqZHXA_PFyD2F96";
+const client=window.supabase.createClient(supabaseUrl,supabaseKey,{auth:{persistSession:true,detectSessionInUrl:false,autoRefreshToken:true}});
+const $=id=>document.getElementById(id);
+const show=(section,message)=>{for(const id of ["request","update","success"])$(id).hidden=id!==section;$("status").textContent=message;};
+let validated=false;
+function cleanUrl(){history.replaceState(null,"",location.pathname);}
+async function init(){
+const raw=location.hash.slice(1), query=new URLSearchParams(location.search), fragment=new URLSearchParams(raw);
+const error=query.get("error_description")||fragment.get("error_description");
+if(error){cleanUrl();show("request","The recovery link is invalid or has expired. Request a fresh one.");return;}
+try{
+if(fragment.get("type")==="recovery"&&fragment.get("access_token")&&fragment.get("refresh_token")){
+const {data,error}=await client.auth.setSession({access_token:fragment.get("access_token"),refresh_token:fragment.get("refresh_token")});
+cleanUrl();
+if(error||!data.session){show("request","Recovery verification failed. Request a new link.");return;}
+validated=true;show("update","Recovery link verified.");return;
+}
+if(query.get("code")){
+const {data,error}=await client.auth.exchangeCodeForSession(query.get("code"));cleanUrl();
+if(error||!data.session){show("request","Recovery verification failed. Request a new link.");return;}
+validated=true;show("update","Recovery link verified.");return;
+}
+cleanUrl();show("request","Enter your account email to start password recovery.");
+}catch(e){cleanUrl();show("request","Unable to process this recovery link. Please try a new one.");}
+}
+$("requestForm").addEventListener("submit",async event=>{
+event.preventDefault();const button=event.target.querySelector("button");button.disabled=true;
+try{
+const {error}=await client.auth.resetPasswordForEmail($("email").value.trim(),{redirectTo:location.origin+location.pathname});
+if(error){show("request",error.status===429?"Too many recent attempts. Please use an already-delivered link or try again later.":"Unable to send recovery email. Please check your email provider settings.");}
+else show("request","If an account exists for this address, a recovery email has been sent. Check your inbox.");
+}catch(e){show("request","Unable to contact the recovery service.");}finally{button.disabled=false;}
+});
+$("updateForm").addEventListener("submit",async event=>{
+event.preventDefault();if(!validated){show("request","A verified recovery link is required.");return;}
+const a=$("password").value,b=$("confirm").value;if(a.length<12||a!==b){$("status").textContent="Use at least 12 characters and make sure both passwords match.";return;}
+const button=event.target.querySelector("button");button.disabled=true;
+try{const {error}=await client.auth.updateUser({password:a});if(error){$("status").textContent="Password update failed. Please use a different strong password or request another recovery link.";return;}
+$("password").value="";$("confirm").value="";validated=false;await client.auth.signOut();show("success","Password saved successfully.");
+}catch(e){$("status").textContent="Unable to save password. Try again."; }finally{button.disabled=false;}
+});init();
+})();
+</script></body></html>
