@@ -945,7 +945,7 @@ async function requestReset(){
   const redirectTo = `${location.origin}${location.pathname}`;
   const { error } = await sb.auth.resetPasswordForEmail(email,{redirectTo});
   if(error) notice('Password reset could not be started. Contact KUMBAYA if this continues.','error');
-  else notice('If that email has a Do’step account, a secure reset link has been sent. Use the email currently registered to your account.','success');
+  else notice('If this email is registered with KUMBAYA Do’step, you’ll receive a secure password-reset link. Check your inbox and spam folder. For security, we can’t confirm whether an account exists.','success');
 }
 
 async function requestTeamEmailChange(){
