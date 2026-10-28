@@ -1180,14 +1180,14 @@ function schedulerServiceById(id){ return schedulerServices.find(s=>s.id===id); 
 async function loadSchedulerServices(){
   const clientSelect=$('scheduler-service');
   const teamSelect=$('team-service');
-  if(!clientSelect) return;
+  if(!clientSelect && !teamSelect) return;
   const {data,error}=await sb.from('service_types')
     .select('id,division,name,description,duration_minutes,active')
     .eq('active',true).order('division').order('name');
-  if(error){ clientSelect.innerHTML='<option value="">Scheduler unavailable</option>'; return; }
+  if(error){ if(clientSelect) clientSelect.innerHTML='<option value="">Scheduler unavailable</option>'; if(teamSelect) teamSelect.innerHTML='<option value="">Scheduler unavailable</option>'; notice('Scheduling services could not be loaded.','error'); return; }
   schedulerServices=data||[];
   const options=['<option value="">Choose a service…</option>'].concat(schedulerServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
-  clientSelect.innerHTML=options;
+  if(clientSelect) clientSelect.innerHTML=options;
   if(teamSelect){
     let teamServices=schedulerServices;
     if(currentProfile?.role==='staff'){
