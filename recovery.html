@@ -9,8 +9,8 @@ button{display:block;width:100%;margin-top:20px;padding:14px;border:0;border-rad
 button:disabled{opacity:.6;cursor:wait}a{color:#efbf76}#status{padding:12px;border-radius:8px;background:#31251c;margin:18px 0}section[hidden]{display:none}
 </style></head><body><main><h1>KUMBAYA · Do’step</h1><p>Secure account password recovery</p>
 <div id="status" role="status" aria-live="polite">Checking your recovery link…</div>
-<section id="request" hidden><p>Request a fresh single-use recovery link. Open it in this same browser.</p><form id="requestForm"><label for="email">Account email</label><input id="email" type="email" autocomplete="email" required><button type="submit">Send recovery email</button></form></section>
-<section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
+<section id="request" hidden><p>Request a six-digit email sign-in code for your existing account. No links required.</p><form id="requestForm"><label for="email">Account email</label><input id="email" type="email" autocomplete="email" required><button type="submit">Send six-digit code</button></form></section>
+<section id="otp" hidden><p>Enter the six-digit code from your KUMBAYA email.</p><form id="otpForm"><label for="code">Email verification code</label><input id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required><button type="submit">Verify code</button></form></section><section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
 <section id="success" hidden><p>Your password has been updated. You can now return to Do’step.</p><p><a href="https://dostep.kumbaya.cloud/">Open Do’step sign in</a></p></section>
 <p><small>Never share a recovery link, password, or verification code. KUMBAYA will never ask you to send these by email.</small></p>
 </main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script><script>
@@ -20,8 +20,8 @@ const supabaseUrl="https://geevglgckmjexvnjnodl.supabase.co";
 const supabaseKey="sb_publishable_7HWq3CFDgkw6UWZZHqZHXA_PFyD2F96";
 const client=window.supabase.createClient(supabaseUrl,supabaseKey,{auth:{persistSession:true,detectSessionInUrl:false,autoRefreshToken:true}});
 const $=id=>document.getElementById(id);
-const show=(section,message)=>{for(const id of ["request","update","success"])$(id).hidden=id!==section;$("status").textContent=message;};
-let validated=false;
+const show=(section,message)=>{for(const id of ["request","otp","update","success"])$(id).hidden=id!==section;$("status").textContent=message;};
+let validated=false;let pendingEmail="";
 function cleanUrl(){history.replaceState(null,"",location.pathname);}
 async function init(){
 const raw=location.hash.slice(1), query=new URLSearchParams(location.search), fragment=new URLSearchParams(raw);
@@ -43,12 +43,22 @@ cleanUrl();show("request","Enter your account email to start password recovery."
 }catch(e){cleanUrl();show("request","Unable to process this recovery link. Please try a new one.");}
 }
 $("requestForm").addEventListener("submit",async event=>{
+event.preventDefault();const button=event.target.querySelector("button");button.disabled=true;pendingEmail=$("email").value.trim();
+try{
+const {error}=await client.auth.signInWithOtp({email:pendingEmail,options:{shouldCreateUser:false}});
+if(error){show("request",error.status===429?"Too many code requests. Use the latest email or try again after the security limit resets.":"Unable to send a code. Confirm the email OTP template is configured and your account exists.");}
+else show("otp","Check your inbox for a six-digit code. If the email only contains a link, the Supabase Magic Link template must be switched to {{ .Token }}.");
+}catch(e){show("request","Unable to contact the authentication service.");}finally{button.disabled=false;}
+});
+$("otpForm").addEventListener("submit",async event=>{
 event.preventDefault();const button=event.target.querySelector("button");button.disabled=true;
 try{
-const {error}=await client.auth.resetPasswordForEmail($("email").value.trim(),{redirectTo:location.origin+location.pathname});
-if(error){show("request",error.status===429?"Too many recent attempts. Please use an already-delivered link or try again later.":"Unable to send recovery email. Please check your email provider settings.");}
-else show("request","If an account exists for this address, a recovery email has been sent. Check your inbox.");
-}catch(e){show("request","Unable to contact the recovery service.");}finally{button.disabled=false;}
+const {data,error}=await client.auth.verifyOtp({email:pendingEmail,token:$("code").value.trim(),type:"email"});
+if(error||!data.session){$("status").textContent="Code invalid or expired. Check the newest email and try again.";return;}
+const {data:{user}}=await client.auth.getUser();
+if(!user||user.email?.toLowerCase()!==pendingEmail.toLowerCase()){await client.auth.signOut();show("request","Account verification mismatch. Please restart.");return;}
+validated=true;show("update","Code verified. Choose your new password.");
+}catch(e){$("status").textContent="Unable to verify the code."; }finally{button.disabled=false;}
 });
 $("updateForm").addEventListener("submit",async event=>{
 event.preventDefault();if(!validated){show("request","A verified recovery link is required.");return;}
