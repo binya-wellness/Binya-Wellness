@@ -809,6 +809,9 @@ let sb = null;
 let currentUser = null;
 let currentProfile = null;
 let passwordUpdateMode = false;
+// Supabase invitation and recovery links must open password setup, not ordinary login.
+const initialAuthLinkType = new URLSearchParams(location.hash.slice(1)).get('type') || new URLSearchParams(location.search).get('type');
+let inviteSetupMode = ['invite','recovery'].includes(initialAuthLinkType);
 
 const $ = (id) => document.getElementById(id);
 const esc = (s='') => String(s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -846,12 +849,13 @@ async function initPortal(){
 
 async function handleAuthEvent(event, session){
   if(event==='PASSWORD_RECOVERY') passwordUpdateMode=true;
+  if(event==='SIGNED_IN' && initialAuthLinkType==='invite') inviteSetupMode=true;
   if(session?.user){ await onSignedIn(session.user); }
   else showLoggedOut();
 }
 
 function shouldRequirePasswordSetup(user){
-  return passwordUpdateMode || user?.user_metadata?.needs_password_setup === true;
+  return passwordUpdateMode || inviteSetupMode || user?.user_metadata?.needs_password_setup === true;
 }
 
 function showPasswordSetup(recovery=false){
@@ -875,6 +879,7 @@ async function updatePortalPassword(){
   const {data,error}=await sb.auth.updateUser({password:pw,data:existing});
   if(error){ notice('Your password could not be updated. Try a stronger password or contact KUMBAYA.','error'); return; }
   passwordUpdateMode=false;
+  inviteSetupMode=false;
   $('new-portal-password').value=''; $('confirm-portal-password').value='';
   history.replaceState(null,'',`${location.pathname}${location.search}#portal`);
   notice('Password saved. Finish MFA to unlock Do’step.','success');
@@ -914,7 +919,7 @@ function disableLogin(){
 }
 
 function showLoggedOut(){
-  currentUser=null; currentProfile=null; passwordUpdateMode=false;
+  currentUser=null; currentProfile=null; passwordUpdateMode=false; inviteSetupMode=false;
   $('password-setup-card')?.classList.add('hidden');
   $('portal-login-card')?.classList.remove('hidden');
   $('portal-dashboard')?.classList.add('hidden');
@@ -964,7 +969,7 @@ async function onSignedIn(user){
   if(error){ notice('Your account is signed in, but the portal profile is not ready. Contact KUMBAYA.','error'); return; }
   currentProfile=data;
   if(shouldRequirePasswordSetup(user)){
-    showPasswordSetup(passwordUpdateMode);
+    showPasswordSetup(passwordUpdateMode || inviteSetupMode);
     return;
   }
   $('password-setup-card')?.classList.add('hidden');
