@@ -1109,7 +1109,7 @@ const configured = Boolean(cfg.supabaseUrl && browserKey);
 let sb = null;
 let currentUser = null;
 let currentProfile = null;
-let passwordUpdateMode = false;
+let passwordUpdateMode = /(?:^|[&#?])type=recovery(?:&|$)/.test(window.location.hash + '&' + window.location.search);
 
 const $ = (id) => document.getElementById(id);
 const esc = (s='') => String(s).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -1148,7 +1148,7 @@ async function initPortal(){
 async function handleAuthEvent(event, session){
   if(event==='PASSWORD_RECOVERY') passwordUpdateMode=true;
   if(session?.user){ await onSignedIn(session.user); }
-  else showLoggedOut();
+  else if(!passwordUpdateMode) showLoggedOut();
 }
 
 function shouldRequirePasswordSetup(user){
@@ -1215,7 +1215,7 @@ function disableLogin(){
 }
 
 function showLoggedOut(){
-  currentUser=null; currentProfile=null; passwordUpdateMode=false;
+  currentUser=null; currentProfile=null;
   $('password-setup-card')?.classList.add('hidden');
   $('portal-login-card')?.classList.remove('hidden');
   $('portal-dashboard')?.classList.add('hidden');
