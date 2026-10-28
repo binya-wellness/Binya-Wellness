@@ -1443,7 +1443,7 @@ async function loadAppointments(){
   let q=sb.from('appointments').select('id,client_id,staff_id,division,starts_at,ends_at,status,label,service_type_id').gte('starts_at',new Date().toISOString()).neq('status','cancelled').order('starts_at').limit(30);
   if(['staff','admin'].includes(currentProfile?.role) && currentProfile?.role!=='admin') q=q.eq('staff_id',currentUser.id);
   const {data,error}=await q;
-  window.__binyaAppointments=data||[];
+  window.__kumbayaAppointments=data||[];
   let clientNames={};
   if(!error && ['staff','admin'].includes(currentProfile?.role) && data?.length){
     const ids=[...new Set(data.map(a=>a.client_id).filter(Boolean))];
@@ -1511,11 +1511,11 @@ async function loadAvailableSlots(){
     const dt=new Date(slot.starts_at);
     return `<button class="slot-btn" type="button" data-slot="${slot.id}" onclick="selectSchedulerSlot('${slot.id}')"><strong>${esc(dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))}</strong><small>${esc(dt.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}))}</small></button>`;
   }).join('');
-  window.__binyaSlots=data;
+  window.__kumbayaSlots=data;
 }
 
 function selectSchedulerSlot(id){
-  const data=(window.__binyaSlots||[]).find(x=>x.id===id); if(!data) return;
+  const data=(window.__kumbayaSlots||[]).find(x=>x.id===id); if(!data) return;
   selectedSlotId=id; selectedSlotData=data;
   document.querySelectorAll('.slot-btn').forEach(b=>b.classList.toggle('selected',b.dataset.slot===id));
   const svc=schedulerServiceById(data.service_type_id);
@@ -1578,10 +1578,10 @@ async function rescheduleSelectedSlot(){
 }
 
 function downloadAppointmentIcs(id){
-  const a=(window.__binyaAppointments||[]).find(x=>x.id===id); if(!a) return;
+  const a=(window.__kumbayaAppointments||[]).find(x=>x.id===id); if(!a) return;
   const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KUMBAYA//Do’step//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:KUMBAYA appointment','DESCRIPTION:Open Do’step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
-  const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='binya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KUMBAYA//Do’step//EN','BEGIN:VEVENT',`UID:${a.id}@kumbaya.cloud`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:KUMBAYA appointment','DESCRIPTION:Open Do’step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='kumbaya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 async function createAvailabilitySlot(){
