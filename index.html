@@ -639,7 +639,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       <article class="about-card">
         <h3>Meet the founder</h3>
         <p>
-          <strong style="color:var(--cream)">Daria Porter, AMFT, MA</strong> is the founder of Kumbaya.
+          <strong style="color:var(--cream)">Daria Porter, MA</strong> is the founder of Kumbaya.
           Their professional background is in mental health and community-centered support, and the larger
           Kumbaya model is being designed to bring practical services, resource navigation, and wellness together
           without making people feel like they need a dictionary to ask for help.
@@ -651,7 +651,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         </p>
         <div class="founder-facts">
           <div class="fact"><strong>Founder</strong><span>Daria Porter</span></div>
-          <div class="fact"><strong>Professional title</strong><span>Associate Marriage & Family Therapist (AMFT), MA</span></div>
+          <div class="fact"><strong>Professional title</strong><span>Registered Associate Marriage and Family Therapist #146290, MA. Employed by Rainbow Connection Counseling Collective and supervised by a licensed clinician.</span></div>
           <div class="fact"><strong>Approach</strong><span>Human, practical, culturally responsive, and easy to understand</span></div>
           <div class="fact"><strong>Long-term vision</strong><span>A multi-service organization with distinct teams under KUMBAYA</span></div>
         </div>
@@ -824,8 +824,8 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       </div>
       <aside class="side-note">
         <h3>Who provides what?</h3>
-        <p><strong>RCCC:</strong> independent therapy provider; counseling consultations, intake, clinical consent, fees, supervision, telehealth and records are handled by RCCC. Ask RCCC about working with <strong>Daria Porter, AMFT</strong>; clinician assignment depends on their intake process and availability.</p>
-        <p><strong>Cyaam / KUMBAYA:</strong> original workbooks, psychoeducation, visual tools, support kits, workshops and community wellness events. These are nonclinical unless explicitly delivered under a separate authorized clinical arrangement.</p>
+        <p><strong>RCCC:</strong> independent therapy provider; counseling consultations, intake, clinical consent, fees, supervision, telehealth and records are handled by RCCC. You may ask RCCC about working with <strong>Daria Porter, Registered Associate Marriage and Family Therapist #146290, employed by Rainbow Connection Counseling Collective and supervised by a licensed clinician</strong>. RCCC confirms clinician fit and availability.</p>
+        <p><strong>Cyaam / KUMBAYA:</strong> original workbooks, psychoeducation, visual tools, support kits, workshops and community wellness events. These are independent, nonclinical offerings.</p>
         <p><strong>Do not submit therapy histories or clinical documents to KUMBAYA or Do’step.</strong> Use RCCC’s secure intake process for counseling.</p>
       </aside>
     </div>
@@ -891,7 +891,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         result.replaceChildren();
         const title=document.createElement('h3'); title.textContent=card.querySelector('h3').textContent;
         const copy=document.createElement('p'); copy.textContent=card.querySelector('p').textContent;
-        const status=document.createElement('p'); status.textContent='For counseling, contact Rainbow Connection Counseling Collective directly. Ask about Daria Porter, AMFT; RCCC handles intake, fees and availability.';
+        const status=document.createElement('p'); status.textContent='For counseling, contact Rainbow Connection Counseling Collective directly. RCCC handles intake, fees and availability.';
         result.append(title,copy,status);
         document.querySelectorAll('[data-wellness-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
         result.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -963,10 +963,10 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       <div class="portal-status">
         <span class="eyebrow">Protected portal</span><h3>What lives here</h3>
         <div class="portal-actions">
-          <div class="portal-tile"><h4>Documents</h4><p>Private uploads and downloads.</p></div>
+          <div class="portal-tile"><h4>Documents</h4><p>View shared documents. New uploads are paused.</p></div>
           <div class="portal-tile"><h4>Requests + Tasks</h4><p>See what is moving and what needs you.</p></div>
-          <div class="portal-tile"><h4>Secure Messages</h4><p>Keep sensitive conversations out of regular email.</p></div>
-          <div class="portal-tile"><h4>Scheduler</h4><p>Book, reschedule, cancel, and keep appointments in one place.</p></div>
+          <div class="portal-tile"><h4>Secure Messages</h4><p>Message KUMBAYA about nonclinical services. Send counseling inquiries directly to RCCC.</p></div>
+          <div class="portal-tile"><h4>Scheduler</h4><p>View portal appointments and find KUMBAYA scheduling options.</p></div>
         </div>
       </div>
     </div>
@@ -1042,8 +1042,8 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
           <span class="eyebrow">Scheduler</span><h3>Book time with KUMBAYA</h3>
           <div class="scheduler-wrap">
             <div id="client-scheduler-booking" class="booking-policy-gate" style="padding:12px 0">
-              <p>Book a <strong>free 15-minute introduction</strong> directly through Calendly. Eligible fixed-price phone services can be booked from the service catalog with <strong>Stripe payment required at booking</strong>. Community Access and custom services require an approved quote and payment before scheduling.</p>
-              <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:14px"><a class="btn primary" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Book free introduction</a><a class="btn secondary" href="/services.html">Browse bookable services + quotes</a></div>
+              <p>Request a <strong>free 15-minute introduction</strong> or browse the service catalog. For paid services, KUMBAYA confirms the scope and verifies Stripe payment before confirming an appointment.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:14px"><a class="btn primary" href="mailto:kumbaya.cloud@proton.me?subject=Free%2015-minute%20KUMBAYA%20introduction" target="_blank" rel="noopener">Request a free introduction</a><a class="btn secondary" href="/services.html">Browse services and request a quote</a></div>
               <p class="fine" style="margin-top:12px">Do not send hardship documents, medical information, payment card details or government ID through public scheduling.</p>
             </div>
           </div>

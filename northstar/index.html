@@ -338,6 +338,20 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 #portal .empty{background:rgba(216,162,74,.045);border:1px dashed rgba(216,162,74,.35);border-radius:13px;padding:16px;color:#d4c6b4}
 @media(max-width:690px){#portal .dash-panel{padding:19px}#portal .dashboard-grid{gap:15px}}
 
+
+body.northstar-app #portal-login-card { gap:clamp(16px,3vw,28px); }
+body.northstar-app #portal-login-card > div { padding:clamp(18px,4vw,36px); min-width:0; }
+body.northstar-app #portal-login-card h1 { font-size:clamp(2.2rem,5vw,3.4rem); line-height:1.12; }
+body.northstar-app #portal-login-card h2 { font-size:clamp(1.45rem,3vw,2rem); margin:.45rem 0 1rem; }
+body.northstar-app .portal-status { border-top:2px solid #78b9aa; }
+body.northstar-app .portal-status .eyebrow { color:#a4d4c5; }
+body.northstar-app .portal-form :is(input,button) { min-height:44px; }
+body.northstar-app .portal-footnote a { color:#f3cf8c; text-decoration:underline; }
+body.northstar-app #portal .portal-form button { white-space:normal; }
+@media (max-width:690px) {
+  body.northstar-app #portal { padding-top:16px; }
+  body.northstar-app #portal-login-card { grid-template-columns:minmax(0,1fr); margin-top:12px; }
+}
 </style>
 
 <script>
@@ -500,7 +514,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       <article class="about-card">
         <h3>Meet the founder</h3>
         <p>
-          <strong style="color:var(--cream)">Daria Porter, AMFT, MA</strong> is the founder of KUMBAYA.
+          <strong style="color:var(--cream)">Daria Porter, MA</strong> is the founder of KUMBAYA.
           Their professional background is in mental health and community-centered support, and the larger
           KUMBAYA model is being designed to bring practical services, resource navigation, and wellness together
           without making people feel like they need a dictionary to ask for help.
@@ -512,7 +526,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         </p>
         <div class="founder-facts">
           <div class="fact"><strong>Founder</strong><span>Daria Porter</span></div>
-          <div class="fact"><strong>Professional title</strong><span>Associate Marriage & Family Therapist (AMFT), MA</span></div>
+          <div class="fact"><strong>Professional title</strong><span>Registered Associate Marriage and Family Therapist #146290, MA. Employed by Rainbow Connection Counseling Collective and supervised by a licensed clinician.</span></div>
           <div class="fact"><strong>Approach</strong><span>Human, practical, culturally responsive, and easy to understand</span></div>
           <div class="fact"><strong>Long-term vision</strong><span>A staffed, multi-service organization with distinct teams under the KUMBAYA umbrella</span></div>
         </div>
@@ -614,14 +628,14 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       </div>
       <aside class="side-note">
         <h3>Who provides what?</h3>
-        <p><strong>RCCC:</strong> independent therapy provider; counseling consultations, intake, clinical consent, fees, supervision, telehealth and records are handled by RCCC. Ask RCCC about working with <strong>Daria Porter, AMFT</strong>; clinician assignment depends on their intake process and availability.</p>
-        <p><strong>Cyaam / KUMBAYA:</strong> original workbooks, psychoeducation, visual tools, support kits, workshops and community wellness events. These are nonclinical unless explicitly delivered under a separate authorized clinical arrangement.</p>
+        <p><strong>RCCC:</strong> independent therapy provider; counseling consultations, intake, clinical consent, fees, supervision, telehealth and records are handled by RCCC. You may ask RCCC about working with <strong>Daria Porter, Registered Associate Marriage and Family Therapist #146290, employed by Rainbow Connection Counseling Collective and supervised by a licensed clinician</strong>. RCCC confirms clinician fit and availability.</p>
+        <p><strong>Cyaam / KUMBAYA:</strong> original workbooks, psychoeducation, visual tools, support kits, workshops and community wellness events. These are independent, nonclinical offerings.</p>
         <p><strong>Do not submit therapy histories or clinical documents to KUMBAYA or Do’step.</strong> Use RCCC’s secure intake process for counseling.</p>
       </aside>
     </div>
 
     <div class="services" id="wellness-services">
-      <article class="service"><div class="num">01</div><h3>Counseling referral — RCCC</h3><p>Request a free 15-minute consultation directly with Rainbow Connection Counseling Collective. Ask about working with Daria Porter, AMFT. RCCC controls clinical intake, supervision, clinician availability, therapy rates, consent, appointments and records.</p><p><a class="btn primary" href="https://www.rainbowconnectioncounseling.com/contact-us" target="_blank" rel="noopener noreferrer">Go to RCCC intake</a></p></article>
+      <article class="service"><div class="num">01</div><h3>Counseling referral — RCCC</h3><p>Request a free 15-minute consultation directly with Rainbow Connection Counseling Collective. Ask RCCC about working with Daria Porter. The registration and supervision details are above. RCCC controls clinical intake, supervision, clinician availability, therapy rates, consent, appointments and records.</p><p><a class="btn primary" href="https://www.rainbowconnectioncounseling.com/contact-us" target="_blank" rel="noopener noreferrer">Go to RCCC intake</a></p></article>
       <article class="service" id="cyaam-products-events"><div class="num">02</div><h3>Cyaam products & educational tools</h3><p>Cyaam / KUMBAYA’s independent psychoeducational materials, workbooks, original feelings wheels, books, classroom visuals, coping kits, and digital resources. Products are not provided or endorsed as RCCC therapy.</p><p><a class="btn secondary" href="https://kumbaya.cloud/#wellness-education-ip">View Cyaam's product plans</a></p></article>
       <article class="service"><div class="num">03</div><h3>Cyaam events & workshops</h3><p>Independent nonclinical learning events, community gatherings, forest bathing and planned kayak/canoe-based wellness activities. Dates and tickets are not yet open; these are not RCCC therapy groups.</p><p><a class="btn secondary" href="https://kumbaya.cloud/#cyaam-events">Explore event plans</a></p></article>
       <article class="service"><div class="num">04</div><h3>Future professional offerings</h3><p>Regulated evaluations, clinical groups, continuing-education credit, and other professional services remain future plans and require separate approvals before launch. They are not offered by Cyaam today.</p></article>
@@ -660,11 +674,11 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       </aside>
     </div>
 
-    <div id="portal-notice" class="portal-notice" hidden></div>
+    <div id="portal-notice" class="portal-notice" role="status" aria-live="polite" hidden></div>
 
     <div id="portal-login-card" class="portal-grid">
       <div class="portal-card">
-        <span class="eyebrow">KUMBAYA account sign in</span><h3>Enter Do’step</h3>
+        <span class="eyebrow">KUMBAYA account sign in</span><h1>Enter Do’step</h1>
         <p>Clients, staff, and administrators sign in here with their existing KUMBAYA account. Public self-signup is intentionally disabled.</p>
         <form id="portal-login-form" class="portal-form" onsubmit="return portalLogin(event)">
           <div><label for="portal-email">Email</label><input id="portal-email" required type="email" autocomplete="username" placeholder="you@example.com"></div>
@@ -672,16 +686,17 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
           <button id="portal-login-submit" class="btn primary" type="submit">Enter Do’step</button>
           <button class="btn secondary" type="button" onclick="portalRequestReset()">Reset password securely</button>
         </form>
+        <p class="portal-footnote"><a href="https://kumbaya.cloud/recovery.html">Use an eight-digit email code</a> if your password reset link is unavailable.</p>
         <p class="portal-footnote">Clients and team members use this sign-in. Your account permissions determine which workspace opens. <a href="mailto:kumbaya.cloud@proton.me">Contact KUMBAYA</a> for account support.</p>
         <p class="portal-footnote">Never send your password, MFA code, EBT PIN, bank password, or government-login password to KUMBAYA staff.</p>
       </div>
       <div class="portal-status">
-        <span class="eyebrow">Protected portal</span><h3>What lives here</h3>
+        <span class="eyebrow">Protected portal</span><h2>What lives here</h2>
         <div class="portal-actions">
-          <div class="portal-tile"><h4>Documents</h4><p>Private uploads and downloads.</p></div>
+          <div class="portal-tile"><h4>Documents</h4><p>View shared documents. New uploads are paused.</p></div>
           <div class="portal-tile"><h4>Requests + Tasks</h4><p>See what is moving and what needs you.</p></div>
-          <div class="portal-tile"><h4>Secure Messages</h4><p>Keep sensitive conversations out of regular email.</p></div>
-          <div class="portal-tile"><h4>Scheduler</h4><p>Book, reschedule, cancel, and keep appointments in one place.</p></div>
+          <div class="portal-tile"><h4>Secure Messages</h4><p>Message KUMBAYA about nonclinical services. Send counseling inquiries directly to RCCC.</p></div>
+          <div class="portal-tile"><h4>Scheduler</h4><p>View portal appointments and find KUMBAYA scheduling options.</p></div>
         </div>
       </div>
     </div>
@@ -756,7 +771,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         <section class="portal-card dash-panel">
           <span class="eyebrow">Scheduler</span><h3>Book time with KUMBAYA</h3>
           <div class="scheduler-wrap">
-            <div id="client-scheduler-booking" style="padding:12px 0"><p>Book a free introduction or an eligible fixed-price phone service through Calendly. Paid appointments require Stripe payment to book. Community Access and custom services use the quote route.</p><p><a class="btn primary" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Book free 15-minute introduction</a> <a class="btn secondary" href="https://kumbaya.cloud/services.html">Browse bookable services + quotes</a></p><p class="fine">Do not enter payment details or hardship proof in Calendly.</p></div>
+            <div id="client-scheduler-booking" style="padding:12px 0"><p>Request a free introduction or browse the services menu for paid options. KUMBAYA confirms the scope and verifies payment before confirming a paid appointment.</p><p><a class="btn primary" href="mailto:kumbaya.cloud@proton.me?subject=Free%2015-minute%20KUMBAYA%20introduction" target="_blank" rel="noopener">Request a free 15-minute introduction</a> <a class="btn secondary" href="https://kumbaya.cloud/services.html">Browse services and request a quote</a></p><p class="fine">Do not enter payment details or hardship proof in Calendly.</p></div>
           </div>
           <div class="scheduler-divider"></div>
           <span class="eyebrow">Your appointments</span><h3>Upcoming</h3>
