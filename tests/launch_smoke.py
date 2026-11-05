@@ -16,6 +16,7 @@ SITES = {
  "cyaam.html": "https://kumbaya.cloud/cyaam.html",
  "cyaam-wheel-worksheet.html": "https://kumbaya.cloud/cyaam-wheel-worksheet.html",
  "northstar/index.html": "https://dostep.kumbaya.cloud/",
+ "northstar/help.html": "https://dostep.kumbaya.cloud/help.html",
 }
 RCCC = "https://www.rainbowconnectioncounseling.com/contact-us"
 CALENDLY = "https://calendly.com/kumbaya-cloud-proton/30min"
@@ -78,6 +79,8 @@ def test_source():
    issues.append("Missing privacy assurance for inquiry builder")
   if file=="cyaam-wheel-worksheet.html" and "rows are intentionally blank" not in text:
    issues.append("Draft vocabulary worksheet must not invent expressions")
+  if file=="northstar/help.html" and "Never include passwords, one-time codes" not in text:
+   issues.append("Account help must warn against sharing credentials and verification codes")
   if file=="northstar/index.html":
    for required in ["Free 15-minute introduction","requireMfaForSensitiveActions: true","allowSensitiveUploads: false","backendReady = false","if(!(await verifyBackendConnection()))","Calendly is KUMBAYA"]:
     if required not in text:issues.append("Missing portal login, privacy or booking safeguard: "+required)
