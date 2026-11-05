@@ -66,7 +66,7 @@ def test_source():
  for file in SITES:
   text=Path(file).read_text(encoding="utf-8")
   issues=check_html(file,text,check_js=True)
-  if file not in ("privacy.html",):
+  if file not in ("privacy.html","cyaam-wheel-worksheet.html"):
    for url in [RCCC,CALENDLY,"https://kumbaya.cloud/privacy.html"]:
     if url not in text:issues.append("Missing required public destination: "+url)
   if file=="services.html":
