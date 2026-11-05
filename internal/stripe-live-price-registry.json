@@ -1,0 +1,40 @@
+{
+  "verified_at": "2026-11-05",
+  "account": "KUMBAYA",
+  "environment": "live",
+  "payment_policy": "quote_invoice_manual_confirmation_only",
+  "paid_self_booking_enabled": false,
+  "products": [
+    {
+      "key": "admin_followup_30m",
+      "name": "Right Hand Th’am — 30-minute administrative follow-up",
+      "product_id": "prod_VZQFtQ4UlJQbnt",
+      "price_id": "price_1UYHOoAwJxP3zGBhxH6AL0n0",
+      "currency": "usd",
+      "unit_amount": 1500,
+      "one_time": true,
+      "available_for_public_checkout": false
+    },
+    {
+      "key": "navigation_action_map_standard_60m",
+      "name": "Right Hand Th’am — 60-minute Navigation + Action Map (standard)",
+      "product_id": "prod_VZQFzoKNzychPb",
+      "price_id": "price_1UYHOqAwJxP3zGBhHpmlksrV",
+      "currency": "usd",
+      "unit_amount": 8500,
+      "one_time": true,
+      "available_for_public_checkout": false
+    },
+    {
+      "key": "navigation_action_map_community_60m",
+      "name": "Right Hand Th’am — 60-minute Navigation + Action Map (approved community rate)",
+      "product_id": "prod_VZQFzoKNzychPb",
+      "price_id": "price_1UYHOsAwJxP3zGBhhSJimPBs",
+      "currency": "usd",
+      "unit_amount": 3000,
+      "one_time": true,
+      "available_for_public_checkout": false
+    }
+  ],
+  "notes": "Read-only verified Stripe catalog; prices do not confirm client eligibility, final service terms, actual payments, tax or customer bookings. Approved scope and payment verification required."
+}
