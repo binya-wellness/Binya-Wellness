@@ -60,6 +60,10 @@ for(const width of [390,1280]){
     await page.locator('details').evaluate(el=>el.open=true);
     const preview=await page.locator('#preview').innerText();
     if(!preview.includes('General question about a nonclinical administrative task')) failures.push(tag+': quote message preview did not update');
+    await page.locator('#reply-email').fill('not-an-email');
+    await page.locator('#email-button').click();
+    if(!(await page.locator('#status').innerText()).includes('valid reply email')) failures.push(tag+': invalid reply email not detected');
+    await page.locator('#reply-email').fill('');
    }
    if(test.name==='worksheet'){
     const rows=await page.locator('#rows tr').count();
@@ -68,6 +72,18 @@ for(const width of [390,1280]){
     await page.locator('details').evaluate(el=>el.open=true);
     const preview=await page.locator('#export').innerText();
     if(!preview.includes('Test anchor')) failures.push(tag+': draft vocabulary export did not update');
+    const downloadPromise=page.waitForEvent('download');
+    await page.locator('#save-draft').click();
+    const download=await downloadPromise;
+    if(download.suggestedFilename()!=='cyaam-second-ring-working-draft.json') failures.push(tag+': wrong draft export filename');
+    await page.locator('#rows tr').first().locator('[data-column="anchor"]').fill('');
+    page.once('dialog',dialog=>dialog.accept());
+    await page.locator('#draft-file').setInputFiles({name:'saved-draft.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({
+      format:'cyaam-ebonics-first-second-ring',schema_version:1,review_state:'DRAFT_NOT_FINAL',
+      rows:[{anchor:'Test anchor',candidate:'',meaning:'',context:'',status:'Needs review'}]
+    }))});
+    const reloaded=await page.locator('#rows tr').first().locator('[data-column="anchor"]').inputValue();
+    if(reloaded!=='Test anchor') failures.push(tag+': draft restore did not recover an authorized working entry');
    }
    const audit=await new AxeBuilder({page}).analyze();
    const severe=audit.violations.filter(v=>v.impact==='critical'||v.impact==='serious');
