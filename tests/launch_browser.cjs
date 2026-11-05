@@ -72,6 +72,10 @@ for(const width of [390,1280]){
     const rows=await page.locator('#rows tr').count();
     if(rows<6) failures.push(tag+': expected at least six blank second-ring draft rows');
     await page.locator('#rows tr').first().locator('[data-column="anchor"]').fill('Test anchor');
+    await page.locator('#rows tr').first().locator('[data-column="candidate"]').fill('Review-only test candidate');
+    if(!(await page.locator('#draft-summary').innerText()).includes('1 candidates entered')) failures.push(tag+': draft candidate counter did not increment');
+    await page.locator('#rows tr').first().locator('[data-column="status"]').selectOption('Approved by owner');
+    if(!(await page.locator('#draft-summary').innerText()).includes('1 owner-approved')) failures.push(tag+': owner review counter did not update');
     await page.locator('details').evaluate(el=>el.open=true);
     const preview=await page.locator('#export').innerText();
     if(!preview.includes('Test anchor')) failures.push(tag+': draft vocabulary export did not update');
