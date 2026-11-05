@@ -448,7 +448,7 @@ function render(){
     html+=`<details class="category" ${open?'open':''}>
       <summary><span class="cat-title">${escHtml(pretty(section.title))}</span><span class="cat-count">${items.length} option${items.length===1?'':'s'}</span></summary>
       ${section.status?`<p class="status-note"><strong>Status:</strong> ${escHtml(section.status)}</p>`:''}
-      <div class="table-wrap"><table>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable service pricing table"><table>
         <thead><tr><th>Service</th><th>Standard</th><th>Community Access</th><th>Request</th></tr></thead>
         <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> Quoted separately when available and legally permitted; the $15 / 30-minute basic administrative follow-up does not apply automatically to every service.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td><td>${serviceRequestAction(section,item)}</td></tr>`).join('')}</tbody>
       </table></div>
