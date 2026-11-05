@@ -13,7 +13,8 @@ const tests = [
  {name:'cyaam',url:origin+'/cyaam.html'},
  {name:'worksheet',url:origin+'/cyaam-wheel-worksheet.html'},
  {name:'process',url:origin+'/how-services-work.html'},
- {name:'portal',url:portalOrigin+'/'}
+ {name:'portal',url:portalOrigin+'/'},
+ {name:'portal-help',url:portalOrigin+'/help.html'}
 ];
 async function main(){
 const failures = [];
@@ -54,6 +55,13 @@ for(const width of [390,1280]){
      const gated=await page.locator('#menu .service-note').count();
      console.log(tag+': nonclinical resource quote controls='+serviceQuotes+' | unavailable services shown='+gated);
     }
+   }
+   if(test.name==='portal-help'){
+    const text=await page.locator('main').innerText();
+    if(!text.includes('Forgot your password?')||!text.includes('authenticator')) failures.push(tag+': account recovery guidance incomplete');
+    if(!text.includes('Never include passwords')) failures.push(tag+': credential safety reminder missing');
+    const recovery=page.locator('a[href*="recovery.html"]');
+    if(!(await recovery.count())) failures.push(tag+': recovery link missing');
    }
    if(test.name==='portal'){
     const dashboard=page.locator('#portal-dashboard');
@@ -132,7 +140,7 @@ for(const width of [390,1280]){
 }
 await browser.close();
 if(failures.length){console.error('BROWSER AUDIT FAILURES:\n'+failures.map(x=>' - '+x).join('\n'));process.exitCode=1;}
-else console.log('BROWSER AUDIT PASSED: 8 pages at mobile and desktop widths');
+else console.log('BROWSER AUDIT PASSED: 9 pages at mobile and desktop widths');
 
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
