@@ -3,11 +3,13 @@
 const { chromium } = require('playwright');
 const { AxeBuilder } = require('@axe-core/playwright');
 const fs = require('node:fs');
+const origin=process.env.KUMBAYA_TEST_ORIGIN||'https://kumbaya.cloud';
+const portalOrigin=process.env.DOSTEP_TEST_ORIGIN||'https://dostep.kumbaya.cloud';
 const tests = [
- {name:'main',url:'https://kumbaya.cloud/'},
- {name:'services',url:'https://kumbaya.cloud/services.html'},
- {name:'privacy',url:'https://kumbaya.cloud/privacy.html'},
- {name:'portal',url:'https://dostep.kumbaya.cloud/'}
+ {name:'main',url:origin+'/'},
+ {name:'services',url:origin+'/services.html'},
+ {name:'privacy',url:origin+'/privacy.html'},
+ {name:'portal',url:portalOrigin+'/'}
 ];
 async function main(){
 const failures = [];
