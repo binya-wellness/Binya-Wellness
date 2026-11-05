@@ -8,6 +8,7 @@ on:
       - 'privacy.html'
       - 'northstar/index.html'
       - 'tests/launch_smoke.py'
+      - 'tests/launch_browser.cjs'
       - '.github/workflows/launch-verification.yml'
   workflow_dispatch:
 jobs:
@@ -36,3 +37,26 @@ jobs:
           python-version: '3.12'
       - name: Check deployed website URLs and essential destinations (read-only)
         run: python tests/launch_smoke.py production
+  browser-mobile-desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned read-only browser test dependencies
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.64.1 @axe-core/playwright@4.14.0
+      - name: Install Chromium test browser
+        run: npx playwright install chromium --with-deps
+      - name: Run mobile, desktop and accessibility tests
+        run: node tests/launch_browser.cjs
+      - name: Keep screenshots to diagnose failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumbaya-browser-screenshots
+          path: test-artifacts/
+          retention-days: 7
