@@ -1,35 +1,47 @@
-# KUMBAYA booking operations
+# KUMBAYA booking operations — verified current state
+**Last verified: November 5, 2026 · Historical version superseded**
 
-Last verified: October 22, 2026.
+## Calendly
+- The connected Calendly owner is **Kumbaya**, in timezone **America/Los_Angeles**.
+- There are **32 existing event types**. The **only active** event type is **KUMBAYA — Free 15-Minute Intro Call**, 15 minutes, **$0**, outbound telephone call.
+- Direct free scheduling URL: https://calendly.com/kumbaya-cloud-proton/30min (URL slug says `30min` but the verified event duration is **15 minutes**).
+- All **31 other event types are inactive**, including previously configured paid sessions. Do not activate or describe them as ready without a complete operating review.
+- Schedule remains **Monday–Friday 10:00–19:00**, Saturday 12:00–17:00, Sunday closed, America/Los_Angeles. Keep unchanged.
+- The previous October 22 state of 22 active event types is **not current** and was archived in `internal/booking-links-archive-2026-10-22.json`.
 
-## Current appointment configuration
+## Right Hand Th’am intake and payment
+- Service finder: https://kumbaya.cloud/services.html
+- Non-sensitive inquiry builder: https://kumbaya.cloud/request.html
+- No personal customer data is stored by the builder; it generates a local email draft and supports manual copy as fallback.
+- Written quote, approved scope, finalized cancellation terms and a verified Stripe invoice are prerequisites to **manual** confirmation of paid work.
+- KUMBAYA Stripe is live-mode, payments/payouts enabled, with two products and three current prices:
+  - `price_1UYHOoAwJxP3zGBhxH6AL0n0`: $15, 30-minute administrative follow-up
+  - `price_1UYHOqAwJxP3zGBhHpmlksrV`: $85, 60-minute Navigation + Action Map (standard)
+  - `price_1UYHOsAwJxP3zGBhhSJimPBs`: $30, 60-minute Navigation + Action Map (community access)
+- **No live customer invoice, paid booking or completed payment has been created for testing.** No Stripe test account is connected in the current tooling. Do not claim end-to-end payment success from catalog reads alone.
+- Other unpublished/unverified services require individual scope, pricing and service-permission review.
 
-Calendly is the schedule of record. There are 32 existing event types: 22 active (21 paid phone appointments plus one free 15-minute introduction), and 10 inactive. Paid appointments require Stripe payment to book. Saved rates and durations were verified before activation. No customer bookings or test charges were created.
+## Clinical and developing service boundaries
+- RCCC is the independent therapy provider, owning its intake, scheduling, supervision, billing and records: https://www.rainbowconnectioncounseling.com/contact-us
+- Cyaam educational tools and nonclinical community experiences are in development, not purchasable or registrable.
+- Process Haus and other regulated services remain inactive pending their specific required approvals.
 
-The public 30-minute Systems Navigation flow was inspected through its final details form: $15 USD, phone, required payment, Stripe. This is a no-charge UI verification; no completed-payment or refund test is claimed.
+## Do’step
+- Portal: https://dostep.kumbaya.cloud/
+- Paid self-booking intentionally inactive; database booking function permits only free 15-minute introduction, requires authenticated client and MFA.
+- Sensitive document uploads intentionally disabled until security, privacy and provider agreements are verified. Public notices advise against sending sensitive records via ordinary email.
+- Client-side portal integration requires manual authenticated user/MFA testing. Public URL checks do not prove end-to-end account function.
+- Supabase security advisor still warns that leaked-password protection is disabled; project entitlement and UI controls must be checked before claiming it is enabled.
+- Do not force a new administrator email, remove MFA or change existing account IDs/roles in an effort to make login easier.
 
-Availability remains Monday-Friday 10:00-19:00, Saturday 12:00-17:00, Sunday unavailable, America/Los_Angeles.
+## Testing and deployment
+- GitHub automated source checks, public endpoint checks and mobile/desktop accessibility tests are in `.github/workflows/launch-verification.yml`.
+- The results are scoped to what these tests actually exercise, not payment, insurance, clinical intake or an authenticated portal session.
+- Source changes must be deployed to both Render services and verified at the intended commit before announcing production functionality.
 
-## Direct booking versus quoted work
-
-- Eligible fixed-price standard phone appointments use native Calendly + Stripe pay-to-book. The website mapping is in verified-booking-links.json.
-- Community Access requests, custom scope, travel, mobile delivery, and unconfirmed operating arrangements use a quote route. Regulated services remain inactive until their specific credentials and arrangements are verified.
-- Do not separately invoice the same fee that Calendly collects. Reconcile cancellations, reschedules and refunds in both Calendly and Stripe.
-- Keep sensitive medical, identity, immigration and hardship records out of Calendly and ordinary quote email.
-- Proton Calendar is optional. Calendly remains the business schedule.
-
-## Inactive appointments
-
-Four mobile-service event types; IEP/504 meeting support; generic paid-service 30/60/90-minute placeholders; substance-use resource consultation; trafficking-survivor introduction. No duplicate event types should be created to replace these.
-
-## Website source and publication
-
-The main source includes 22 matching service buttons, separate Community Access/custom quote controls, a corrected $15 Navigation price, KUMBAYA branding and team sign-in/email-change controls. These source changes are saved but were not deployed: Render requires the user to select the existing workspace before a deployment can be initiated. Verify publication before saying the website links are live.
-
-The Process Haus calculator stays in its separate review branch and PR 1. Do not merge or publish it without the user's separate direction. Eleven estimate scenarios passed. Checkout and regulated-service ordering remain inactive.
-
-## Portal and account boundaries
-
-The existing administrator profile was retained and renamed KUMBAYA Admin. The login email was not forcibly changed or confirmed. Account recovery, verification of a new sign-in email, MFA, and signatures need the account holder.
-
-Sensitive uploads remain disabled. Proton's BAA does not itself establish Supabase/portal operational readiness. Existing Stripe webhook engineering does not deliver booking links automatically and must not be represented as such.
+## Not yet verified
+- An authorized Stripe test-mode invoice-to-payment/refund transaction.
+- Client agreement service-specific cancellation/refund clauses and full operating authorization.
+- Supabase compromised-password protection and authenticated portal task/message/booking journeys.
+- Cyaam first product's final language, artwork, community review, checkout, or sale.
+- Channel-specific marketing publication and opt-in mailing list.
