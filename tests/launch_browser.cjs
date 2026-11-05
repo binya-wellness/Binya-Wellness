@@ -91,6 +91,7 @@ for(const width of [390,1280]){
    }
    const audit=await new AxeBuilder({page}).analyze();
    const severe=audit.violations.filter(v=>v.impact==='critical'||v.impact==='serious');
+   if(audit.violations.length) console.log(tag+': axe detail '+JSON.stringify(audit.violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.slice(0,2).map(n=>n.target.join(','))}))));
    for(const v of severe)failures.push(tag+': accessibility '+v.id+' ('+v.impact+') '+v.nodes.slice(0,3).map(n=>n.target.join(',')).join(';'));
    console.log(tag+': HTTP '+resp?.status()+' | '+JSON.stringify(info)+' | axe serious/critical='+severe.length+' | all='+audit.violations.length);
    await page.screenshot({path:'test-artifacts/'+tag+'.png',fullPage:true});
