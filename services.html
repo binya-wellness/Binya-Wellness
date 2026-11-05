@@ -421,8 +421,9 @@ function serviceRequestAction(section,item){
   if(/BINYA PROCESS HOUSE|FUTURE REGULATED WELLNESS/.test(name)){
     return '<span class="service-note" role="status">Not offered yet — credentials or program approval required</span>';
   }
-  const development=/CYAAM PRODUCTS & EVENTS|EDUCATION \\+ IP STUDIO/.test(name);
-  const free=/^free$|^\\$0\\b/i.test(String(item.standard||'').trim());
+  const development=/CYAAM PRODUCTS & EVENTS|EDUCATION [+] IP STUDIO/.test(name);
+  const value=String(item.standard||'').trim().toLowerCase();
+  const free=value==='free'||value==='$0'||value==='$0.00';
   const label=development?'Ask about launch':free?'Ask about service':'Request quote';
   return `<button class="quote-request" type="button" data-section="${escHtml(name)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${label}</button>`;
 }
@@ -461,7 +462,7 @@ function render(){
 menuEl.addEventListener('click',function(e){
  const btn=e.target.closest('button.quote-request');if(!btn)return;
  const section=btn.dataset.section||'',service=btn.dataset.service||'',price=btn.dataset.price||'',status=btn.dataset.status||'';
- const isCyaamDevelopment=/CYAAM PRODUCTS & EVENTS|EDUCATION \\+ IP STUDIO/.test(section);
+ const isCyaamDevelopment=/CYAAM PRODUCTS & EVENTS|EDUCATION [+] IP STUDIO/.test(section);
  if(isCyaamDevelopment){
   const subject='Cyaam launch-interest inquiry — '+service;
   const body=['Hello Cyaam,','', 'I am interested in updates about this planned Cyaam offering:',service,'','Please let me know when details are confirmed. I understand this is not a purchase, reservation, event ticket or clinical intake.','','Please do not send any medical histories or sensitive records by ordinary email.'].join('\n');
