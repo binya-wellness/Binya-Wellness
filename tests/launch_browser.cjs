@@ -37,6 +37,7 @@ for(const width of [390,1280]){
     const filter=page.locator('button.filter[data-mode="clinical"]');
     if(await filter.count()===0) failures.push(tag+': Cyaam filter missing');
     else {
+     await page.locator('#step-3').click();
      await filter.click();
      const visible=await page.getByText('CYAAM PRODUCTS & EVENTS',{exact:false}).first().isVisible().catch(()=>false);
      if(!visible)failures.push(tag+': Cyaam products/events not visible after selecting filter');
