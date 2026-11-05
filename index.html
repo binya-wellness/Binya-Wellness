@@ -435,6 +435,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       without having to already know the system.
     </p>
 
+    <h2 class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Explore KUMBAYA services</h2>
     <div class="brand-stack" aria-label="Choose the kind of help you need">
       <article class="mini-card" style="--accent:var(--gold)">
         <small>Legal support</small><h3>Process Haus</h3>
@@ -1623,7 +1624,7 @@ async function closeAvailabilitySlot(id){
 </script>
 <script>
 (function(){function ready(){const key='kumbaya-reader-mode';let enabled=false;try{enabled=localStorage.getItem(key)==='on'}catch(e){};function sync(){document.body.classList.toggle('reader-mode',enabled);document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.setAttribute('aria-pressed',String(enabled)));document.querySelectorAll('[data-reader-guide]').forEach(x=>x.hidden=!enabled)}document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.addEventListener('click',()=>{enabled=!enabled;try{localStorage.setItem(key,enabled?'on':'off')}catch(e){}sync()}));sync();const header=document.querySelector('header');function setOffset(){if(header)document.documentElement.style.setProperty('--sticky-offset',Math.ceil(header.getBoundingClientRect().height+20)+'px')}setOffset();window.addEventListener('resize',setOffset)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready()})();
-</script><footer class="shell" style="padding:18px 0"><a href="https://dostep.kumbaya.cloud/?access=team#portal">Do’step team sign-in</a> · <a href="mailto:kumbaya.cloud@proton.me">kumbaya.cloud@proton.me</a></footer>
-<p class="privacy-link" style="padding:12px 24px;text-align:center;font-size:.9rem"><a href="https://kumbaya.cloud/privacy.html" style="color:#e8bd76;text-decoration:underline">Privacy &amp; service boundaries</a> · <a href="https://kumbaya.cloud/how-services-work.html" style="color:#e8bd76;text-decoration:underline">How services work</a> · <a href="https://kumbaya.cloud/services.html" style="color:#e8bd76;text-decoration:underline">Service prices &amp; terms</a></p>
+</script><nav class="shell" aria-label="Team and contact links" style="padding:18px 0"><a href="https://dostep.kumbaya.cloud/?access=team#portal">Do’step team sign-in</a> · <a href="mailto:kumbaya.cloud@proton.me">kumbaya.cloud@proton.me</a></nav>
+<nav class="privacy-link" aria-label="Privacy and service links" style="padding:12px 24px;text-align:center;font-size:.9rem"><a href="https://kumbaya.cloud/privacy.html" style="color:#e8bd76;text-decoration:underline">Privacy &amp; service boundaries</a> · <a href="https://kumbaya.cloud/how-services-work.html" style="color:#e8bd76;text-decoration:underline">How services work</a> · <a href="https://kumbaya.cloud/services.html" style="color:#e8bd76;text-decoration:underline">Service prices &amp; terms</a></nav>
 </body>
 </html>
