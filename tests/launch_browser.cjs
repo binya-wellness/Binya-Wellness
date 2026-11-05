@@ -82,8 +82,12 @@ for(const width of [390,1280]){
       format:'cyaam-ebonics-first-second-ring',schema_version:1,review_state:'DRAFT_NOT_FINAL',
       rows:[{anchor:'Test anchor',candidate:'',meaning:'',context:'',status:'Needs review'}]
     }))});
-    const reloaded=await page.locator('#rows tr').first().locator('[data-column="anchor"]').inputValue();
-    if(reloaded!=='Test anchor') failures.push(tag+': draft restore did not recover an authorized working entry');
+    try {
+     await page.waitForFunction(() => document.querySelector('#rows tr [data-column="anchor"]')?.value==='Test anchor',null,{timeout:5000});
+    } catch(e) {
+     const status=await page.locator('#status').innerText();
+     failures.push(tag+': draft restore did not recover an authorized working entry ('+status+')');
+    }
    }
    const audit=await new AxeBuilder({page}).analyze();
    const severe=audit.violations.filter(v=>v.impact==='critical'||v.impact==='serious');
