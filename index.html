@@ -347,7 +347,8 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
     tabs.forEach(function(t) {
       const active = t.dataset.target === id;
       t.classList.toggle('active', active);
-      t.setAttribute('aria-selected', active ? 'true' : 'false');
+      if(active)t.setAttribute('aria-current','page');
+      else t.removeAttribute('aria-current');
     });
 
     try { history.replaceState(null, '', '#' + id); } catch (_) {}
