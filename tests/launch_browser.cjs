@@ -9,6 +9,7 @@ const tests = [
  {name:'main',url:origin+'/'},
  {name:'services',url:origin+'/services.html'},
  {name:'privacy',url:origin+'/privacy.html'},
+ {name:'process',url:origin+'/how-services-work.html'},
  {name:'portal',url:portalOrigin+'/'}
 ];
 async function main(){
@@ -57,7 +58,7 @@ for(const width of [390,1280]){
 }
 await browser.close();
 if(failures.length){console.error('BROWSER AUDIT FAILURES:\n'+failures.map(x=>' - '+x).join('\n'));process.exitCode=1;}
-else console.log('BROWSER AUDIT PASSED: 4 pages at mobile and desktop widths');
+else console.log('BROWSER AUDIT PASSED: 5 pages at mobile and desktop widths');
 
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
