@@ -1112,6 +1112,7 @@ const cfg = window.KUMBAYA_CONFIG || window.BINYA_CONFIG || {};
 const browserKey = cfg.supabasePublishableKey || cfg.supabaseAnonKey || '';
 const configured = Boolean(cfg.supabaseUrl && browserKey);
 let sb = null;
+let backendReady = false;
 let currentUser = null;
 let currentProfile = null;
 let passwordUpdateMode = /(?:^|[&#?])type=recovery(?:&|$)/.test(window.location.hash + '&' + window.location.search);
@@ -1138,7 +1139,11 @@ async function initPortal(){
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
 
-  await verifyBackendConnection();
+  if(!(await verifyBackendConnection())){
+    disableLogin();
+    notice('Do’step is temporarily unable to verify its backend. Use the free Calendly link or contact KUMBAYA; do not enter credentials here.','error');
+    return;
+  }
 
   sb.auth.onAuthStateChange((event, session) => {
     // Defer Supabase calls out of the auth callback to avoid auth-lock reentrancy.
@@ -1197,6 +1202,7 @@ async function verifyBackendConnection(){
       notice('Do’step could not verify its secure backend. No credentials or documents were transmitted.','error');
       return false;
     }
+    backendReady = true;
     if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
     return true;
   }catch(_err){
@@ -1208,6 +1214,7 @@ async function verifyBackendConnection(){
 }
 
 function disableLogin(){
+  backendReady = false;
   const form=$('portal-login-form');
   if(form){
     form.querySelectorAll('input,button').forEach(x=>x.disabled=true);
@@ -1225,12 +1232,12 @@ function showLoggedOut(){
   $('portal-login-card')?.classList.remove('hidden');
   $('portal-dashboard')?.classList.add('hidden');
   const badge=$('portal-live-state');
-  if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
+  if(badge){ badge.textContent=backendReady?'Secure backend connected':'Secure backend unavailable'; badge.className=backendReady?'live-state ready':'live-state pending'; }
 }
 
 async function login(event){
   event.preventDefault(); clearNotice();
-  if(!sb) return false;
+  if(!sb || !backendReady){ notice('Secure backend unavailable. Please use the free KUMBAYA introduction or try later.','error'); return false; }
   const email=$('portal-email').value.trim();
   const password=$('portal-password').value;
   const btn=$('portal-login-submit');
@@ -1499,7 +1506,7 @@ async function loadSchedulerServices(){
     }
     teamSelect.innerHTML=['<option value="">Choose a service…</option>'].concat(teamServices.map(s=>`<option value="${s.id}">${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
   }
-  if(currentProfile?.role==='client') await loadAvailableSlots();
+  // Do not present a second, empty booking system alongside the active Calendly schedule.
 }
 
 async function loadAvailableSlots(){
