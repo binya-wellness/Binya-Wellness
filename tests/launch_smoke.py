@@ -12,6 +12,9 @@ SITES = {
  "services.html": "https://kumbaya.cloud/services.html",
  "privacy.html": "https://kumbaya.cloud/privacy.html",
  "how-services-work.html": "https://kumbaya.cloud/how-services-work.html",
+ "request.html": "https://kumbaya.cloud/request.html",
+ "cyaam.html": "https://kumbaya.cloud/cyaam.html",
+ "cyaam-wheel-worksheet.html": "https://kumbaya.cloud/cyaam-wheel-worksheet.html",
  "northstar/index.html": "https://dostep.kumbaya.cloud/",
 }
 RCCC = "https://www.rainbowconnectioncounseling.com/contact-us"
@@ -69,6 +72,10 @@ def test_source():
   if file=="services.html":
    for phrase in ["CYAAM PRODUCTS & EVENTS","Ask about launch","Right Hand Th’am"]:
     if phrase not in text:issues.append("Missing catalog or availability signal: "+phrase)
+  if file=="request.html" and "Nothing you type here is submitted" not in text:
+   issues.append("Missing privacy assurance for inquiry builder")
+  if file=="cyaam-wheel-worksheet.html" and "rows are intentionally blank" not in text:
+   issues.append("Draft vocabulary worksheet must not invent expressions")
   if file=="northstar/index.html" and "Free 15-minute introduction" not in text:
    issues.append("Missing free-only portal booking language")
   if issues:failed=True
@@ -91,6 +98,10 @@ def test_production():
      if must not in html:issues.append("Deployed content missing "+must)
    if file=="services.html" and "CYAAM PRODUCTS & EVENTS" not in html:
     issues.append("Cyaam products/events finder not deployed")
+   if file=="cyaam.html" and "In development" not in html:
+    issues.append("Cyaam development status not present")
+   if file=="request.html" and "Open email draft" not in html:
+    issues.append("Inquiry form not deployed")
    if file=="how-services-work.html" and "How our services work" not in html:
     issues.append("Customer process information not present")
    if file=="privacy.html" and "Privacy, inquiries" not in html:
