@@ -39,6 +39,17 @@ Right Hand Th’am, a KUMBAYA division, offers only the administrative/resource-
 ### Plain-language scope acknowledgement (draft)
 > I understand that Right Hand Th’am provides only the nonclinical administrative or resource-navigation services described in this quote. KUMBAYA is not acting as my therapist, lawyer, legal document assistant, or government benefits representative through this service. Any additional work requires my written approval and a separate or updated quote. Payment does not confirm an appointment until KUMBAYA verifies receipt and sends a booking confirmation.
 
+## Verified live Stripe catalog (configuration only)
+These objects exist in the KUMBAYA Stripe account; they are **not** public checkout links or proof of customer payment.
+
+| Nonclinical service | Amount | Stripe price ID |
+|---|---:|---|
+| 30-minute administrative follow-up | $15.00 USD | `price_1UYHOoAwJxP3zGBhxH6AL0n0` |
+| 60-minute Navigation + Action Map — standard | $85.00 USD | `price_1UYHOqAwJxP3zGBhHpmlksrV` |
+| 60-minute Navigation + Action Map — Community Access | $30.00 USD | `price_1UYHOsAwJxP3zGBhhSJimPBs` |
+
+Use the corresponding item **only after** validating the exact written scope and approved Community Access rate. All other services need their own reviewed pricing or custom invoice line items. No test/live customer invoice has been created, and direct paid self-booking remains closed.
+
 ## Invoice and payment verification
 1. Confirm the written scope and quote were accepted.
 2. Create a **single, itemized Stripe invoice** in KUMBAYA's connected account that matches the approved price, discounts, and third-party costs. Do not ask customers to email payment-card information.
