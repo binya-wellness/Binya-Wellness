@@ -9,6 +9,7 @@
 <p>Use this research worksheet to organize the <strong>second ring</strong> without inventing or prematurely approving vocabulary. The rows are intentionally blank. Write only expressions you want to consider, record their meaning and context, and explicitly approve or reject each one.</p>
 <div class="notice"><strong>Draft vocabulary, not a released wheel.</strong> This tool does not suggest or approve expressions automatically. Entries stay on this page unless you explicitly copy, print, or download a draft file. You can reopen that file on this device later. Nothing is transmitted to KUMBAYA or stored on its servers. Don't enter private medical histories or personal identifying details.</div>
 <h2>Second-ring vocabulary review</h2>
+<p id="draft-summary" class="note" role="status" aria-live="polite">0 candidates entered · 0 owner-approved · 0 awaiting review</p>
 <p class="note">For each candidate, record the core emotion it belongs under, the expression and its nuance, regional/community usage notes, and your decision. If your source or context isn't confirmed, mark the entry for review.</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Horizontally scrollable editable second-ring vocabulary worksheet">
 <table><thead><tr><th scope="col">Core/first-ring anchor</th><th scope="col">Second-ring candidate</th><th scope="col">Meaning / difference</th><th scope="col">Context / source / region</th><th scope="col">Review status</th></tr></thead><tbody id="rows"></tbody></table></div>
@@ -91,12 +92,22 @@ $('draft-file').addEventListener('change',async function(){
  }catch(e){$('status').textContent='Could not open the file: '+e.message;}
  this.value='';
 });
-function refresh(){$('export').textContent=exportText();}
+function refresh(){
+ $('export').textContent=exportText();
+ const entries=[...$('rows').querySelectorAll('tr')].map(tr=>({
+  candidate:tr.querySelector('[data-column="candidate"]').value.trim(),
+  status:tr.querySelector('[data-column="status"]').value
+ })).filter(item=>item.candidate);
+ const approved=entries.filter(item=>item.status==='Approved by owner').length;
+ const pending=entries.filter(item=>item.status==='Needs review').length;
+ $('draft-summary').textContent=entries.length+' candidates entered · '+approved+' owner-approved · '+pending+' awaiting review';
+}
 $('add').addEventListener('click',()=>{const r=row();r.querySelector('input').focus();refresh();});
 $('copy').addEventListener('click',async()=>{refresh();try{await navigator.clipboard.writeText(exportText());$('status').textContent='Worksheet copied. Paste it into a document to preserve your draft.';}catch(e){$('status').textContent='Copy unavailable; expand the export preview and select the text manually.';}});
 $('print').addEventListener('click',()=>window.print());
 $('clear').addEventListener('click',()=>{if(!confirm('Clear draft worksheet entries from this page? This cannot be undone.'))return;$('rows').replaceChildren();for(let i=0;i<6;i++)row();refresh();$('status').textContent='Draft rows reset to blank.';});
 $('rows').addEventListener('input',refresh);
+$('rows').addEventListener('change',refresh);
 for(let i=0;i<6;i++)row();refresh();
 })();
 </script></body></html>
