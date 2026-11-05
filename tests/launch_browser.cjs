@@ -64,6 +64,9 @@ for(const width of [390,1280]){
     await page.locator('#email-button').click();
     if(!(await page.locator('#status').innerText()).includes('valid reply email')) failures.push(tag+': invalid reply email not detected');
     await page.locator('#reply-email').fill('');
+    await page.goto(origin+'/request.html?service='+encodeURIComponent('<img src=x onerror=alert(1)>')+'&section=Right%20Hand%20Tham',{waitUntil:'domcontentloaded'});
+    if(await page.locator('#selected-service img').count()) failures.push(tag+': untrusted service query rendered markup');
+    if(!(await page.locator('#selected-service').innerText()).includes('<img')) failures.push(tag+': query text not rendered safely');
    }
    if(test.name==='worksheet'){
     const rows=await page.locator('#rows tr').count();
@@ -72,6 +75,10 @@ for(const width of [390,1280]){
     await page.locator('details').evaluate(el=>el.open=true);
     const preview=await page.locator('#export').innerText();
     if(!preview.includes('Test anchor')) failures.push(tag+': draft vocabulary export did not update');
+    const previousRows=await page.locator('#rows tr').count();
+    await page.locator('#draft-file').setInputFiles({name:'unsupported.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({format:'untrusted',rows:[{anchor:'x'}]}))});
+    await page.waitForFunction(() => document.querySelector('#status')?.textContent.includes('Could not open'),null,{timeout:5000});
+    if(await page.locator('#rows tr').count()!==previousRows) failures.push(tag+': unsupported draft modified working rows');
     const downloadPromise=page.waitForEvent('download');
     await page.locator('#save-draft').click();
     const download=await downloadPromise;
