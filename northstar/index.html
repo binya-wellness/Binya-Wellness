@@ -778,7 +778,7 @@ body.northstar-app #portal .portal-form button { white-space:normal; }
         <section class="portal-card dash-panel">
           <span class="eyebrow">Scheduler</span><h3>Book time with KUMBAYA</h3>
           <div class="scheduler-wrap">
-            <div id="client-scheduler-booking" style="padding:12px 0"><p>Request a free introduction or browse the services menu for paid options. KUMBAYA confirms the scope and verifies payment before confirming a paid appointment.</p><p><a class="btn primary" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Request a free 15-minute introduction</a> <a class="btn secondary" href="https://kumbaya.cloud/services.html">Browse services and request a quote</a></p><p class="fine">Do not enter payment details, medical information, or hardship proof in Calendly. Counseling consultations are booked through RCCC, not this KUMBAYA link.</p></div>
+            <div id="client-scheduler-booking" style="padding:12px 0"><p>Calendly is KUMBAYA’s schedule of record for free introductions. Paid services are requested by written quote and arranged separately after scope and payment verification.</p><p><a class="btn primary" href="https://calendly.com/kumbaya-cloud-proton/30min" target="_blank" rel="noopener">Request a free 15-minute introduction</a> <a class="btn secondary" href="https://kumbaya.cloud/services.html">Browse services and request a quote</a></p><p class="fine">Do not enter payment details, medical information, or hardship proof in Calendly. Counseling consultations are booked through RCCC, not this KUMBAYA link.</p></div>
             <div id="free-portal-scheduler" class="scheduler-controls">
               <div><label for="scheduler-service">Free introduction service area</label>
                 <select id="scheduler-service" onchange="cancelRescheduleMode(false); loadAvailableSlots()"></select>
@@ -854,6 +854,7 @@ const cfg = window.KUMBAYA_CONFIG || window.BINYA_CONFIG || {};
 const browserKey = cfg.supabasePublishableKey || cfg.supabaseAnonKey || '';
 const configured = Boolean(cfg.supabaseUrl && browserKey);
 let sb = null;
+let backendReady = false;
 let currentUser = null;
 let currentProfile = null;
 let passwordUpdateMode = false;
@@ -883,7 +884,11 @@ async function initPortal(){
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
 
-  await verifyBackendConnection();
+  if(!(await verifyBackendConnection())){
+    disableLogin();
+    notice('Do’step is temporarily unable to verify its backend. Use the free Calendly link or contact KUMBAYA; do not enter credentials here.','error');
+    return;
+  }
 
   sb.auth.onAuthStateChange((event, session) => {
     // Defer Supabase calls out of the auth callback to avoid auth-lock reentrancy.
@@ -944,6 +949,7 @@ async function verifyBackendConnection(){
       notice('Do’step could not verify its secure backend. No credentials or documents were transmitted.','error');
       return false;
     }
+    backendReady = true;
     if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
     return true;
   }catch(_err){
@@ -955,6 +961,7 @@ async function verifyBackendConnection(){
 }
 
 function disableLogin(){
+  backendReady = false;
   const form=$('portal-login-form');
   if(form){
     form.querySelectorAll('input,button').forEach(x=>x.disabled=true);
@@ -972,12 +979,12 @@ function showLoggedOut(){
   $('portal-login-card')?.classList.remove('hidden');
   $('portal-dashboard')?.classList.add('hidden');
   const badge=$('portal-live-state');
-  if(badge){ badge.textContent='Secure backend connected'; badge.className='live-state ready'; }
+  if(badge){ badge.textContent=backendReady?'Secure backend connected':'Secure backend unavailable'; badge.className=backendReady?'live-state ready':'live-state pending'; }
 }
 
 async function login(event){
   event.preventDefault(); clearNotice();
-  if(!sb) return false;
+  if(!sb || !backendReady){ notice('Secure backend unavailable. Please use the free KUMBAYA introduction or try later.','error'); return false; }
   const email=$('portal-email').value.trim();
   const password=$('portal-password').value;
   const btn=$('portal-login-submit');
@@ -1031,7 +1038,8 @@ async function onSignedIn(user){
   if(team) $('team-account-email').textContent=user.email || '';
   $('team-scheduler')?.classList.toggle('visible', team);
   $('client-scheduler-booking')?.classList.toggle('hidden', team);
-  $('free-portal-scheduler')?.classList.toggle('hidden', team);
+  // Calendly is the public schedule of record. Internal slots currently have no published future availability.
+  $('free-portal-scheduler')?.classList.add('hidden');
   $('client-document-upload')?.classList.toggle('hidden', team || !cfg.allowSensitiveUploads);
   $('document-upload-notice')?.classList.toggle('hidden', team || cfg.allowSensitiveUploads);
   $('client-message-compose')?.classList.toggle('hidden', team);
@@ -1248,7 +1256,7 @@ async function loadSchedulerServices(){
     }
     teamSelect.innerHTML=['<option value="">Choose a service…</option>'].concat(teamServices.map(s=>`<option value="${s.id}">${esc(({resource:'Resource navigation',process:'Process Haus',wellness:'Cyaam / Wellness',va:'Veteran resources'})[s.division]||s.division)} · ${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
   }
-  if(currentProfile?.role==='client') await loadAvailableSlots();
+  // Do not present a second, empty booking system alongside the active Calendly schedule.
 }
 
 async function loadAvailableSlots(){
