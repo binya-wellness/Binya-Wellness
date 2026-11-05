@@ -416,6 +416,17 @@ function includedScope(section,item){
 
 
 
+function serviceRequestAction(section,item){
+  const name=String(section.title||'');
+  if(/BINYA PROCESS HOUSE|FUTURE REGULATED WELLNESS/.test(name)){
+    return '<span class="service-note" role="status">Not offered yet — credentials or program approval required</span>';
+  }
+  const development=/CYAAM PRODUCTS & EVENTS|EDUCATION \\+ IP STUDIO/.test(name);
+  const free=/^free$|^\\$0\\b/i.test(String(item.standard||'').trim());
+  const label=development?'Ask about launch':free?'Ask about service':'Request quote';
+  return `<button class="quote-request" type="button" data-section="${escHtml(name)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${label}</button>`;
+}
+
 function render(){
   browseEl.classList.add('active');
   const q=searchEl.value.trim().toLowerCase();
@@ -438,7 +449,7 @@ function render(){
       ${section.status?`<p class="status-note"><strong>Status:</strong> ${escHtml(section.status)}</p>`:''}
       <div class="table-wrap"><table>
         <thead><tr><th>Service</th><th>Standard</th><th>Community Access</th><th>Request</th></tr></thead>
-        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> Quoted separately when available and legally permitted; the $15 / 30-minute basic administrative follow-up does not apply automatically to every service.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td><td><button class="quote-request" type="button" data-section="${escHtml(section.title)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${/CYAAM PRODUCTS & EVENTS/.test(section.title)?'Ask about launch':(/^free$|^\$0\b/i.test(String(item.standard).trim())?'Ask about service':(VERIFIED_BOOKINGS[section.title+'::'+item.service]?'Community Access / custom quote':'Request quote'))}</button></td></tr>`).join('')}</tbody>
+        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> Quoted separately when available and legally permitted; the $15 / 30-minute basic administrative follow-up does not apply automatically to every service.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td><td>${serviceRequestAction(section,item)}</td></tr>`).join('')}</tbody>
       </table></div>
       ${section.note?`<p class="category-note">${escHtml(section.note)}</p>`:''}
     </details>`;
@@ -450,7 +461,7 @@ function render(){
 menuEl.addEventListener('click',function(e){
  const btn=e.target.closest('button.quote-request');if(!btn)return;
  const section=btn.dataset.section||'',service=btn.dataset.service||'',price=btn.dataset.price||'',status=btn.dataset.status||'';
- const isCyaamDevelopment=/CYAAM PRODUCTS & EVENTS/.test(section);
+ const isCyaamDevelopment=/CYAAM PRODUCTS & EVENTS|EDUCATION \\+ IP STUDIO/.test(section);
  if(isCyaamDevelopment){
   const subject='Cyaam launch-interest inquiry — '+service;
   const body=['Hello Cyaam,','', 'I am interested in updates about this planned Cyaam offering:',service,'','Please let me know when details are confirmed. I understand this is not a purchase, reservation, event ticket or clinical intake.','','Please do not send any medical histories or sensitive records by ordinary email.'].join('\n');
