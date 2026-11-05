@@ -14,12 +14,12 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: aws-northstar
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: aws-actions/setup-sam@v2
       - name: SAM validate
         run: sam validate --template-file template.yaml
