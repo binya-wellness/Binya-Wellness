@@ -51,8 +51,18 @@ jobs:
         run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.64.1 @axe-core/playwright@4.14.0
       - name: Install Chromium test browser
         run: npx playwright install chromium --with-deps
-      - name: Run mobile, desktop and accessibility tests
-        run: node tests/launch_browser.cjs
+      - name: Run local-source and deployed mobile/desktop/accessibility tests
+        shell: bash
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/kumbaya-site.log 2>&1 &
+          python3 -m http.server 8766 --bind 127.0.0.1 --directory northstar >/tmp/dostep-site.log 2>&1 &
+          sleep 2
+          set +e
+          KUMBAYA_TEST_ORIGIN=http://127.0.0.1:8765 DOSTEP_TEST_ORIGIN=http://127.0.0.1:8766 node tests/launch_browser.cjs
+          local_status=$?
+          node tests/launch_browser.cjs
+          deployed_status=$?
+          if [ "$local_status" -ne 0 ] || [ "$deployed_status" -ne 0 ]; then exit 1; fi
       - name: Keep screenshots to diagnose failures
         if: always()
         uses: actions/upload-artifact@v4
