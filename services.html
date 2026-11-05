@@ -407,10 +407,10 @@ function includedScope(section,item){
  const hour=title.match(/(?:^|[^\d])(1|1\.5|2)[- ]hour\b/i);
  if(hour)return (Number(hour[1])*60)+' minutes included';
  if(/\/\s*30\s*min/i.test(price)||/\/\s*30\s*min/i.test(String(item.community||'')))return '30-minute billing block';
- if(/^free$|^\$0\b/i.test(price)&&/^free$|^\$0\b/i.test(String(item.community||'')))return 'One free starting-point conversation or referral, up to 30 minutes; optional added support quoted separately';
+ if(/^free$|^\$0\b/i.test(price)&&/^free$|^\$0\b/i.test(String(item.community||'')))return 'Free service or referral as described; confirm whether this is an appointment, information resource, or defined deliverable before proceeding';
  if(/PROCESS HOUSE|PROCESS HAUS|PROCESS SERVER|SERVICE OF PROCESS/i.test(section.title))return 'One specified service-of-process assignment at the listed address / attempt allowance; optional additional support only with approval';
  if(/per page|\/page|per copy|\/copy|per form|\/form|per document|\/document|per filing|\/filing|per address|\/address|per attempt|\/attempt/i.test(title+' '+price))return 'One listed unit or defined task; optional added administrative time in approved 30-minute blocks';
- return 'One defined service task, including up to 30 minutes of client-directed administrative support; added time only by approval';
+ return 'Scope and included time or deliverable must be confirmed in the written quote before acceptance';
 }
 
 
@@ -437,7 +437,7 @@ function render(){
       ${section.status?`<p class="status-note"><strong>Status:</strong> ${escHtml(section.status)}</p>`:''}
       <div class="table-wrap"><table>
         <thead><tr><th>Service</th><th>Standard</th><th>Community Access</th><th>Request</th></tr></thead>
-        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> $15 per approved 30 minutes, both tiers.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td><td><button class="quote-request" type="button" data-section="${escHtml(section.title)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${/^free$|^\$0\b/i.test(String(item.standard).trim())?'Ask about service':(VERIFIED_BOOKINGS[section.title+'::'+item.service]?'Community Access / custom quote':'Request quote')}</button></td></tr>`).join('')}</tbody>
+        <tbody>${items.map(item=>`<tr><td><div class="service-name">${escHtml(item.service)}</div><div class="service-desc">${escHtml(item.description)}</div><div class="scope-note"><strong>Included:</strong> ${escHtml(includedScope(section,item))}. <strong>Additional support:</strong> Quoted separately when available and legally permitted; the $15 / 30-minute basic administrative follow-up does not apply automatically to every service.</div></td><td class="${priceClass(item.standard)}">${escHtml(item.standard)}</td><td class="${priceClass(item.community)}">${escHtml(item.community)}</td><td><button class="quote-request" type="button" data-section="${escHtml(section.title)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${/^free$|^\$0\b/i.test(String(item.standard).trim())?'Ask about service':(VERIFIED_BOOKINGS[section.title+'::'+item.service]?'Community Access / custom quote':'Request quote')}</button></td></tr>`).join('')}</tbody>
       </table></div>
       ${section.note?`<p class="category-note">${escHtml(section.note)}</p>`:''}
     </details>`;
