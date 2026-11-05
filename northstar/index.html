@@ -206,7 +206,7 @@
     .portal-card p,.portal-status p,.portal-tile p{color:#cbbdaa}
     .secure-note{display:flex;gap:.8rem;align-items:flex-start;margin-top:1rem;padding:1rem;border-radius:16px;background:rgba(29,98,100,.13);border:1px solid rgba(29,98,100,.42);color:#d7cbb9}
     .secure-note .lock{font-size:1.3rem;line-height:1}.portal-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
-    .portal-tile{padding:1rem;min-height:118px;background:#100e0b}.portal-tile h4{margin:.15rem 0 .35rem;color:var(--cream)}.portal-tile p{margin:0;font-size:.92rem;opacity:.88}
+    .portal-tile{padding:1rem;min-height:118px;background:#100e0b}.portal-tile h3{margin:.15rem 0 .35rem;color:var(--cream)}.portal-tile p{margin:0;font-size:.92rem;opacity:.88}
     .portal-disabled{opacity:.62;position:relative;cursor:not-allowed}.portal-disabled::after{content:"Secure access required";position:absolute;right:.7rem;top:.7rem;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:.28rem .45rem;border-radius:999px;background:rgba(216,162,74,.12);color:#f1c97f;border:1px solid rgba(216,162,74,.24)}
     .portal-form{display:grid;gap:.8rem;margin-top:1rem}.portal-form label{font-weight:700;font-size:.9rem;color:var(--cream)}.portal-form input{width:100%;padding:.82rem .9rem;border:1px solid var(--line);border-radius:12px;background:#100e0b;color:var(--cream);font:inherit}.portal-form input::placeholder{color:#887d6c}.portal-form input:focus{outline:2px solid rgba(216,162,74,.34);outline-offset:2px;border-color:var(--gold)}.portal-form button{width:100%}
     .portal-footnote{font-size:.82rem;color:var(--muted);margin-top:.9rem}.scope-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.8rem}.scope-badge{padding:.4rem .65rem;border-radius:999px;background:rgba(29,98,100,.18);color:#a9d6d6;border:1px solid rgba(29,98,100,.3);font-size:.82rem;font-weight:700}
@@ -698,10 +698,10 @@ body.northstar-app #portal .portal-form button { white-space:normal; }
       <div class="portal-status">
         <span class="eyebrow">Protected portal</span><h2>What lives here</h2>
         <div class="portal-actions">
-          <div class="portal-tile"><h4>Documents</h4><p>View shared documents. New uploads are paused.</p></div>
-          <div class="portal-tile"><h4>Requests + Tasks</h4><p>See what is moving and what needs you.</p></div>
-          <div class="portal-tile"><h4>Secure Messages</h4><p>Message KUMBAYA about nonclinical services. Send counseling inquiries directly to RCCC.</p></div>
-          <div class="portal-tile"><h4>Scheduler</h4><p>View portal appointments and find KUMBAYA scheduling options.</p></div>
+          <div class="portal-tile"><h3>Documents</h3><p>View shared documents. New uploads are paused.</p></div>
+          <div class="portal-tile"><h3>Requests + Tasks</h3><p>See what is moving and what needs you.</p></div>
+          <div class="portal-tile"><h3>Secure Messages</h3><p>Message KUMBAYA about nonclinical services. Send counseling inquiries directly to RCCC.</p></div>
+          <div class="portal-tile"><h3>Scheduler</h3><p>View portal appointments and find KUMBAYA scheduling options.</p></div>
         </div>
       </div>
     </div>
@@ -1379,7 +1379,7 @@ async function closeAvailabilitySlot(id){
 </script>
 <script>
 (function(){function ready(){const key='kumbaya-reader-mode';let enabled=false;try{enabled=localStorage.getItem(key)==='on'}catch(e){};function sync(){document.body.classList.toggle('reader-mode',enabled);document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.setAttribute('aria-pressed',String(enabled)));document.querySelectorAll('[data-reader-guide]').forEach(x=>x.hidden=!enabled)}document.querySelectorAll('[data-reader-toggle]').forEach(x=>x.addEventListener('click',()=>{enabled=!enabled;try{localStorage.setItem(key,enabled?'on':'off')}catch(e){}sync()}));sync();const header=document.querySelector('header');function setOffset(){if(header)document.documentElement.style.setProperty('--sticky-offset',Math.ceil(header.getBoundingClientRect().height+20)+'px')}setOffset();window.addEventListener('resize',setOffset)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready);else ready()})();
-</script><footer class="shell" style="padding:18px 0"><a href="https://dostep.kumbaya.cloud/?access=team#portal">Do’step team sign-in</a> · <a href="mailto:kumbaya.cloud@proton.me">kumbaya.cloud@proton.me</a></footer>
-<p class="privacy-link" style="padding:12px 24px;text-align:center;font-size:.9rem"><a href="https://kumbaya.cloud/privacy.html" style="color:#e8bd76;text-decoration:underline">Privacy &amp; service boundaries</a> · <a href="https://kumbaya.cloud/how-services-work.html" style="color:#e8bd76;text-decoration:underline">How services work</a> · <a href="https://kumbaya.cloud/services.html" style="color:#e8bd76;text-decoration:underline">Service prices &amp; terms</a></p>
+</script><nav class="shell" aria-label="Team and contact links" style="padding:18px 0"><a href="https://dostep.kumbaya.cloud/?access=team#portal">Do’step team sign-in</a> · <a href="mailto:kumbaya.cloud@proton.me">kumbaya.cloud@proton.me</a></nav>
+<nav class="privacy-link" aria-label="Privacy and service links" style="padding:12px 24px;text-align:center;font-size:.9rem"><a href="https://kumbaya.cloud/privacy.html" style="color:#e8bd76;text-decoration:underline">Privacy &amp; service boundaries</a> · <a href="https://kumbaya.cloud/how-services-work.html" style="color:#e8bd76;text-decoration:underline">How services work</a> · <a href="https://kumbaya.cloud/services.html" style="color:#e8bd76;text-decoration:underline">Service prices &amp; terms</a></nav>
 </body>
 </html>
