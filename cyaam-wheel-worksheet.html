@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Cyaam Ebonics-first Feelings Wheel | Draft Vocabulary Worksheet</title>
+<style>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0c0b09;color:#f3e7d2;font:16px/1.6 system-ui,-apple-system,sans-serif}header{padding:16px 22px;border-bottom:1px solid #625039}main{max-width:1120px;margin:auto;padding:30px 20px 75px}h1,h2{font-family:Georgia,serif;line-height:1.2}h1{font-size:clamp(1.9rem,5vw,3rem)}a{color:#f2c078}a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid #f2c078;outline-offset:3px}.notice{padding:16px 20px;border-left:4px solid #d8a24a;background:#241d14;margin:18px 0}.note{color:#d6c8b6}.table-scroll{overflow-x:auto;border:1px solid #725b40;border-radius:15px}table{width:100%;min-width:870px;border-collapse:collapse}th,td{border-bottom:1px solid #564431;padding:11px;text-align:left;vertical-align:top}th{background:#302416}td{background:#18130f}input,textarea,select{font:inherit;background:#0e0d0b;color:#f3e7d2;border:1px solid #ac8c61;border-radius:7px;padding:8px;width:100%;min-width:115px}textarea{min-height:55px;resize:vertical}button{background:#d8a24a;color:#17110a;border:1px solid #d8a24a;border-radius:10px;padding:10px 16px;cursor:pointer;font:inherit;font-weight:700}button.secondary{background:transparent;color:#f3e7d2}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}.status{min-height:1.4em}details{border:1px solid #5e4b37;padding:13px 16px;border-radius:12px;margin:20px 0}pre{white-space:pre-wrap;word-break:break-word}@media print{header,.actions,.notice aside{display:none}body,td,th{background:#fff;color:#000}input,textarea{color:#000;background:#fff;border:1px solid #999}main{padding:0}.table-scroll{overflow:visible}table{min-width:0;font-size:11px}} </style>
+</head><body>
+<header><a href="/cyaam.html">← Cyaam development overview</a> · <a href="/privacy.html">Privacy</a></header>
+<main><p class="note">Cyaam · Original educational research tool · Unapproved draft</p>
+<h1>Ebonics-first Feelings Wheel: second-ring worksheet</h1>
+<p>Use this research worksheet to organize the **second ring** without inventing or prematurely approving vocabulary. The rows are intentionally blank. Write only expressions you want to consider, record their meaning and context, and explicitly approve or reject each one.</p>
+<div class="notice"><strong>Draft vocabulary, not a released wheel.</strong> This tool does not suggest or approve expressions automatically. Information you type stays in this browser page until you copy, print or close it. Nothing is transmitted, uploaded or saved by Cyaam. Don't enter private medical histories or personal identifying details.</div>
+<h2>Second-ring vocabulary review</h2>
+<p class="note">For each candidate, record the core emotion it belongs under, the expression and its nuance, regional/community usage notes, and your decision. If your source or context isn't confirmed, mark the entry for review.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Horizontally scrollable editable second-ring vocabulary worksheet">
+<table><thead><tr><th scope="col">Core/first-ring anchor</th><th scope="col">Second-ring candidate</th><th scope="col">Meaning / difference</th><th scope="col">Context / source / region</th><th scope="col">Review status</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="actions"><button type="button" id="add">Add empty row</button><button type="button" id="copy">Copy worksheet as text</button><button type="button" id="print" class="secondary">Print / save as PDF</button><button type="button" id="clear" class="secondary">Clear all draft entries</button></div>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+<details><summary>View export preview</summary><pre id="export"></pre></details>
+<h2>Approval sequence</h2><p class="note">Candidate → explain the nuanced meaning → verify local/community usage → compare with nearby second-ring candidates → explicitly approve before entering the final wheel. Do not treat an empty or “needs review” entry as finalized Cyaam vocabulary.</p>
+<p><a href="/cyaam.html">Return to Cyaam</a> · <a href="/request.html?section=CYAAM%20PRODUCTS%20%26%20EVENTS&amp;service=Ebonics-first%20Feelings%20Wheel&amp;intent=interest">Ask about future release</a></p>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+let nextId=0;
+const statuses=['Needs review','Meaning verified','Usage/context verified','Approved by owner','Rejected / revise'];
+function row(){
+ const tr=document.createElement('tr');tr.dataset.row=String(++nextId);
+ for(const [col,label] of [['anchor','Core or first-ring anchor'],['candidate','Second-ring expression'],['meaning','Meaning and nuance'],['context','Usage context and source']]){
+  const td=document.createElement('td');
+  const field=document.createElement(col==='meaning'||col==='context'?'textarea':'input');
+  field.dataset.column=col;field.setAttribute('aria-label',label+' — draft row '+nextId);field.maxLength=col==='context'?400:200;
+  td.append(field);tr.append(td);
+ }
+ const td=document.createElement('td');const select=document.createElement('select');select.dataset.column='status';select.setAttribute('aria-label','Review status — draft row '+nextId);
+ for(const name of statuses){const o=document.createElement('option');o.textContent=name;o.value=name;select.append(o);}
+ td.append(select);tr.append(td);$('rows').append(tr);return tr;
+}
+function exportText(){
+ const lines=['CYAAM — EBONICS-FIRST FEELINGS WHEEL — SECOND RING','WORKING DRAFT • NOT FINAL OR APPROVED','','Core anchor | Candidate | Meaning/nuance | Context/source | Status'];
+ for(const tr of $('rows').querySelectorAll('tr')){
+  const values=['anchor','candidate','meaning','context','status'].map(k=>tr.querySelector('[data-column="'+k+'"]').value.replace(/\s+/g,' ').trim()||'—');
+  if(values.every((v,i)=>i===4||v==='—'))continue;
+  lines.push(values.join(' | '));
+ }
+ lines.push('','No entry is released without explicit owner approval.');
+ return lines.join('\n');
+}
+function refresh(){$('export').textContent=exportText();}
+$('add').addEventListener('click',()=>{const r=row();r.querySelector('input').focus();refresh();});
+$('copy').addEventListener('click',async()=>{refresh();try{await navigator.clipboard.writeText(exportText());$('status').textContent='Worksheet copied. Paste it into a document to preserve your draft.';}catch(e){$('status').textContent='Copy unavailable; expand the export preview and select the text manually.';}});
+$('print').addEventListener('click',()=>window.print());
+$('clear').addEventListener('click',()=>{if(!confirm('Clear draft worksheet entries from this page? This cannot be undone.'))return;$('rows').replaceChildren();for(let i=0;i<6;i++)row();refresh();$('status').textContent='Draft rows reset to blank.';});
+$('rows').addEventListener('input',refresh);
+for(let i=0;i<6;i++)row();refresh();
+})();
+</script></body></html>
