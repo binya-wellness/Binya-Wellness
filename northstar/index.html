@@ -348,6 +348,9 @@ body.northstar-app .portal-status .eyebrow { color:#a4d4c5; }
 body.northstar-app .portal-form :is(input,button) { min-height:44px; }
 body.northstar-app .portal-footnote a { color:#f3cf8c; text-decoration:underline; }
 body.northstar-app #portal .portal-form button { white-space:normal; }
+#free-portal-scheduler > :nth-child(n+3) { grid-column:1/-1; }
+#free-portal-scheduler .fine { margin:0; }
+#free-portal-scheduler .slot-grid { margin:0; }
 @media (max-width:690px) {
   body.northstar-app #portal { padding-top:16px; }
   body.northstar-app #portal-login-card { grid-template-columns:minmax(0,1fr); margin-top:12px; }
@@ -772,6 +775,19 @@ body.northstar-app #portal .portal-form button { white-space:normal; }
           <span class="eyebrow">Scheduler</span><h3>Book time with KUMBAYA</h3>
           <div class="scheduler-wrap">
             <div id="client-scheduler-booking" style="padding:12px 0"><p>Request a free introduction or browse the services menu for paid options. KUMBAYA confirms the scope and verifies payment before confirming a paid appointment.</p><p><a class="btn primary" href="mailto:kumbaya.cloud@proton.me?subject=Free%2015-minute%20KUMBAYA%20introduction" target="_blank" rel="noopener">Request a free 15-minute introduction</a> <a class="btn secondary" href="https://kumbaya.cloud/services.html">Browse services and request a quote</a></p><p class="fine">Do not enter payment details or hardship proof in Calendly.</p></div>
+            <div id="free-portal-scheduler" class="scheduler-controls">
+              <div><label for="scheduler-service">Free introduction service area</label>
+                <select id="scheduler-service" onchange="cancelRescheduleMode(false); loadAvailableSlots()"></select>
+              </div>
+              <div><label for="scheduler-window">Look ahead</label>
+                <select id="scheduler-window" onchange="loadAvailableSlots()"><option value="14">14 days</option><option value="30">30 days</option></select>
+              </div>
+              <p class="fine">Times are shown in your device’s time zone.</p>
+              <div id="scheduler-slots" class="slot-grid" aria-live="polite"></div>
+              <div id="scheduler-summary" class="scheduler-summary hidden" aria-live="polite"></div>
+              <button id="scheduler-book-btn" class="btn primary hidden" type="button" onclick="bookSelectedSlot()">Confirm free introduction</button>
+              <button id="scheduler-reschedule-cancel" class="btn secondary hidden" type="button" onclick="cancelRescheduleMode()">Keep original appointment</button>
+            </div>
           </div>
           <div class="scheduler-divider"></div>
           <span class="eyebrow">Your appointments</span><h3>Upcoming</h3>
@@ -1011,6 +1027,7 @@ async function onSignedIn(user){
   if(team) $('team-account-email').textContent=user.email || '';
   $('team-scheduler')?.classList.toggle('visible', team);
   $('client-scheduler-booking')?.classList.toggle('hidden', team);
+  $('free-portal-scheduler')?.classList.toggle('hidden', team);
   $('client-document-upload')?.classList.toggle('hidden', team);
   $('client-message-compose')?.classList.toggle('hidden', team);
   await Promise.all([loadPortalDivisions(), loadDocuments(), loadTasks(), loadMessages(), loadAppointments(), loadSchedulerServices()]);
@@ -1214,7 +1231,8 @@ async function loadSchedulerServices(){
     .eq('active',true).order('division').order('name');
   if(error){ if(clientSelect) clientSelect.innerHTML='<option value="">Scheduler unavailable</option>'; if(teamSelect) teamSelect.innerHTML='<option value="">Scheduler unavailable</option>'; notice('Scheduling services could not be loaded.','error'); return; }
   schedulerServices=data||[];
-  const options=['<option value="">Choose a service…</option>'].concat(schedulerServices.map(s=>`<option value="${s.id}">${esc(({resource:'Resource navigation',process:'Process Haus',wellness:'Cyaam / Wellness',va:'Veteran resources'})[s.division]||s.division)} · ${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
+  const freeServices=schedulerServices.filter(service=>service.name==='Free 15-minute introduction' && service.duration_minutes===15);
+  const options=['<option value="">Choose a service…</option>'].concat(freeServices.map(s=>`<option value="${s.id}">${esc(({resource:'Resource navigation',process:'Process Haus',wellness:'Cyaam / Wellness',va:'Veteran resources'})[s.division]||s.division)} · ${esc(s.name)} · ${s.duration_minutes} min</option>`)).join('');
   if(clientSelect) clientSelect.innerHTML=options;
   if(teamSelect){
     let teamServices=schedulerServices;
@@ -1236,7 +1254,9 @@ async function loadAvailableSlots(){
   if(!serviceId){ box.innerHTML='<p class="empty">Choose a service to see times.</p>'; return; }
   const days=Number($('scheduler-window')?.value||14);
   const end=new Date(Date.now()+days*86400000);
+  box.innerHTML='<p class="empty">Checking available times…</p>';
   const {data,error}=await sb.rpc('list_available_slots',{p_service_type_id:serviceId,p_until:end.toISOString()});
+  if($('scheduler-service').value!==serviceId || Number($('scheduler-window').value)!==days) return;
   if(error){ box.innerHTML='<p class="empty">Available times could not be loaded.</p>'; return; }
   if(!data?.length){ box.innerHTML='<p class="empty">No open times in this window yet. Check back or message KUMBAYA.</p>'; return; }
   box.innerHTML=data.map(slot=>{
@@ -1257,14 +1277,12 @@ function selectSchedulerSlot(id){
 }
 
 async function bookSelectedSlot(){
-  notice('Direct paid-service scheduling is disabled; request a quote and pay first.','warn');return;
-
   if(window.__rescheduleAppointment){ notice('Finish or cancel the current reschedule first.','warn'); return; }
   if(!selectedSlotId) return;
   if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
   const btn=$('scheduler-book-btn'); btn.disabled=true; btn.textContent='Booking…';
-  const {data,error}=await sb.rpc('book_appointment',{p_slot_id:selectedSlotId});
-  btn.disabled=false; btn.textContent='Confirm appointment';
+  const {error}=await sb.rpc('book_appointment',{p_slot_id:selectedSlotId});
+  btn.disabled=false; btn.textContent='Confirm free introduction';
   if(error){ notice(error.message?.includes('already booked')?'That time was just taken. Choose another slot.':'Appointment could not be booked.','error'); await loadAvailableSlots(); return; }
   notice('Appointment confirmed.','success');
   selectedSlotId=null; selectedSlotData=null; $('scheduler-summary').classList.add('hidden'); btn.classList.add('hidden');
@@ -1280,7 +1298,13 @@ async function cancelAppointment(id){
 }
 
 async function startReschedule(id,serviceId){
-  const sel=$('scheduler-service'); if(sel){ sel.value=serviceId; await loadAvailableSlots(); }
+  const sel=$('scheduler-service');
+  if(!sel || !Array.from(sel.options).some(option=>option.value && option.value===serviceId)){
+    notice('Contact KUMBAYA to arrange a new time for this appointment.','info');
+    return;
+  }
+  sel.value=serviceId;
+  await loadAvailableSlots();
   notice('Choose a new time above. Your current appointment stays reserved until the new time is confirmed.','info');
   window.__rescheduleAppointment=id;
   const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm new time'; btn.onclick=rescheduleSelectedSlot; }
@@ -1288,14 +1312,14 @@ async function startReschedule(id,serviceId){
   document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
-function cancelRescheduleMode(){
+function cancelRescheduleMode(showNotice=true){
   window.__rescheduleAppointment=null;
   selectedSlotId=null; selectedSlotData=null;
   document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('selected'));
   $('scheduler-summary')?.classList.add('hidden');
-  const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm appointment'; btn.onclick=bookSelectedSlot; btn.classList.add('hidden'); }
+  const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm free introduction'; btn.onclick=bookSelectedSlot; btn.classList.add('hidden'); }
   $('scheduler-reschedule-cancel')?.classList.add('hidden');
-  notice('Your original appointment is unchanged.','info');
+  if(showNotice) notice('Your original appointment is unchanged.','info');
 }
 
 async function rescheduleSelectedSlot(){
@@ -1303,9 +1327,9 @@ async function rescheduleSelectedSlot(){
   if(cfg.requireMfaForSensitiveActions && !(await requireAal2())) return;
   const btn=$('scheduler-book-btn'); btn.disabled=true; btn.textContent='Rescheduling…';
   const {error}=await sb.rpc('reschedule_appointment',{p_appointment_id:window.__rescheduleAppointment,p_new_slot_id:selectedSlotId});
-  btn.disabled=false; btn.textContent='Confirm appointment'; btn.onclick=bookSelectedSlot;
+  btn.disabled=false; btn.textContent='Confirm new time';
   if(error){ notice('Appointment could not be rescheduled. Your original time is still reserved.','error'); return; }
-  window.__rescheduleAppointment=null; $('scheduler-reschedule-cancel')?.classList.add('hidden'); notice('Appointment moved to the new time.','success');
+  cancelRescheduleMode(false); notice('Appointment moved to the new time.','success');
   await Promise.all([loadAppointments(),loadAvailableSlots()]);
 }
 
