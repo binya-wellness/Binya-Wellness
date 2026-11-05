@@ -7,12 +7,12 @@
 <main><p class="note">Cyaam · Original educational research tool · Unapproved draft</p>
 <h1>Ebonics-first Feelings Wheel: second-ring worksheet</h1>
 <p>Use this research worksheet to organize the <strong>second ring</strong> without inventing or prematurely approving vocabulary. The rows are intentionally blank. Write only expressions you want to consider, record their meaning and context, and explicitly approve or reject each one.</p>
-<div class="notice"><strong>Draft vocabulary, not a released wheel.</strong> This tool does not suggest or approve expressions automatically. Information you type stays in this browser page until you copy, print or close it. Nothing is transmitted, uploaded or saved by Cyaam. Don't enter private medical histories or personal identifying details.</div>
+<div class="notice"><strong>Draft vocabulary, not a released wheel.</strong> This tool does not suggest or approve expressions automatically. Entries stay on this page unless you explicitly copy, print, or download a draft file. You can reopen that file on this device later. Nothing is transmitted to KUMBAYA or stored on its servers. Don't enter private medical histories or personal identifying details.</div>
 <h2>Second-ring vocabulary review</h2>
 <p class="note">For each candidate, record the core emotion it belongs under, the expression and its nuance, regional/community usage notes, and your decision. If your source or context isn't confirmed, mark the entry for review.</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Horizontally scrollable editable second-ring vocabulary worksheet">
 <table><thead><tr><th scope="col">Core/first-ring anchor</th><th scope="col">Second-ring candidate</th><th scope="col">Meaning / difference</th><th scope="col">Context / source / region</th><th scope="col">Review status</th></tr></thead><tbody id="rows"></tbody></table></div>
-<div class="actions"><button type="button" id="add">Add empty row</button><button type="button" id="copy">Copy worksheet as text</button><button type="button" id="print" class="secondary">Print / save as PDF</button><button type="button" id="clear" class="secondary">Clear all draft entries</button></div>
+<div class="actions"><button type="button" id="add">Add empty row</button><button type="button" id="save-draft">Download editable draft</button><button type="button" id="load-draft" class="secondary">Open saved draft</button><input id="draft-file" type="file" accept="application/json,.json" aria-label="Choose a saved Cyaam worksheet draft" hidden><button type="button" id="copy">Copy worksheet as text</button><button type="button" id="print" class="secondary">Print / save as PDF</button><button type="button" id="clear" class="secondary">Clear all draft entries</button></div>
 <p class="status" id="status" role="status" aria-live="polite"></p>
 <details><summary>View export preview</summary><pre id="export"></pre></details>
 <h2>Approval sequence</h2><p class="note">Candidate → explain the nuanced meaning → verify local/community usage → compare with nearby second-ring candidates → explicitly approve before entering the final wheel. Do not treat an empty or “needs review” entry as finalized Cyaam vocabulary.</p>
@@ -46,6 +46,51 @@ function exportText(){
  lines.push('','No entry is released without explicit owner approval.');
  return lines.join('\n');
 }
+function snapshot(){
+ return {format:'cyaam-ebonics-first-second-ring',schema_version:1,review_state:'DRAFT_NOT_FINAL',
+ rows:[...$('rows').querySelectorAll('tr')].map(tr=>Object.fromEntries(['anchor','candidate','meaning','context','status'].map(k=>[k,tr.querySelector('[data-column="'+k+'"]').value])))};
+}
+function validateDraft(doc){
+ if(!doc||doc.format!=='cyaam-ebonics-first-second-ring'||doc.schema_version!==1||!Array.isArray(doc.rows)||doc.rows.length>200)throw Error('This is not a supported second-ring draft file.');
+ const keys=['anchor','candidate','meaning','context','status'];
+ for(const rowData of doc.rows){
+  if(!rowData||typeof rowData!=='object')throw Error('Invalid draft row.');
+  for(const k of keys){
+   if(typeof rowData[k]!=='string'||rowData[k].length>(k==='context'?400:k==='status'?80:200))throw Error('Invalid or overly long draft field.');
+  }
+  if(!statuses.includes(rowData.status))throw Error('Invalid approval status.');
+ }
+}
+function applyDraft(doc){
+ validateDraft(doc);
+ $('rows').replaceChildren();
+ for(const entry of doc.rows){
+  const tr=row();
+  for(const [k,v] of Object.entries(entry))tr.querySelector('[data-column="'+k+'"]').value=v;
+ }
+ if(!doc.rows.length)row();
+ refresh();
+}
+$('save-draft').addEventListener('click',()=>{
+ const data=JSON.stringify(snapshot(),null,2);
+ const url=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download='cyaam-second-ring-working-draft.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ $('status').textContent='Draft file downloaded. Keep it somewhere private and upload it here next time to resume. No data was sent to KUMBAYA.';
+});
+$('load-draft').addEventListener('click',()=>$('draft-file').click());
+$('draft-file').addEventListener('change',async function(){
+ const file=this.files&&this.files[0];
+ if(!file)return;
+ if(file.size>150000){$('status').textContent='The draft file is too large.';this.value='';return;}
+ try{
+  const doc=JSON.parse(await file.text());validateDraft(doc);
+  if(!confirm('Open this saved draft? It will replace the entries currently on this page.')){this.value='';return;}
+  applyDraft(doc);
+  $('status').textContent='Draft restored locally. Review each entry before approval.';
+ }catch(e){$('status').textContent='Could not open the file: '+e.message;}
+ this.value='';
+});
 function refresh(){$('export').textContent=exportText();}
 $('add').addEventListener('click',()=>{const r=row();r.querySelector('input').focus();refresh();});
 $('copy').addEventListener('click',async()=>{refresh();try{await navigator.clipboard.writeText(exportText());$('status').textContent='Worksheet copied. Paste it into a document to preserve your draft.';}catch(e){$('status').textContent='Copy unavailable; expand the export preview and select the text manually.';}});
