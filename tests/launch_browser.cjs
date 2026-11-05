@@ -44,6 +44,12 @@ for(const width of [390,1280]){
      await filter.click();
      const visible=await page.getByText('CYAAM PRODUCTS & EVENTS',{exact:false}).first().isVisible().catch(()=>false);
      if(!visible)failures.push(tag+': Cyaam products/events not visible after selecting filter');
+     const resourceFilter=page.locator('button.filter[data-mode="resources"]');
+     await resourceFilter.click();
+     const serviceQuotes=await page.locator('#menu button.quote-request').count();
+     if(serviceQuotes===0) failures.push(tag+': Right Hand Th’am request-a-quote controls absent');
+     const gated=await page.locator('#menu .service-note').count();
+     console.log(tag+': nonclinical resource quote controls='+serviceQuotes+' | unavailable services shown='+gated);
     }
    }
    const audit=await new AxeBuilder({page}).analyze();
