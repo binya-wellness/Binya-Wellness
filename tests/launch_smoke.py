@@ -67,8 +67,10 @@ def test_source():
   text=Path(file).read_text(encoding="utf-8")
   issues=check_html(file,text,check_js=True)
   if file not in ("privacy.html","cyaam-wheel-worksheet.html"):
-   for url in [RCCC,CALENDLY,"https://kumbaya.cloud/privacy.html"]:
+   for url in [RCCC,CALENDLY]:
     if url not in text:issues.append("Missing required public destination: "+url)
+   if "https://kumbaya.cloud/privacy.html" not in text and 'href="/privacy.html"' not in text:
+    issues.append("Missing privacy policy link")
   if file=="services.html":
    for phrase in ["CYAAM PRODUCTS & EVENTS","Ask about launch","Right Hand Th’am"]:
     if phrase not in text:issues.append("Missing catalog or availability signal: "+phrase)
