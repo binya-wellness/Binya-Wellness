@@ -1,7 +1,7 @@
 // Read-only browser smoke and accessibility audit. Never sign in, submit forms,
 // create bookings, upload files, or collect customer information.
 const { chromium } = require('playwright');
-const AxeBuilder = require('@axe-core/playwright').default;
+const { AxeBuilder } = require('@axe-core/playwright');
 const fs = require('node:fs');
 const tests = [
  {name:'main',url:'https://kumbaya.cloud/'},
@@ -9,6 +9,7 @@ const tests = [
  {name:'privacy',url:'https://kumbaya.cloud/privacy.html'},
  {name:'portal',url:'https://dostep.kumbaya.cloud/'}
 ];
+async function main(){
 const failures = [];
 const browser = await chromium.launch({headless:true});
 fs.mkdirSync('test-artifacts',{recursive:true});
@@ -54,3 +55,6 @@ for(const width of [390,1280]){
 await browser.close();
 if(failures.length){console.error('BROWSER AUDIT FAILURES:\n'+failures.map(x=>' - '+x).join('\n'));process.exitCode=1;}
 else console.log('BROWSER AUDIT PASSED: 4 pages at mobile and desktop widths');
+
+}
+main().catch(error=>{console.error(error);process.exitCode=1;});
