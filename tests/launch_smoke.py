@@ -17,6 +17,7 @@ SITES = {
  "cyaam-wheel-worksheet.html": "https://kumbaya.cloud/cyaam-wheel-worksheet.html",
  "northstar/index.html": "https://dostep.kumbaya.cloud/",
  "northstar/help.html": "https://dostep.kumbaya.cloud/help.html",
+ "recovery.html": "https://kumbaya.cloud/recovery.html",
 }
 RCCC = "https://www.rainbowconnectioncounseling.com/contact-us"
 CALENDLY = "https://calendly.com/kumbaya-cloud-proton/30min"
@@ -67,7 +68,7 @@ def test_source():
  for file in SITES:
   text=Path(file).read_text(encoding="utf-8")
   issues=check_html(file,text,check_js=True)
-  if file not in ("privacy.html","cyaam-wheel-worksheet.html"):
+  if file not in ("privacy.html","cyaam-wheel-worksheet.html","recovery.html"):
    for url in [RCCC,CALENDLY]:
     if url not in text:issues.append("Missing required public destination: "+url)
    if "https://kumbaya.cloud/privacy.html" not in text and 'href="/privacy.html"' not in text:
