@@ -1,0 +1,38 @@
+name: KUMBAYA launch verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'services.html'
+      - 'privacy.html'
+      - 'northstar/index.html'
+      - 'tests/launch_smoke.py'
+      - '.github/workflows/launch-verification.yml'
+  workflow_dispatch:
+jobs:
+  source-safety:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate HTML links, IDs, labels, and inline JavaScript syntax
+        run: python tests/launch_smoke.py source
+  production-smoke:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check deployed website URLs and essential destinations (read-only)
+        run: python tests/launch_smoke.py production
