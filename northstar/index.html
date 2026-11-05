@@ -748,6 +748,7 @@ body.northstar-app #portal .portal-form button { white-space:normal; }
       <div class="dashboard-grid">
         <section class="portal-card dash-panel">
           <div class="dash-title"><div><span class="eyebrow">Documents</span><h3>Secure files</h3></div></div>
+          <p id="document-upload-notice" class="fine" role="status">Document uploads are not available through Do’step yet. Please do not send medical records or other sensitive documents through public forms or email.</p>
           <div id="client-document-upload" class="upload-box">
             <label for="document-division">Service area</label><select id="document-division"><option value="">Loading available areas…</option></select>
             <label for="document-file">Choose document</label><input id="document-file" type="file" />
@@ -1028,7 +1029,8 @@ async function onSignedIn(user){
   $('team-scheduler')?.classList.toggle('visible', team);
   $('client-scheduler-booking')?.classList.toggle('hidden', team);
   $('free-portal-scheduler')?.classList.toggle('hidden', team);
-  $('client-document-upload')?.classList.toggle('hidden', team);
+  $('client-document-upload')?.classList.toggle('hidden', team || !cfg.allowSensitiveUploads);
+  $('document-upload-notice')?.classList.toggle('hidden', team || cfg.allowSensitiveUploads);
   $('client-message-compose')?.classList.toggle('hidden', team);
   await Promise.all([loadPortalDivisions(), loadDocuments(), loadTasks(), loadMessages(), loadAppointments(), loadSchedulerServices()]);
   if(team) await loadTeamSlots();
