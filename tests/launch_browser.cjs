@@ -14,7 +14,8 @@ const tests = [
  {name:'worksheet',url:origin+'/cyaam-wheel-worksheet.html'},
  {name:'process',url:origin+'/how-services-work.html'},
  {name:'portal',url:portalOrigin+'/'},
- {name:'portal-help',url:portalOrigin+'/help.html'}
+ {name:'portal-help',url:portalOrigin+'/help.html'},
+ {name:'recovery',url:origin+'/recovery.html'}
 ];
 async function main(){
 const failures = [];
@@ -37,9 +38,9 @@ for(const width of [390,1280]){
     privacy:!!document.querySelector('a[href*="/privacy.html"]')
    }));
    if(info.overflow)failures.push(tag+': page horizontal viewport overflow');
-   if(!['privacy','worksheet'].includes(test.name) && !info.rccc)failures.push(tag+': RCCC link absent');
-   if(!['privacy','worksheet'].includes(test.name) && !info.calendly)failures.push(tag+': free Calendly link absent');
-   if(test.name!=='privacy' && !info.privacy)failures.push(tag+': privacy link absent');
+   if(!['privacy','worksheet','recovery'].includes(test.name) && !info.rccc)failures.push(tag+': RCCC link absent');
+   if(!['privacy','worksheet','recovery'].includes(test.name) && !info.calendly)failures.push(tag+': free Calendly link absent');
+   if(!['privacy','recovery'].includes(test.name) && !info.privacy)failures.push(tag+': privacy link absent');
    if(test.name==='services'){
     const filter=page.locator('button.filter[data-mode="clinical"]');
     if(await filter.count()===0) failures.push(tag+': Cyaam filter missing');
@@ -55,6 +56,13 @@ for(const width of [390,1280]){
      const gated=await page.locator('#menu .service-note').count();
      console.log(tag+': nonclinical resource quote controls='+serviceQuotes+' | unavailable services shown='+gated);
     }
+   }
+   if(test.name==='recovery'){
+    const passwordField=page.locator('#password');
+    const codeField=page.locator('#code');
+    if(!await passwordField.count()||!await codeField.count()) failures.push(tag+': recovery controls missing');
+    const helpLink=page.locator('a[href*="/help.html"]');
+    if(!await helpLink.count()) failures.push(tag+': recovery does not offer account help');
    }
    if(test.name==='portal-help'){
     const text=await page.locator('main').innerText();
@@ -140,7 +148,7 @@ for(const width of [390,1280]){
 }
 await browser.close();
 if(failures.length){console.error('BROWSER AUDIT FAILURES:\n'+failures.map(x=>' - '+x).join('\n'));process.exitCode=1;}
-else console.log('BROWSER AUDIT PASSED: 9 pages at mobile and desktop widths');
+else console.log('BROWSER AUDIT PASSED: 10 pages at mobile and desktop widths');
 
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
