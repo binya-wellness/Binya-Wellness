@@ -8,6 +8,7 @@ on:
       - 'privacy.html'
       - 'how-services-work.html'
       - 'request.html'
+      - 'recovery.html'
       - 'cyaam.html'
       - 'cyaam-wheel-worksheet.html'
       - 'robots.txt'
