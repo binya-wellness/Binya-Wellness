@@ -9,6 +9,9 @@ const tests = [
  {name:'main',url:origin+'/'},
  {name:'services',url:origin+'/services.html'},
  {name:'privacy',url:origin+'/privacy.html'},
+ {name:'quote',url:origin+'/request.html'},
+ {name:'cyaam',url:origin+'/cyaam.html'},
+ {name:'worksheet',url:origin+'/cyaam-wheel-worksheet.html'},
  {name:'process',url:origin+'/how-services-work.html'},
  {name:'portal',url:portalOrigin+'/'}
 ];
@@ -33,8 +36,8 @@ for(const width of [390,1280]){
     privacy:!!document.querySelector('a[href*="/privacy.html"]')
    }));
    if(info.overflow)failures.push(tag+': page horizontal viewport overflow');
-   if(test.name!=='privacy' && !info.rccc)failures.push(tag+': RCCC link absent');
-   if(test.name!=='privacy' && !info.calendly)failures.push(tag+': free Calendly link absent');
+   if(!['privacy','worksheet'].includes(test.name) && !info.rccc)failures.push(tag+': RCCC link absent');
+   if(!['privacy','worksheet'].includes(test.name) && !info.calendly)failures.push(tag+': free Calendly link absent');
    if(test.name!=='privacy' && !info.privacy)failures.push(tag+': privacy link absent');
    if(test.name==='services'){
     const filter=page.locator('button.filter[data-mode="clinical"]');
@@ -52,6 +55,20 @@ for(const width of [390,1280]){
      console.log(tag+': nonclinical resource quote controls='+serviceQuotes+' | unavailable services shown='+gated);
     }
    }
+   if(test.name==='quote'){
+    await page.locator('#summary').fill('General question about a nonclinical administrative task');
+    await page.locator('details').evaluate(el=>el.open=true);
+    const preview=await page.locator('#preview').innerText();
+    if(!preview.includes('General question about a nonclinical administrative task')) failures.push(tag+': quote message preview did not update');
+   }
+   if(test.name==='worksheet'){
+    const rows=await page.locator('#rows tr').count();
+    if(rows<6) failures.push(tag+': expected at least six blank second-ring draft rows');
+    await page.locator('#rows tr').first().locator('[data-column="anchor"]').fill('Test anchor');
+    await page.locator('details').evaluate(el=>el.open=true);
+    const preview=await page.locator('#export').innerText();
+    if(!preview.includes('Test anchor')) failures.push(tag+': draft vocabulary export did not update');
+   }
    const audit=await new AxeBuilder({page}).analyze();
    const severe=audit.violations.filter(v=>v.impact==='critical'||v.impact==='serious');
    for(const v of severe)failures.push(tag+': accessibility '+v.id+' ('+v.impact+') '+v.nodes.slice(0,3).map(n=>n.target.join(',')).join(';'));
@@ -64,7 +81,7 @@ for(const width of [390,1280]){
 }
 await browser.close();
 if(failures.length){console.error('BROWSER AUDIT FAILURES:\n'+failures.map(x=>' - '+x).join('\n'));process.exitCode=1;}
-else console.log('BROWSER AUDIT PASSED: 5 pages at mobile and desktop widths');
+else console.log('BROWSER AUDIT PASSED: 8 pages at mobile and desktop widths');
 
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
