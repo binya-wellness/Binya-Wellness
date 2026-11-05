@@ -11,6 +11,7 @@ SITES = {
  "index.html": "https://kumbaya.cloud/",
  "services.html": "https://kumbaya.cloud/services.html",
  "privacy.html": "https://kumbaya.cloud/privacy.html",
+ "how-services-work.html": "https://kumbaya.cloud/how-services-work.html",
  "northstar/index.html": "https://dostep.kumbaya.cloud/",
 }
 RCCC = "https://www.rainbowconnectioncounseling.com/contact-us"
@@ -62,7 +63,7 @@ def test_source():
  for file in SITES:
   text=Path(file).read_text(encoding="utf-8")
   issues=check_html(file,text,check_js=True)
-  if file!="privacy.html":
+  if file not in ("privacy.html",):
    for url in [RCCC,CALENDLY,"https://kumbaya.cloud/privacy.html"]:
     if url not in text:issues.append("Missing required public destination: "+url)
   if file=="services.html":
@@ -90,6 +91,8 @@ def test_production():
      if must not in html:issues.append("Deployed content missing "+must)
    if file=="services.html" and "CYAAM PRODUCTS & EVENTS" not in html:
     issues.append("Cyaam products/events finder not deployed")
+   if file=="how-services-work.html" and "How our services work" not in html:
+    issues.append("Customer process information not present")
    if file=="privacy.html" and "Privacy, inquiries" not in html:
     issues.append("Privacy notice not present")
    issues+=check_html(file,html,check_js=False)
