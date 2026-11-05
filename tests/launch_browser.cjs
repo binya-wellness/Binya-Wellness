@@ -55,6 +55,15 @@ for(const width of [390,1280]){
      console.log(tag+': nonclinical resource quote controls='+serviceQuotes+' | unavailable services shown='+gated);
     }
    }
+   if(test.name==='portal'){
+    const dashboard=page.locator('#portal-dashboard');
+    const loginForm=page.locator('#portal-login-form');
+    if(await dashboard.isVisible()) failures.push(tag+': private dashboard exposed to signed-out visitor');
+    if(!(await loginForm.count())) failures.push(tag+': account sign-in form missing');
+    if(await page.locator('#client-document-upload').isVisible()) failures.push(tag+': private upload controls exposed to signed-out visitor');
+    const liveNotice=await page.locator('#document-upload-notice').innerText();
+    if(!liveNotice.includes('not available')) failures.push(tag+': sensitive-upload closure notice missing');
+   }
    if(test.name==='quote'){
     await page.locator('#summary').fill('General question about a nonclinical administrative task');
     await page.locator('details').evaluate(el=>el.open=true);
