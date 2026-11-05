@@ -74,6 +74,16 @@ for(const width of [390,1280]){
    for(const v of severe)failures.push(tag+': accessibility '+v.id+' ('+v.impact+') '+v.nodes.slice(0,3).map(n=>n.target.join(',')).join(';'));
    console.log(tag+': HTTP '+resp?.status()+' | '+JSON.stringify(info)+' | axe serious/critical='+severe.length+' | all='+audit.violations.length);
    await page.screenshot({path:'test-artifacts/'+tag+'.png',fullPage:true});
+   if(test.name==='services'){
+    const quote=page.locator('#menu button.quote-request').first();
+    if(await quote.count()){
+     const expected=(await quote.getAttribute('data-service'))||'';
+     await quote.click();
+     await page.waitForURL(/\/request\.html\?/,{timeout:10000});
+     const actual=await page.locator('#selected-service').innerText();
+     if(actual!==expected)failures.push(tag+': selected service did not survive quote-request navigation');
+    }
+   }
   }catch(e){failures.push(tag+': '+e.message.slice(0,380));}
   await page.close();
  }
