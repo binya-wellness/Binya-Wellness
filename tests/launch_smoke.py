@@ -78,8 +78,9 @@ def test_source():
    issues.append("Missing privacy assurance for inquiry builder")
   if file=="cyaam-wheel-worksheet.html" and "rows are intentionally blank" not in text:
    issues.append("Draft vocabulary worksheet must not invent expressions")
-  if file=="northstar/index.html" and "Free 15-minute introduction" not in text:
-   issues.append("Missing free-only portal booking language")
+  if file=="northstar/index.html":
+   for required in ["Free 15-minute introduction","requireMfaForSensitiveActions: true","allowSensitiveUploads: false","backendReady = false","if(!(await verifyBackendConnection()))","Calendly is KUMBAYA"]:
+    if required not in text:issues.append("Missing portal login, privacy or booking safeguard: "+required)
   if issues:failed=True
   print(("FAIL" if issues else "PASS")+" source "+file)
   for issue in issues:print("  - "+issue)
