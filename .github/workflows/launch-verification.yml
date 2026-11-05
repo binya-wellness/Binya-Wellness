@@ -16,6 +16,8 @@ on:
       - 'northstar/index.html'
       - 'tests/launch_smoke.py'
       - 'tests/launch_browser.cjs'
+      - 'tests/test_stripe_quote_catalog.py'
+      - 'internal/stripe-live-price-registry.json'
       - '.github/workflows/launch-verification.yml'
   workflow_dispatch:
 jobs:
@@ -33,6 +35,8 @@ jobs:
           node-version: '22'
       - name: Validate HTML links, IDs, labels, and inline JavaScript syntax
         run: python tests/launch_smoke.py source
+      - name: Dry-run verified Stripe catalog and quote arithmetic
+        run: python tests/test_stripe_quote_catalog.py
   production-smoke:
     runs-on: ubuntu-latest
     permissions:
