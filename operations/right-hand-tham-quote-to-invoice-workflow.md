@@ -72,6 +72,16 @@ Use the corresponding item **only after** validating the exact written scope and
 - **Cyaam products/events:** Currently described as **in development**; an interest inquiry is not a sale, ticket, clinical intake, or reservation.
 - **Free KUMBAYA introduction:** https://calendly.com/kumbaya-cloud-proton/30min (15 minutes, nonclinical, $0).
 
+## Legal and insurance verification — unresolved
+The October 2026 KUMBAYA planning packet identifies KUMBAYA as a proposed sole-proprietor brand and expressly leaves its FBN/DBA, EIN identity, municipal registration, business bank-account evidence, and insurance **unverified**. Stripe account enablement is not evidence that these registrations or insurance policies have been approved.
+
+- [ ] Confirm the legal owner and exact operating/business name from original records. Do not use a guessed EIN or certify an unfiled DBA.
+- [ ] For a Los Angeles County sole proprietor operating as **KUMBAYA** without the owner's surname in the trade name, check and complete the county Fictitious Business Name process and publication: https://www.lavote.gov/home/county-clerk/fictitious-business-names/filing/who-should-file and https://www.lavote.gov/home/county-clerk/fictitious-business-names/filing/requirements
+- [ ] Confirm the City of Los Angeles Business Tax Registration Certificate and applicable business activities: https://finance.lacity.gov/business-registration-process
+- [ ] Obtain and verify liability insurance appropriate to actual nonclinical services; for public events, mobile work, kayaking/canoeing, and workshops, obtain separate activity/venue coverage and safety review before sale.
+- [ ] Verify any credentials, registrations, bond, permits, or restricted service boundaries before an individual service is activated.
+- [ ] If legal or insurance approval is incomplete, keep the corresponding paid service in quote-only or unavailable status rather than promising delivery.
+
 ## Release gates
 - [x] Free intro is active in Calendly (last checked 2026-11-04; verify anew if changed)
 - [x] Paid Do’step booking function limited to the free 15-minute service (last checked 2026-11-04)
