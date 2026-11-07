@@ -216,14 +216,17 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       <div class="toolbar" aria-label="Menu filters">
         <input id="service-search" class="search" type="search" placeholder="Search — housing, SSI, VA, IEP, naloxone…" aria-label="Search services">
         <div class="filters">
-          <button class="filter active" data-mode="all" type="button">All</button>
-          <button class="filter" data-mode="free-standard" type="button">$0 for everyone</button>
-          <button class="filter" data-mode="free-community" type="button">$0 with Community Access</button>
-          <button class="filter" data-mode="community" type="button">Community Access</button>
-          <button class="filter" data-mode="process" type="button">Process Haus</button><button class="filter" data-mode="resources" type="button">Right Hand Th’am</button><button class="filter" data-mode="education" type="button">Eddycashun</button><button class="filter" data-mode="clinical" type="button">Cyaam</button>
+          <button class="filter active" data-mode="all" type="button" aria-pressed="true">All</button>
+          <button class="filter" data-mode="free-standard" type="button" aria-pressed="false">$0 for everyone</button>
+          <button class="filter" data-mode="free-community" type="button" aria-pressed="false">$0 with Community Access</button>
+          <button class="filter" data-mode="community" type="button" aria-pressed="false">Community Access</button>
+          <button class="filter" data-mode="process" type="button" aria-pressed="false">Process Haus</button>
+          <button class="filter" data-mode="resources" type="button" aria-pressed="false">Right Hand Th’am</button>
+          <button class="filter" data-mode="education" type="button" aria-pressed="false">Eddycashun</button>
+          <button class="filter" data-mode="clinical" type="button" aria-pressed="false">Cyaam</button>
         </div>
       </div>
-      <p id="result-count" class="count"></p>
+      <p id="result-count" class="count" role="status"></p>
       <p class="fine" style="margin-top:12px">Each service now has a request-a-quote control. It opens a prefilled email in your device’s mail app; sending the email is your choice. This is not a payment or booking. Currently inactive, credential-gated and coming-soon services are inquiries only. Free 15-minute nonclinical introductions can be booked directly through the verified Calendly link above. RCCC counseling consultations use RCCC's separate intake.</p>
       <div id="menu" class="menu"></div>
     </section>
@@ -311,8 +314,9 @@ function setStep(n){
   [1,2,3].forEach(i=>{const button=document.getElementById('step-'+i);button.classList.toggle('active',i===n);button.setAttribute('aria-current',i===n?'step':'false');});
 }
 function goToServices(){
-  browseEl.classList.add('active');setStep(3);
-  if(!selectedSections && !browseEl.querySelector('.category')){mode='all';render();}
+  const wasBrowsing=browseEl.classList.contains('active');
+  setStep(3);
+  if(!wasBrowsing) render();
   const header=document.querySelector('header');const offset=(header?.getBoundingClientRect().height||0)+20;
   window.scrollTo({top:Math.max(0,window.scrollY+browseEl.getBoundingClientRect().top-offset),behavior:'smooth'});
 }
@@ -369,22 +373,24 @@ function showSection(title){
     <h2 class="guide-heading">${escHtml(pretty(title))}</h2>
     <p class="guide-copy">Here are the options in this lane. Each service has a short plain-language description, with Standard and Community Access prices shown together.</p>`;
   document.getElementById('back-lanes').onclick=()=>{if(selectedGuide)chooseProblem(selectedGuide.id);else showProblems();scrollGuide()};
-  browseEl.classList.add('active');
-  setFilterButton('all');
   render();
   scrollGuide();
 }
 function showFree(which){
-  selectedSections=null; mode=which; searchEl.value=''; setStep(3); setFilterButton(which);
+  selectedSections=null; mode=which; searchEl.value=''; setStep(3);
   guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-free">← Back</button><span class="choice-label">Free help</span></div>
     <h2 class="guide-heading">${which==='free-standard'?'$0 for everyone':'$0 with Community Access'}</h2>
     <p class="guide-copy">Only the services matching this $0 option are shown below.</p>`;
   document.getElementById('back-free').onclick=()=>chooseProblem('free');
-  browseEl.classList.add('active');render();
+  render();
   setTimeout(()=>browseEl.scrollIntoView({behavior:'smooth',block:'start'}),80);
 }
 function setFilterButton(which){
-  document.querySelectorAll('.filter').forEach(b=>b.classList.toggle('active',b.dataset.mode===which));
+  document.querySelectorAll('.filter').forEach(button=>{
+    const pressed=button.dataset.mode===which;
+    button.classList.toggle('active',pressed);
+    button.setAttribute('aria-pressed',String(pressed));
+  });
 }
 function matchesMode(section,item){
   if(mode==='free-standard') return isFree(item.standard);
@@ -430,6 +436,7 @@ function serviceRequestAction(section,item){
 
 function render(){
   browseEl.classList.add('active');
+  setFilterButton(selectedSections ? null : mode);
   const q=searchEl.value.trim().toLowerCase();
   let total=0,html='';
   for(const section of MENU){
@@ -469,14 +476,14 @@ menuEl.addEventListener('click',function(e){
  window.location.assign('/request.html?'+params.toString());
 });
 function openBrowse(newMode='all',focusSearch=false){
-  selectedSections=null;mode=newMode;searchEl.value='';browseEl.classList.add('active');setFilterButton(newMode);render();
+  selectedSections=null;mode=newMode;searchEl.value='';render();
   setTimeout(()=>{document.getElementById('result-count').scrollIntoView({behavior:'smooth',block:'start'});if(focusSearch)searchEl.focus();},80);
 }
 document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{
-  selectedSections=null;mode=btn.dataset.mode;searchEl.value='';browseEl.classList.add('active');setFilterButton(mode);render();
+  selectedSections=null;mode=btn.dataset.mode;searchEl.value='';render();
   document.getElementById('result-count').scrollIntoView({behavior:'smooth',block:'start'});
 }));
-searchEl.addEventListener('input',()=>{selectedSections=null;mode='all';setFilterButton('all');render();});
+searchEl.addEventListener('input',()=>{selectedSections=null;mode='all';render();});
 document.getElementById('start-guide').onclick=()=>{showProblems();scrollGuide();};
 document.getElementById('free-now').onclick=()=>{chooseProblem('free');scrollGuide();};
 document.getElementById('search-now').onclick=()=>openBrowse('all',true);
