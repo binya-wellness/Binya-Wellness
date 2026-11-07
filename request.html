@@ -21,14 +21,15 @@
  <p class="small" id="price-note"></p>
  <p class="note"><strong>No sensitive records here.</strong> Don't include SSNs, financial account numbers, medical or therapy records, immigration IDs, passwords, or identity documents. For immediate danger, contact local emergency services; this inbox isn't monitored for emergencies.</p>
 </div>
-<form id="inquiry" class="panel" novalidate>
+<p id="inquiry-fallback" class="note">If the inquiry form does not load, email <a href="mailto:kumbaya.cloud@proton.me">kumbaya.cloud@proton.me</a> with a brief, non-sensitive description of what you need.</p>
+<form id="inquiry" class="panel" novalidate hidden>
  <h2>Information to include</h2>
  <div class="fields">
-  <div><label for="preferred-name">Preferred name</label><input id="preferred-name" name="preferred-name" maxlength="80" autocomplete="name" placeholder="How should we address you?"><p class="hint">Optional.</p></div>
-  <div><label for="reply-email">Email for a reply</label><input id="reply-email" name="reply-email" type="email" inputmode="email" maxlength="160" autocomplete="email" placeholder="you@example.com"><p class="hint">Optional, but helpful if you use a different email app.</p></div>
-  <div><label for="timeframe">Preferred timeframe</label><input id="timeframe" name="timeframe" maxlength="100" placeholder="For example: next week"><p class="hint">No booking is created by this request.</p></div>
-  <div><label for="contact-method">Accessibility or contact preference</label><input id="contact-method" name="contact-method" maxlength="130" placeholder="For example: email only"><p class="hint">Optional; no diagnosis needed.</p></div>
-  <div class="full"><label for="summary">What general help are you looking for?</label><textarea id="summary" name="summary" maxlength="850" placeholder="Briefly describe the non-sensitive task, learning interest, or requested resource."></textarea><p class="hint">850-character limit. Please keep personal documents out of this request.</p></div>
+  <div><label for="preferred-name">Preferred name</label><input id="preferred-name" maxlength="80" autocomplete="name" placeholder="How should we address you?"><p class="hint">Optional.</p></div>
+  <div><label for="reply-email">Email for a reply</label><input id="reply-email" type="email" inputmode="email" maxlength="160" autocomplete="email" placeholder="you@example.com"><p class="hint">Optional, but helpful if you use a different email app.</p></div>
+  <div><label for="timeframe">Preferred timeframe</label><input id="timeframe" maxlength="100" placeholder="For example: next week"><p class="hint">No booking is created by this request.</p></div>
+  <div><label for="contact-method">Accessibility or contact preference</label><input id="contact-method" maxlength="130" placeholder="For example: email only"><p class="hint">Optional; no diagnosis needed.</p></div>
+  <div class="full"><label for="summary">What general help are you looking for?</label><textarea id="summary" maxlength="850" placeholder="Briefly describe the non-sensitive task, learning interest, or requested resource."></textarea><p class="hint">850-character limit. Please keep personal documents out of this request.</p></div>
  </div>
  <div class="actions"><button type="submit" id="email-button">Open email draft</button><button type="button" class="secondary" id="copy-button">Copy message</button></div>
  <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -50,6 +51,7 @@ document.getElementById('selected-service').textContent=service;
 document.getElementById('selected-section').textContent=section;
 document.getElementById('title').textContent=interest?'Ask about an upcoming Cyaam offering':'Request a Right Hand Th’am service quote';
 document.getElementById('description').textContent=interest?'Ask for updates about an in-development product or community event. This does not create a purchase or registration.':'Describe the nonclinical help you need. We will check service availability and scope before quoting. This form creates an email draft only.';
+document.getElementById('description').textContent += ' Nothing you type here is submitted to or stored by this website.';
 document.getElementById('price-note').textContent=interest?'Not available for sale or event registration.':(price?'Published reference price: '+price+'. Final written price may differ depending on the approved scope.':'Any applicable price will be confirmed in a written quote.');
 const id=x=>document.getElementById(x);
 const value=x=>String(id(x).value||'').trim();
@@ -90,6 +92,8 @@ try{await navigator.clipboard.writeText(text);id('status').textContent='Message 
 catch(e){id('status').textContent='Automatic copy is unavailable in this browser. Expand Preview the email text and copy it manually.';}
 });
 refresh();
+id('inquiry').hidden=false;
+id('inquiry-fallback').hidden=true;
 })();
 </script>
 </body></html>
