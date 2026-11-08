@@ -324,10 +324,10 @@ function goToServices(){
   setStep(3);
   if(!wasBrowsing) render();
   const header=document.querySelector('header');const offset=(header?.getBoundingClientRect().height||0)+20;
-  window.scrollTo({top:Math.max(0,window.scrollY+browseEl.getBoundingClientRect().top-offset),behavior:'smooth'});
+  window.scrollTo({top:Math.max(0,window.scrollY+browseEl.getBoundingClientRect().top-offset),behavior:'auto'});
 }
 
-function scrollGuide(){const el=document.getElementById('guide');const header=document.querySelector('header');const offset=(header?.getBoundingClientRect().height||0)+20;window.scrollTo({top:Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset),behavior:'smooth'});}
+function scrollGuide(){const el=document.getElementById('guide');const header=document.querySelector('header');const offset=(header?.getBoundingClientRect().height||0)+20;window.scrollTo({top:Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset),behavior:'auto'});}
 function focusGuide(){
   guideBody.querySelector('.guide-heading').focus({preventScroll:true});
   scrollGuide();
@@ -498,11 +498,11 @@ menuEl.addEventListener('click',function(e){
 });
 function openBrowse(newMode='all',focusSearch=false){
   selectedSections=null;mode=newMode;searchEl.value='';render();
-  setTimeout(()=>{document.getElementById('result-count').scrollIntoView({behavior:'smooth',block:'start'});if(focusSearch)searchEl.focus();},80);
+  setTimeout(()=>{document.getElementById('result-count').scrollIntoView({behavior:'auto',block:'start'});if(focusSearch)searchEl.focus();},80);
 }
 document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{
   selectedSections=null;mode=btn.dataset.mode;searchEl.value='';render();
-  document.getElementById('result-count').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('result-count').scrollIntoView({behavior:'auto',block:'start'});
 }));
 searchEl.addEventListener('input',()=>{selectedSections=null;mode='all';render();});
 document.getElementById('start-guide').onclick=()=>showProblems();
