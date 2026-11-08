@@ -710,11 +710,11 @@ body.northstar-app #portal .portal-form button { white-space:normal; }
     <div id="password-setup-card" class="portal-card hidden" style="margin-top:1.25rem;max-width:620px">
       <span class="eyebrow">Secure account setup</span><h3 id="password-setup-title">Set your Do’step password</h3>
       <p id="password-setup-copy">Choose a strong password to finish securing your account.</p>
-      <div class="portal-form">
-        <div><label for="new-portal-password">New password</label><input id="new-portal-password" type="password" autocomplete="new-password" minlength="12" placeholder="At least 12 characters"></div>
-        <div><label for="confirm-portal-password">Confirm password</label><input id="confirm-portal-password" type="password" autocomplete="new-password" minlength="12"></div>
-        <button class="btn primary" type="button" onclick="updatePortalPassword()">Save secure password</button>
-      </div>
+      <form class="portal-form" onsubmit="event.preventDefault(); updatePortalPassword()">
+        <div><label for="new-portal-password">New password</label><input id="new-portal-password" type="password" autocomplete="new-password" minlength="12" required placeholder="At least 12 characters"></div>
+        <div><label for="confirm-portal-password">Confirm password</label><input id="confirm-portal-password" type="password" autocomplete="new-password" minlength="12" required></div>
+        <button class="btn primary" id="save-portal-password" type="submit">Save secure password</button>
+      </form>
     </div>
 
     <div id="portal-dashboard" class="portal-dashboard hidden">
@@ -925,19 +925,35 @@ function showPasswordSetup(recovery=false){
 
 async function updatePortalPassword(){
   if(!sb || !currentUser) return;
+  const button=$('save-portal-password');
+  if(button.disabled) return;
   const pw=$('new-portal-password')?.value || '';
   const confirmPw=$('confirm-portal-password')?.value || '';
   if(pw.length<12){ notice('Use a password with at least 12 characters.','warn'); return; }
   if(pw!==confirmPw){ notice('The passwords do not match.','warn'); return; }
   const existing={...(currentUser.user_metadata||{}),needs_password_setup:false};
-  const {data,error}=await sb.auth.updateUser({password:pw,data:existing});
-  if(error){ notice('Your password could not be updated. Try a stronger password or contact KUMBAYA.','error'); return; }
+  button.disabled=true; button.textContent='Saving…';
+  let data;
+  try {
+    const response=await sb.auth.updateUser({password:pw,data:existing});
+    if(response.error){ notice('Your password could not be updated. Try a stronger password or contact KUMBAYA.','error'); return; }
+    data=response.data;
+  } catch {
+    notice('Do’step could not confirm the password update. Try signing in with the new password, or use account help.','error');
+    return;
+  } finally {
+    button.disabled=false; button.textContent='Save secure password';
+  }
   passwordUpdateMode=false;
   inviteSetupMode=false;
   $('new-portal-password').value=''; $('confirm-portal-password').value='';
   history.replaceState(null,'',`${location.pathname}${location.search}#portal`);
   notice('Password saved. Finish MFA to unlock Do’step.','success');
-  await onSignedIn(data.user || currentUser);
+  try {
+    await onSignedIn(data.user || currentUser);
+  } catch {
+    notice('Password saved. Reopen Do’step and finish MFA to unlock your account.','success');
+  }
 }
 
 async function verifyBackendConnection(){
