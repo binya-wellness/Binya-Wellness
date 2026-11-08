@@ -354,14 +354,14 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
     try { history.replaceState(null, '', '#' + id); } catch (_) {}
 
     if (isHome) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
       return;
     }
 
     const target = document.getElementById(id);
     if (target) {
       requestAnimationFrame(function() {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.scrollIntoView({ behavior: 'auto', block: 'start' });
       });
     }
   };
