@@ -1388,7 +1388,7 @@ async function rescheduleSelectedSlot(){
 function downloadAppointmentIcs(id){
   const a=(window.__binyaAppointments||[]).find(x=>x.id===id); if(!a) return;
   const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KUMBAYA//Do’step//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:KUMBAYA appointment','DESCRIPTION:Open Do’step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KUMBAYA//Do’step//EN','BEGIN:VEVENT',`UID:${a.id}@binya`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:KUMBAYA appointment','DESCRIPTION:Open Do’step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n';
   const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='kumbaya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
