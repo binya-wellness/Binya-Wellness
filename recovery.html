@@ -11,7 +11,7 @@ button:disabled{opacity:.6;cursor:wait}a{color:#efbf76}#status{padding:12px;bord
 <div id="status" role="status" aria-live="polite"></div>
 <noscript><p>Password recovery needs JavaScript. Enable it and reopen this page, or use the account help link below.</p></noscript>
 <section id="request" hidden><p>Request an eight-digit email sign-in code for your existing account. No links required.</p><form id="requestForm"><label for="email">Account email</label><input id="email" type="email" autocomplete="email" required><button type="submit">Send eight-digit code</button></form></section>
-<section id="otp" hidden><p>Enter the eight-digit code from your KUMBAYA email.</p><form id="otpForm"><label for="code">Email verification code</label><input id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required><button type="submit">Verify code</button></form></section><section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
+<section id="otp" hidden><p>Enter the eight-digit code from your KUMBAYA email.</p><form id="otpForm"><label for="code">Email verification code</label><input id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required><button type="submit">Verify code</button></form><p><button type="button" id="restart-code">Request a new code</button></p></section><section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
 <section id="success" hidden><p>Your password has been updated. You can now return to Do’step.</p><p><a href="https://dostep.kumbaya.cloud/">Open Do’step sign in</a></p></section>
 <p><small>Never share a recovery link, password, or verification code. KUMBAYA will never ask you to send these by email.</small></p><p><a href="https://dostep.kumbaya.cloud/help.html">Read Do’step account help</a> · <a href="https://dostep.kumbaya.cloud/">Return to sign in</a></p>
 </main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script><script>
@@ -55,18 +55,34 @@ event.preventDefault();const button=event.target.querySelector("button");button.
 try{
 const {error}=await client.auth.signInWithOtp({email:pendingEmail,options:{shouldCreateUser:false}});
 if(error){show("request",error.status===429?"Too many code requests. Use the latest email or try again after the security limit resets.":"Unable to send a code. Confirm the email OTP template is configured and your account exists.");}
-else show("otp","Check your inbox for an eight-digit code. If the email has no code, return to Do’step and choose Reset password securely, or use the account help link below.");
+else {
+  show("otp","Check your inbox for an eight-digit code. If the email has no code, return to Do’step and choose Reset password securely, or use the account help link below.");
+  $("code").focus();
+}
 }catch(e){show("request","Unable to contact the authentication service.");}finally{button.disabled=false;}
 });
+const restartCode=$("restart-code");
+restartCode.addEventListener("click",()=>{
+  if(restartCode.disabled) return;
+  pendingEmail="";
+  $("code").value="";
+  show("request","Confirm your account email to request a new code.");
+  $("email").focus();
+});
 $("otpForm").addEventListener("submit",async event=>{
-event.preventDefault();const button=event.target.querySelector("button");button.disabled=true;
+event.preventDefault();
+const button=event.target.querySelector("button");
+if(button.disabled) return;
+button.disabled=true;
+restartCode.disabled=true;
 try{
 const {data,error}=await client.auth.verifyOtp({email:pendingEmail,token:$("code").value.trim(),type:"email"});
-if(error||!data.session){$("status").textContent="Code invalid or expired. Check the newest email and try again.";return;}
+if(error||!data.session){$("status").textContent="Code invalid or expired. Use the newest email or choose Request a new code.";return;}
 const {data:{user}}=await client.auth.getUser();
 if(!user||user.email?.toLowerCase()!==pendingEmail.toLowerCase()){await client.auth.signOut();show("request","Account verification mismatch. Please restart.");return;}
 validated=true;show("update","Code verified. Choose your new password.");
-}catch(e){$("status").textContent="Unable to verify the code."; }finally{button.disabled=false;}
+}catch(e){$("status").textContent="Unable to verify the code."; }
+finally{button.disabled=false;restartCode.disabled=false;}
 });
 $("updateForm").addEventListener("submit",async event=>{
 event.preventDefault();if(!validated){show("request","A verified recovery link is required.");return;}
