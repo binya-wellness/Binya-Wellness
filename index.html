@@ -897,7 +897,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         const status=document.createElement('p'); status.textContent='For counseling, contact Rainbow Connection Counseling Collective directly. RCCC handles intake, fees and availability.';
         result.append(title,copy,status);
         document.querySelectorAll('[data-wellness-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-        result.scrollIntoView({behavior:'smooth',block:'nearest'});
+        result.scrollIntoView({behavior:'auto',block:'nearest'});
       }));
     </script>
 
@@ -1587,7 +1587,7 @@ async function startReschedule(id,serviceId){
   window.__rescheduleAppointment=id;
   const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm new time'; btn.onclick=rescheduleSelectedSlot; }
   $('scheduler-reschedule-cancel')?.classList.remove('hidden');
-  document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'smooth',block:'center'});
+  document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'auto',block:'center'});
 }
 
 function cancelRescheduleMode(){
