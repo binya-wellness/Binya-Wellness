@@ -948,7 +948,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       </aside>
     </div>
 
-    <div id="portal-notice" class="portal-notice" hidden></div>
+    <div id="portal-notice" class="portal-notice" role="status" aria-live="polite" hidden></div>
 
     <div id="portal-login-card" class="portal-grid">
       <div class="portal-card">
@@ -958,8 +958,10 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
           <div><label for="portal-email">Email</label><input id="portal-email" required type="email" autocomplete="username" placeholder="you@example.com"></div>
           <div><label for="portal-password">Password</label><input id="portal-password" required type="password" autocomplete="current-password" placeholder="••••••••••••"></div>
           <button id="portal-login-submit" class="btn primary" type="submit">Enter Do’step</button>
-          <button class="btn secondary" type="button" onclick="portalRequestReset()">Reset password securely</button>
+          <button id="portal-reset-submit" class="btn secondary" type="button" onclick="portalRequestReset()">Reset password securely</button>
         </form>
+        <p class="portal-footnote"><a href="https://kumbaya.cloud/recovery.html">Use an eight-digit email code</a> if your password reset link is unavailable.</p>
+        <p class="portal-footnote"><a href="https://dostep.kumbaya.cloud/help.html">Account access and MFA troubleshooting</a></p>
         <p class="portal-footnote">Clients and team members use this sign-in. Your account permissions determine which workspace opens. <a href="mailto:kumbaya.cloud@proton.me">Contact KUMBAYA</a> for account support.</p>
         <p class="portal-footnote">Never send your password, MFA code, EBT PIN, bank password, or government-login password to KUMBAYA staff.</p>
       </div>
@@ -1240,26 +1242,44 @@ async function login(event){
   event.preventDefault(); clearNotice();
   if(!sb || !backendReady){ notice('Secure backend unavailable. Please use the free KUMBAYA introduction or try later.','error'); return false; }
   const email=$('portal-email').value.trim();
-  const password=$('portal-password').value;
+  const passwordInput=$('portal-password');
   const btn=$('portal-login-submit');
+  if(btn.disabled) return false;
   btn.disabled=true; btn.textContent='Signing in…';
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  btn.disabled=false; btn.textContent='Enter Do’step';
-  if(error) notice('Sign-in failed. Check your email/password or use the secure reset flow.','error');
-  $('portal-password').value='';
+  try {
+    const { error } = await sb.auth.signInWithPassword({ email, password:passwordInput.value });
+    if(error) notice('Sign-in failed. Check your email/password or use the secure reset flow.','error');
+  } catch {
+    notice('Do’step could not complete sign-in. Try again or use account help.','error');
+  } finally {
+    passwordInput.value='';
+    btn.disabled=false; btn.textContent='Enter Do’step';
+  }
   return false;
 }
 
 async function logout(){ if(sb) await sb.auth.signOut(); }
 
 async function requestReset(){
-  if(!sb) return;
-  const email=$('portal-email').value.trim();
-  if(!email){ notice('Enter your email first, then choose password reset.','warn'); return; }
+  if(!sb || !backendReady) return;
+  const btn=$('portal-reset-submit');
+  if(btn.disabled) return;
+  clearNotice();
+  const emailInput=$('portal-email');
+  const email=emailInput.value.trim();
+  if(!email){ notice('Enter your email first, then choose password reset.','warn'); emailInput.focus(); return; }
+  if(!emailInput.reportValidity()) return;
   const redirectTo = `${location.origin}${location.pathname}`;
-  const { error } = await sb.auth.resetPasswordForEmail(email,{redirectTo});
-  if(error) notice('Password reset could not be started. Contact KUMBAYA if this continues.','error');
-  else notice('If that email has a Do’step account, a secure reset link has been sent. Use the email currently registered to your account.','success');
+  btn.disabled=true; btn.textContent='Requesting reset…';
+  try {
+    const { error } = await sb.auth.resetPasswordForEmail(email,{redirectTo});
+    if(error){ notice('Password reset could not be started. Try again or use account help.','error'); return; }
+    notice('If this email is registered with KUMBAYA Do’step, you’ll receive a secure password-reset link. Check your inbox and spam folder. For security, we can’t confirm whether an account exists.','success');
+  } catch {
+    notice('Password reset could not be started. Try again or use account help.','error');
+  } finally {
+    btn.disabled=false; btn.textContent='Reset password securely';
+  }
 }
 
 async function requestTeamEmailChange(){
