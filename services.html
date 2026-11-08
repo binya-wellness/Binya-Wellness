@@ -59,6 +59,9 @@ body.reader-mode .tabs{gap:12px} body.reader-mode .tab,body.reader-mode button{f
 
 /* Five-sweep: accessible focus, anchored sections and calmer reading */
 :root{--sticky-offset:150px}html{scroll-padding-top:var(--sticky-offset)}[id]{scroll-margin-top:var(--sticky-offset)}
+.skip-link{position:fixed;inset-block-start:1rem;inset-inline-start:1rem;z-index:1000;max-inline-size:calc(100% - 2rem);padding:10px 14px;border-radius:8px;background:var(--gold);color:#17110a;font-weight:800;clip-path:inset(50%)}
+.skip-link:focus{clip-path:none}
+@media print{.skip-link{display:none}}
 :where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid #eec77c;outline-offset:3px}
 .reader-toggle{border:1px solid var(--gold);border-radius:999px;padding:9px 12px;color:var(--cream);background:#15120e;font:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap}
 .reader-toggle[aria-pressed="true"]{background:var(--gold);color:#17110a}
@@ -161,6 +164,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 .quote-request{border:1px solid var(--gold);background:rgba(216,162,74,.1);color:var(--cream);border-radius:12px;padding:9px 12px;cursor:pointer;font-weight:800;white-space:nowrap}.quote-request:hover,.quote-request:focus-visible{background:var(--gold);color:#17110a;outline:2px solid var(--cream);outline-offset:2px}\n</style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <header>
   <div class="shell">
     <div class="topbar">
@@ -174,7 +178,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
   </div>
 </header>
 
-<main>
+<main id="main-content" tabindex="-1">
 <aside class="reader-guide" data-reader-guide hidden aria-label="ADHD and dyslexia reading support"><h2>Easy Read is on</h2><p><strong>1.</strong> Pick a topic. <strong>2.</strong> Open what you need. <strong>3.</strong> Take your time.</p></aside>
   <section class="shell" aria-label="Cyaam counseling and independent resources" style="margin:16px auto 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
   <div style="border:1px solid rgba(216,162,74,.45);background:#1d1812;border-radius:20px;padding:22px">
