@@ -33,7 +33,7 @@
  </div>
  <div class="actions"><button type="submit" id="email-button">Open email draft</button><button type="button" class="secondary" id="copy-button">Copy message</button></div>
  <p id="status" class="status" role="status" aria-live="polite"></p>
- <details><summary>Preview the email text</summary><pre id="preview"></pre></details>
+ <details id="draft-preview"><summary id="preview-toggle">Preview the email text</summary><pre id="preview"></pre></details>
 </form>
 <p class="small">This creates a draft only; you must send it using your own email account. KUMBAYA will confirm whether the service is available, its scope and any price before paid work. Counseling inquiries are handled separately by <a href="https://www.rainbowconnectioncounseling.com/contact-us">Rainbow Connection Counseling Collective</a>.</p>
 </main>
@@ -81,12 +81,22 @@ interest?'I understand this inquiry is not a purchase, ticket, appointment, or c
 'Please do not request or send sensitive records through ordinary email.'
 ].filter(Boolean).join('\n');
 }
-function refresh(){id('preview').textContent='Subject: '+subject+'\n\n'+message();}
+function refresh(){
+ const draft='To: kumbaya.cloud@proton.me\nSubject: '+subject+'\n\n'+message();
+ id('preview').textContent=draft;
+ return draft;
+}
+function validReplyEmail(){
+ const email=id('reply-email');
+ if(!email.value.trim()||email.checkValidity()) return true;
+ id('status').textContent='Please enter a valid reply email or leave it blank.';
+ email.focus();
+ return false;
+}
 for(const input of document.querySelectorAll('input,textarea'))input.addEventListener('input',refresh);
 id('inquiry').addEventListener('submit',e=>{
  e.preventDefault();
- const reply=value('reply-email');
- if(reply&&!id('reply-email').checkValidity()){id('status').textContent='Please enter a valid reply email or leave it blank.';id('reply-email').focus();return;}
+ if(!validReplyEmail()) return;
  refresh();
  const url='mailto:kumbaya.cloud@proton.me?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(message());
  if(url.length>6000){id('status').textContent='This message is too long for some email apps. Shorten your summary or use Copy message.';return;}
@@ -94,10 +104,16 @@ id('inquiry').addEventListener('submit',e=>{
  location.href=url;
 });
 id('copy-button').addEventListener('click',async()=>{
-refresh();
-const text='To: kumbaya.cloud@proton.me\nSubject: '+subject+'\n\n'+message();
-try{await navigator.clipboard.writeText(text);id('status').textContent='Message copied. Paste it into your email app and send it to kumbaya.cloud@proton.me.';}
-catch(e){id('status').textContent='Automatic copy is unavailable in this browser. Expand Preview the email text and copy it manually.';}
+ if(!validReplyEmail()) return;
+ const draft=refresh();
+ try {
+  await navigator.clipboard.writeText(draft);
+  id('status').textContent='Message copied. Paste it into your email app and send it to kumbaya.cloud@proton.me.';
+ } catch {
+  id('draft-preview').open=true;
+  id('preview-toggle').focus();
+  id('status').textContent='Automatic copy is unavailable. Copy the recipient, subject and message from the open preview below.';
+ }
 });
 refresh();
 id('inquiry').hidden=false;
