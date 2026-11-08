@@ -273,6 +273,9 @@ body.reader-mode .tabs{gap:12px} body.reader-mode .tab,body.reader-mode button{f
 
 /* Five-sweep: accessible focus, anchored sections and calmer reading */
 :root{--sticky-offset:150px}html{scroll-padding-top:var(--sticky-offset)}[id]{scroll-margin-top:var(--sticky-offset)}
+.skip-link{position:fixed;inset-block-start:1rem;inset-inline-start:1rem;z-index:1000;max-inline-size:calc(100% - 2rem);padding:10px 14px;border-radius:8px;background:var(--gold);color:#17110a;font-weight:800;clip-path:inset(50%)}
+.skip-link:focus{clip-path:none}
+@media print{.skip-link{display:none}}
 :where(a,button,summary,input,select,textarea):focus-visible{outline:3px solid #eec77c;outline-offset:3px}
 .reader-toggle{border:1px solid var(--gold);border-radius:999px;padding:9px 12px;color:var(--cream);background:#15120e;font:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap}
 .reader-toggle[aria-pressed="true"]{background:var(--gold);color:#17110a}
@@ -395,6 +398,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
 
 </head>
 <body>
+<a class="skip-link" href="#top" onclick="const mainContent = document.getElementById('top'); event.preventDefault(); mainContent.focus({preventScroll:true}); mainContent.scrollIntoView()">Skip to main content</a>
 <header>
   <div class="shell">
     <div class="topbar">
@@ -425,7 +429,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
   </div>
 </header>
 
-<main id="top">
+<main id="top" tabindex="-1">
 <aside class="reader-guide" data-reader-guide hidden aria-label="ADHD and dyslexia reading support"><h2>Easy Read is on</h2><p><strong>1.</strong> Pick a topic. <strong>2.</strong> Open what you need. <strong>3.</strong> Take your time.</p></aside>
   <section class="hero shell" id="home">
     <span class="eyebrow">Practical help, rooted in community</span>
