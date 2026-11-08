@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="index,follow"><title>Request a service quote | KUMBAYA</title>
-<meta name="description" content="Prepare a nonclinical Right Hand Th’am inquiry or Cyaam launch-interest message without uploading sensitive records.">
+<meta name="description" content="Prepare a nonclinical KUMBAYA service inquiry or launch-interest message without uploading sensitive records.">
 <link rel="canonical" href="https://kumbaya.cloud/request.html">
 <style>
 :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0c0b09;color:#f3e7d2;font:16px/1.6 system-ui,-apple-system,sans-serif}header,footer{border-bottom:1px solid #65503b;background:#17130f;padding:16px 22px}footer{border-top:1px solid #65503b;border-bottom:0}nav{max-width:900px;margin:auto;display:flex;gap:20px;flex-wrap:wrap}a{color:#f1bf78}main{max-width:900px;margin:auto;padding:30px 22px 70px}h1,h2{font-family:Georgia,serif;line-height:1.2}h1{font-size:clamp(2rem,5vw,3rem)}.intro{font-size:1.1rem}.panel{background:#1b1712;border:1px solid #685338;border-radius:18px;padding:23px;margin:20px 0}.selection{padding:12px 16px;border-left:4px solid #e0a54e;background:#251e14;overflow-wrap:anywhere}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,275px),1fr));gap:16px}label{display:block;font-weight:700;margin:0 0 7px}input,textarea,select{width:100%;font:inherit;background:#100e0b;color:#fff0d9;border:1px solid #ad906b;border-radius:9px;padding:11px}textarea{resize:vertical;min-height:112px}input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #e8bd76;outline-offset:3px}.full{grid-column:1/-1}.hint{color:#d5c6b3;font-size:.92rem;margin:5px 0 0}.note{border-left:4px solid #d8a24a;padding:12px 16px;background:#282115}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}button{border:1px solid #dfad60;background:#d8a24a;color:#17110a;font:inherit;font-weight:750;border-radius:12px;padding:12px 18px;cursor:pointer}button.secondary{background:transparent;color:#f3e7d2}.status{min-height:1.6em;margin:12px 0}.small{font-size:.92rem;color:#d5c6b3}#preview{white-space:pre-wrap;overflow-wrap:anywhere;background:#110f0d;border:1px solid #746044;border-radius:10px;padding:14px;margin-top:15px}
@@ -12,7 +12,7 @@
 <body>
 <header><nav aria-label="Main navigation"><a href="/">KUMBAYA home</a><a href="/services.html">Services</a><a href="/how-services-work.html">How services work</a><a href="/privacy.html">Privacy</a></nav></header>
 <main>
-<p class="small">KUMBAYA · Right Hand Th’am / Cyaam</p>
+<p class="small">KUMBAYA · Service inquiries</p>
 <h1 id="title">Prepare your service inquiry</h1>
 <p class="intro" id="description">This page helps you prepare an email. Nothing you type here is submitted to or stored by this website.</p>
 <div class="panel">
@@ -44,18 +44,26 @@
 const p=new URLSearchParams(location.search);
 const truncate=(s,n)=>String(s||'').trim().slice(0,n).replace(/[\r\n\t]/g,' ');
 const service=truncate(p.get('service'),150)||'General nonclinical inquiry';
-const section=truncate(p.get('section'),140)||'KUMBAYA';
-const interest=p.get('intent')==='interest'||/CYAAM PRODUCTS & EVENTS|EDUCATION \+ IP STUDIO/.test(section);
+const catalogSection=truncate(p.get('section'),140)||'KUMBAYA';
+const sectionNames=new Map([
+ ['BINYA PROCESS HOUSE — LOS ANGELES LAUNCH RATES','Process Haus — Los Angeles Launch Rates'],
+ ['BINYA EDUCATION + IP STUDIO — BUILDING NOW','Eddycashun — Education + IP Studio'],
+]);
+const section=sectionNames.get(catalogSection)||catalogSection;
+const education=/EDUCATION \+ IP STUDIO/i.test(catalogSection);
+const cyaam=/CYAAM PRODUCTS & EVENTS/i.test(catalogSection);
+const interest=p.get('intent')==='interest'||education||cyaam;
+const interestBrand=education?'Eddycashun':cyaam?'Cyaam':'KUMBAYA';
 const price=truncate(p.get('price'),70);
 document.getElementById('selected-service').textContent=service;
 document.getElementById('selected-section').textContent=section;
-document.getElementById('title').textContent=interest?'Ask about an upcoming Cyaam offering':'Request a Right Hand Th’am service quote';
+document.getElementById('title').textContent=interest?'Ask about an upcoming '+interestBrand+' offering':'Request a KUMBAYA service quote';
 document.getElementById('description').textContent=interest?'Ask for updates about an in-development product or community event. This does not create a purchase or registration.':'Describe the nonclinical help you need. We will check service availability and scope before quoting. This form creates an email draft only.';
 document.getElementById('description').textContent += ' Nothing you type here is submitted to or stored by this website.';
 document.getElementById('price-note').textContent=interest?'Not available for sale or event registration.':(price?'Published reference price: '+price+'. Final written price may differ depending on the approved scope.':'Any applicable price will be confirmed in a written quote.');
 const id=x=>document.getElementById(x);
 const value=x=>String(id(x).value||'').trim();
-const subject=(interest?'Cyaam launch interest — ':'KUMBAYA nonclinical quote request — ')+service;
+const subject=(interest?interestBrand+' launch interest — ':'KUMBAYA nonclinical quote request — ')+service;
 function message(){
 return [
 'Hello KUMBAYA,','',
