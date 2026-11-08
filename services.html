@@ -41,7 +41,8 @@
     .bottom-actions{border-top:1px solid var(--line);padding:28px 0 54px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}.btn{border:1px solid var(--gold);padding:11px 17px;border-radius:999px;font-weight:800;display:inline-block;background:var(--gold);color:#130e08;cursor:pointer}.btn.secondary{background:transparent;color:var(--cream);border-color:var(--line)}
     @media(max-width:900px){.problem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lane-grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}}
     @media(max-width:620px){.problem-grid{grid-template-columns:1fr}.guide-body{padding:18px}.guide-top{align-items:flex-start;flex-direction:column}.topbar{align-items:flex-start;padding:13px 0}.brand-copy span{display:none}h1{font-size:clamp(2.45rem,12vw,4rem)}.shortcut{align-items:flex-start;flex-direction:column}.tabs{padding-bottom:10px}}
-    @media print{header,.guide,.start-strip,.toolbar,.bottom-actions .btn{display:none!important}.browse{display:block!important}.shell{max-width:none;padding:0}.hero{padding-top:0}body{background:white;color:black}.hero-copy,.fine,.category-note,.status-note,.count{color:#333}details.category{background:white;border-color:#bbb;box-shadow:none}details.category>.table-wrap,details.category>.category-note,details.category>.status-note{display:block!important}table{min-width:0}th{background:#eee;color:#222}th,td{border-color:#ccc;color:#111}.free,.ca{color:#111}}
+    .print-menu{display:none}
+    @media print{header,.guide,.start-strip,.browse,.bottom-actions .btn{display:none!important}.print-menu{display:block}.shell{max-width:none;padding:0}.hero{padding-top:0}body{background:white;color:black}.hero-copy,.fine,.category-note,.status-note,.count{color:#333}details.category{background:white;border-color:#bbb;box-shadow:none;overflow:visible}.table-wrap{overflow:visible}.service-name,.service-desc{color:#111}.status-note,.category-note{background:white}.quote-request{display:none}details.category>.table-wrap,details.category>.category-note,details.category>.status-note{display:block!important}table{min-width:0}th{background:#eee;color:#222}th,td{border-color:#ccc;color:#111}.free,.ca{color:#111}}
   
 /* KUMBAYA continuity + reader accessibility */
 html{scroll-padding-top:155px} section[id], .panel[id], #guide, #browse, #contact{scroll-margin-top:155px}
@@ -227,8 +228,13 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         </div>
       </div>
       <p id="result-count" class="count" role="status"></p>
-      <p class="fine" style="margin-top:12px">Each service now has a request-a-quote control. It opens a prefilled email in your device’s mail app; sending the email is your choice. This is not a payment or booking. Currently inactive, credential-gated and coming-soon services are inquiries only. Free 15-minute nonclinical introductions can be booked directly through the verified Calendly link above. RCCC counseling consultations use RCCC's separate intake.</p>
+      <p class="fine" style="margin-top:12px">Available services have a request button that opens an inquiry draft. You can review the draft before opening it in your email app. This is not a payment or booking. Currently inactive, credential-gated and coming-soon services are inquiries only. Free 15-minute nonclinical introductions can be booked directly through the verified Calendly link above. RCCC counseling consultations use RCCC's separate intake.</p>
       <div id="menu" class="menu"></div>
+    </section>
+
+    <section class="print-menu">
+      <h2>Full KUMBAYA service menu</h2>
+      <div id="print-menu"></div>
     </section>
 
     <section class="shell" aria-label="Pricing and authorization rules" style="margin:20px auto;padding:18px 22px;border:1px solid var(--line);border-radius:18px;background:var(--panel)"><h2 style="margin-top:0">Pricing, taxes &amp; service boundaries</h2><p class="fine">Printed goods and tangible merchandise are generally taxable in California; any applicable sales tax is quoted separately. Printing is planned pending seller-permit and equipment readiness. Notary fees follow California legal maximums (commonly $15 per acknowledgment signature and $15 per jurat); any mobile travel charge is separate, optional, and agreed before dispatch. Process serving requires active registration and bond. KUMBAYA does not offer legal advice, paid self-help legal-document assistance requiring LDA/UDA registration, VA claims representation, or unlicensed clinical services. Separate government/provider fees, delivery and travel are disclosed before approval. Community Access remains available where shown.</p></section>
@@ -400,7 +406,7 @@ function setFilterButton(which){
     button.setAttribute('aria-pressed',String(pressed));
   });
 }
-function matchesMode(section,item){
+function matchesMode(section,item,mode){
   if(mode==='free-standard') return isFree(item.standard);
   if(mode==='free-community') return isFree(item.community);
   if(mode==='community') return communityAvailable(item.community);
@@ -442,10 +448,7 @@ function serviceRequestAction(section,item){
   return `<button class="quote-request" type="button" data-section="${escHtml(name)}" data-service="${escHtml(item.service)}" data-price="${escHtml(item.standard)}" data-status="${escHtml(section.status||'')}">${label}</button>`;
 }
 
-function render(){
-  browseEl.classList.add('active');
-  setFilterButton(selectedSections ? null : mode);
-  const q=searchEl.value.trim().toLowerCase();
+function buildMenu(mode,selectedSections,q,openAll=false){
   let total=0,html='';
   for(const section of MENU){
     if(selectedSections&&!selectedSections.includes(section.title)) continue;
@@ -455,11 +458,11 @@ function render(){
     if(mode==='clinical'&&!/FUTURE REGULATED WELLNESS|CYAAM PRODUCTS & EVENTS/.test(section.title)) continue;
     const items=section.items.filter(item=>{
       const hay=(section.title+' '+item.service+' '+item.standard+' '+item.community).toLowerCase();
-      return matchesMode(section,item)&&(!q||hay.includes(q));
+      return matchesMode(section,item,mode)&&(!q||hay.includes(q));
     });
     if(!items.length) continue;
     total+=items.length;
-    const open=selectedSections||q||mode!=='all';
+    const open=openAll||selectedSections||q||mode!=='all';
     html+=`<details class="category" ${open?'open':''}>
       <summary><span class="cat-title">${escHtml(pretty(section.title))}</span><span class="cat-count">${items.length} option${items.length===1?'':'s'}</span></summary>
       ${section.status?`<p class="status-note"><strong>Status:</strong> ${escHtml(section.status)}</p>`:''}
@@ -470,9 +473,19 @@ function render(){
       ${section.note?`<p class="category-note">${escHtml(section.note)}</p>`:''}
     </details>`;
   }
+  return {html,total};
+}
+function render(){
+  browseEl.classList.add('active');
+  setFilterButton(selectedSections ? null : mode);
+  const {html,total}=buildMenu(mode,selectedSections,searchEl.value.trim().toLowerCase());
   menuEl.innerHTML=html||'<div class="empty">No services match that choice. Try another lane or search term.</div>';
   countEl.textContent=total+` option${total===1?'':'s'} shown`;
 }
+window.addEventListener('beforeprint',()=>{
+  const printMenu=document.getElementById('print-menu');
+  if(!printMenu.firstElementChild) printMenu.innerHTML=buildMenu('all',null,'',true).html;
+});
 // Quote requests use the user's own mail app: no sensitive data is collected on this site.
 menuEl.addEventListener('click',function(e){
  const btn=e.target.closest('button.quote-request');if(!btn)return;
