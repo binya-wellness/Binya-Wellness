@@ -200,12 +200,12 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       <button class="pill-action" id="browse-all" type="button">Browse the full menu</button>
     </div>
 
-    <section class="guide" id="guide" aria-live="polite">
+    <section class="guide" id="guide">
       <div class="guide-top">
         <strong>Find the right lane</strong>
         <div class="steps" aria-label="Three-step service finder">
-          <button class="step active" id="step-1" type="button" onclick="showProblems();scrollGuide()">1. What you got goin on?</button>
-          <button class="step" id="step-2" type="button" onclick="if(selectedGuide){chooseProblem(selectedGuide.id);scrollGuide()}else{showProblems();scrollGuide()}">2. Say word?</button>
+          <button class="step active" id="step-1" type="button" onclick="showProblems()">1. What you got goin on?</button>
+          <button class="step" id="step-2" type="button" onclick="if(selectedGuide)chooseProblem(selectedGuide.id);else showProblems()">2. Say word?</button>
           <button class="step" id="step-3" type="button" onclick="goToServices()">3 · Let’s get to it</button>
         </div>
       </div>
@@ -322,68 +322,76 @@ function goToServices(){
 }
 
 function scrollGuide(){const el=document.getElementById('guide');const header=document.querySelector('header');const offset=(header?.getBoundingClientRect().height||0)+20;window.scrollTo({top:Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset),behavior:'smooth'});}
-function showProblems(){
+function focusGuide(){
+  guideBody.querySelector('.guide-heading').focus({preventScroll:true});
+  scrollGuide();
+}
+function showProblems(moveFocus=true){
   selectedGuide=null; selectedSections=null; browseEl.classList.remove('active'); setStep(1);
-  guideBody.innerHTML=`<h2 class="guide-heading">Who all over there?</h2>
+  guideBody.innerHTML=`<h2 class="guide-heading" tabindex="-1">Who all over there?</h2>
     <p class="guide-copy">Pick the closest answer. It does not have to be perfect—you can always go back.</p>
     <div class="problem-grid">${GUIDES.map(g=>`<button class="problem" type="button" data-guide="${g.id}">
       <span class="icon" aria-hidden="true">${g.icon}</span><strong>${escHtml(g.label)}</strong><span>${escHtml(g.desc)}</span>
     </button>`).join('')}</div>`;
   guideBody.querySelectorAll('[data-guide]').forEach(btn=>btn.addEventListener('click',()=>chooseProblem(btn.dataset.guide)));
+  if(moveFocus) focusGuide();
 }
-function chooseProblem(id){
+function chooseProblem(id,moveFocus=true){
   const g=GUIDES.find(x=>x.id===id); if(!g) return;browseEl.classList.remove('active');
   selectedGuide=g; setStep(2);
   if(id==='wellness'){
     guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-problems">← Back</button></div>
-      <h2 class="guide-heading">Counseling through RCCC</h2>
+      <h2 class="guide-heading" tabindex="-1">Counseling through RCCC</h2>
       <p class="guide-copy">Rainbow Connection Counseling Collective handles counseling intake, fees, and availability.</p>
       <a class="btn" href="https://www.rainbowconnectioncounseling.com/contact-us">Contact RCCC for counseling</a>`;
-    document.getElementById('back-problems').onclick=()=>{showProblems();scrollGuide()};
+    document.getElementById('back-problems').onclick=()=>showProblems();
+    if(moveFocus) focusGuide();
     return;
   }
   if(id==='free'){
     guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-problems">← Back</button><span class="choice-label">Free help</span></div>
-      <h2 class="guide-heading">Which $0 list do you want?</h2>
+      <h2 class="guide-heading" tabindex="-1">Which $0 list do you want?</h2>
       <p class="guide-copy">You can see services that are free for everyone, or services that can be $0 when you use Community Access.</p>
       <div class="lane-grid">
         <button class="lane" type="button" data-free="free-standard"><strong>$0 for everyone</strong><span>No Community Access screening needed.</span></button>
         <button class="lane" type="button" data-free="free-community"><strong>$0 with Community Access</strong><span>Includes services that become free at the Community Access rate.</span></button>
       </div>
       <div class="shortcut"><div><strong>Not sure what you need?</strong><p>The 15-minute “Where Do I Start?” triage and targeted referral match are free for everyone.</p></div><button class="pill-action primary" id="free-triage" type="button">Show Start Here</button></div>`;
-    document.getElementById('back-problems').onclick=()=>{showProblems();scrollGuide()};
+    document.getElementById('back-problems').onclick=()=>showProblems();
     guideBody.querySelectorAll('[data-free]').forEach(b=>b.onclick=()=>showFree(b.dataset.free));
     document.getElementById('free-triage').onclick=()=>showSection('START HERE - SYSTEMS NAVIGATION');
+    if(moveFocus) focusGuide();
     return;
   }
   const available=g.sections.map(t=>MENU.find(s=>s.title===t)).filter(Boolean);
   guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-problems">← Back</button><span class="choice-label">${escHtml(g.label)}</span></div>
-    <h2 class="guide-heading">What sounds closest?</h2>
+    <h2 class="guide-heading" tabindex="-1">What sounds closest?</h2>
     <p class="guide-copy">Pick one lane and we’ll show only those services, plain-language descriptions, and prices.</p>
     <div class="lane-grid">${available.map(s=>`<button class="lane" type="button" data-section="${escHtml(s.title)}">
       <strong>${escHtml(pretty(s.title))}</strong><span>${s.items.length} options</span>
     </button>`).join('')}</div>`;
-  document.getElementById('back-problems').onclick=showProblems;
+  document.getElementById('back-problems').onclick=()=>showProblems();
   guideBody.querySelectorAll('[data-section]').forEach(btn=>btn.onclick=()=>showSection(btn.dataset.section));
+  if(moveFocus) focusGuide();
 }
 function showSection(title){
   selectedSections=[title]; mode='all'; searchEl.value=''; setStep(3);
   const sec=MENU.find(s=>s.title===title);
   guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-lanes">← Back</button><span class="choice-label">${selectedGuide?escHtml(selectedGuide.label):'Service finder'}</span></div>
-    <h2 class="guide-heading">${escHtml(pretty(title))}</h2>
+    <h2 class="guide-heading" tabindex="-1">${escHtml(pretty(title))}</h2>
     <p class="guide-copy">Here are the options in this lane. Each service has a short plain-language description, with Standard and Community Access prices shown together.</p>`;
-  document.getElementById('back-lanes').onclick=()=>{if(selectedGuide)chooseProblem(selectedGuide.id);else showProblems();scrollGuide()};
+  document.getElementById('back-lanes').onclick=()=>{if(selectedGuide)chooseProblem(selectedGuide.id);else showProblems();};
   render();
-  scrollGuide();
+  focusGuide();
 }
 function showFree(which){
   selectedSections=null; mode=which; searchEl.value=''; setStep(3);
   guideBody.innerHTML=`<div class="back-row"><button class="back" type="button" id="back-free">← Back</button><span class="choice-label">Free help</span></div>
-    <h2 class="guide-heading">${which==='free-standard'?'$0 for everyone':'$0 with Community Access'}</h2>
+    <h2 class="guide-heading" tabindex="-1">${which==='free-standard'?'$0 for everyone':'$0 with Community Access'}</h2>
     <p class="guide-copy">Only the services matching this $0 option are shown below.</p>`;
   document.getElementById('back-free').onclick=()=>chooseProblem('free');
   render();
-  setTimeout(()=>browseEl.scrollIntoView({behavior:'smooth',block:'start'}),80);
+  focusGuide();
 }
 function setFilterButton(which){
   document.querySelectorAll('.filter').forEach(button=>{
@@ -484,8 +492,8 @@ document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',(
   document.getElementById('result-count').scrollIntoView({behavior:'smooth',block:'start'});
 }));
 searchEl.addEventListener('input',()=>{selectedSections=null;mode='all';render();});
-document.getElementById('start-guide').onclick=()=>{showProblems();scrollGuide();};
-document.getElementById('free-now').onclick=()=>{chooseProblem('free');scrollGuide();};
+document.getElementById('start-guide').onclick=()=>showProblems();
+document.getElementById('free-now').onclick=()=>chooseProblem('free');
 document.getElementById('search-now').onclick=()=>openBrowse('all',true);
 document.getElementById('browse-all').onclick=()=>openBrowse('all',false);
 
@@ -493,10 +501,10 @@ document.getElementById('browse-all').onclick=()=>openBrowse('all',false);
 const params=new URLSearchParams(location.search);
 const initialView=params.get('view');
 if(initialView==='process'){
-  chooseProblem('process');
+  chooseProblem('process',false);
   scrollGuide();
 }else{
-  showProblems();
+  showProblems(false);
   if(initialView==='education') openBrowse('education');
 }
 </script>
