@@ -12,7 +12,7 @@ button:disabled{opacity:.6;cursor:wait}a{color:#efbf76}#status{padding:12px;bord
 <noscript><p>Password recovery needs JavaScript. Enable it and reopen this page, or use the account help link below.</p></noscript>
 <section id="request" hidden><p>Request an eight-digit email sign-in code for your existing account. No links required.</p><form id="requestForm"><label for="email">Account email</label><input id="email" type="email" autocomplete="email" required><button type="submit">Send eight-digit code</button></form></section>
 <section id="otp" hidden><p>Enter the eight-digit code from your KUMBAYA email.</p><form id="otpForm"><label for="code">Email verification code</label><input id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required><button type="submit">Verify code</button></form><p><button type="button" id="restart-code">Request a new code</button></p></section><section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
-<section id="success" hidden><p>Your password has been updated. You can now return to Do’step.</p><p><a href="https://dostep.kumbaya.cloud/">Open Do’step sign in</a></p></section>
+<section id="success" hidden><p>Your password has been updated. You can now return to Do’step.</p><p><a href="https://dostep.kumbaya.cloud/" id="recovery-sign-in">Open Do’step sign in</a></p><button id="retry-sign-out" type="button" hidden>Retry sign-out</button></section>
 <p><small>Never share a recovery link, password, or verification code. KUMBAYA will never ask you to send these by email.</small></p><p><a href="https://dostep.kumbaya.cloud/help.html">Read Do’step account help</a> · <a href="https://dostep.kumbaya.cloud/">Return to sign in</a></p>
 </main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script><script>
 (() => {
@@ -84,13 +84,41 @@ validated=true;show("update","Code verified. Choose your new password.");
 }catch(e){$("status").textContent="Unable to verify the code."; }
 finally{button.disabled=false;restartCode.disabled=false;}
 });
+const retrySignOut=$("retry-sign-out");
+async function finishRecovery(){
+  retrySignOut.disabled=true;
+  let signedOut=false;
+  try {
+    const {error}=await client.auth.signOut();
+    signedOut=!error;
+  } catch {
+    // The password was already saved. Keep recovery sign-out available.
+  }
+  retrySignOut.hidden=signedOut;
+  retrySignOut.disabled=false;
+  show("success",signedOut?"Password saved successfully.":"Password saved. The recovery session could not be signed out. Retry sign-out before leaving this page.");
+  (signedOut?$("recovery-sign-in"):retrySignOut).focus();
+}
+retrySignOut.addEventListener("click",()=>{
+  if(!retrySignOut.disabled) return finishRecovery();
+});
 $("updateForm").addEventListener("submit",async event=>{
 event.preventDefault();if(!validated){show("request","A verified recovery link is required.");return;}
 const a=$("password").value,b=$("confirm").value;if(a.length<12||a!==b){$("status").textContent="Use at least 12 characters and make sure both passwords match.";return;}
-const button=event.target.querySelector("button");button.disabled=true;
-try{const {error}=await client.auth.updateUser({password:a});if(error){$("status").textContent="Password update failed. Please use a different strong password or request another recovery link.";return;}
-$("password").value="";$("confirm").value="";validated=false;await client.auth.signOut();show("success","Password saved successfully.");
-}catch(e){$("status").textContent="Unable to save password. Try again."; }finally{button.disabled=false;}
+const button=event.target.querySelector("button");
+if(button.disabled) return;
+button.disabled=true;
+try {
+  const {error}=await client.auth.updateUser({password:a});
+  if(error){$("status").textContent="Password update failed. Please use a different strong password or request another recovery link.";return;}
+} catch {
+  $("status").textContent="Unable to save password. Try again.";
+  return;
+} finally {
+  button.disabled=false;
+}
+$("password").value="";$("confirm").value="";validated=false;
+await finishRecovery();
 });init();
 })();
 </script></body></html>
