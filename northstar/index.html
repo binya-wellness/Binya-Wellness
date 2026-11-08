@@ -1357,7 +1357,7 @@ async function startReschedule(id,serviceId){
   window.__rescheduleAppointment=id;
   const btn=$('scheduler-book-btn'); if(btn){ btn.textContent='Confirm new time'; btn.onclick=rescheduleSelectedSlot; }
   $('scheduler-reschedule-cancel')?.classList.remove('hidden');
-  document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'smooth',block:'center'});
+  document.querySelector('#scheduler-service')?.scrollIntoView({behavior:'auto',block:'center'});
 }
 
 function cancelRescheduleMode(showNotice=true){
