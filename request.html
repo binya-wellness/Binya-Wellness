@@ -42,7 +42,7 @@
 (()=>{
 'use strict';
 const p=new URLSearchParams(location.search);
-const truncate=(s,n)=>String(s||'').trim().slice(0,n).replace(/[\r\n\t]/g,' ');
+const truncate=(s,n)=>Array.from(String(s||'').trim()).slice(0,n).join('').replace(/[\r\n\t]/g,' ');
 const service=truncate(p.get('service'),150)||'General nonclinical inquiry';
 const catalogSection=truncate(p.get('section'),140)||'KUMBAYA';
 const sectionNames=new Map([
@@ -60,7 +60,7 @@ document.getElementById('selected-section').textContent=section;
 document.getElementById('title').textContent=interest?'Ask about an upcoming '+interestBrand+' offering':'Request a KUMBAYA service quote';
 document.getElementById('description').textContent=interest?'Ask for updates about an in-development product or community event. This does not create a purchase or registration.':'Describe the nonclinical help you need. We will check service availability and scope before quoting. This form creates an email draft only.';
 document.getElementById('description').textContent += ' Nothing you type here is submitted to or stored by this website.';
-document.getElementById('price-note').textContent=interest?'Not available for sale or event registration.':(price?'Published reference price: '+price+'. Final written price may differ depending on the approved scope.':'Any applicable price will be confirmed in a written quote.');
+document.getElementById('price-note').textContent=interest?'Not available for sale or event registration.':(price?'Price reference from this link: '+price+'. Only a written quote confirms the price.':'Any applicable price will be confirmed in a written quote.');
 const id=x=>document.getElementById(x);
 const value=x=>String(id(x).value||'').trim();
 const subject=(interest?interestBrand+' launch interest — ':'KUMBAYA nonclinical quote request — ')+service;
@@ -69,7 +69,7 @@ return [
 'Hello KUMBAYA,','',
 interest?'I would like updates when the planned offering below becomes available.':'I would like to request a nonclinical service quote.',
 'Service: '+service,'Area: '+section,
-price&&!interest?'Published reference price: '+price:'',
+price&&!interest?'Price reference from this link: '+price:'',
 '',
 'Preferred name: '+(value('preferred-name')||'Not provided'),
 'Reply email: '+(value('reply-email')||'Use the sending email address'),
