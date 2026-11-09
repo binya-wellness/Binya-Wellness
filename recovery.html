@@ -11,7 +11,7 @@ button:disabled{opacity:.6;cursor:wait}a{color:#efbf76}#status{padding:12px;bord
 <div id="status" role="status" aria-live="polite"></div>
 <noscript><p>Password recovery needs JavaScript. Enable it and reopen this page, or use the account help link below.</p></noscript>
 <section id="request" hidden><p>Request an eight-digit email sign-in code for your existing account. No links required.</p><form id="requestForm"><label for="email">Account email</label><input id="email" type="email" autocomplete="email" required><button type="submit">Send eight-digit code</button></form></section>
-<section id="otp" hidden><p>Enter the eight-digit code from your KUMBAYA email.</p><form id="otpForm"><label for="code">Email verification code</label><input id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required><button type="submit">Verify code</button></form><p><button type="button" id="restart-code">Request a new code</button></p></section><section id="update" hidden><p>Your recovery link was accepted. Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
+<section id="otp" hidden><p>Enter the eight-digit code from your KUMBAYA email.</p><form id="otpForm"><label for="code">Email verification code</label><input id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" required><button type="submit">Verify code</button></form><p><button type="button" id="restart-code">Request a new code</button></p></section><section id="update" hidden><p>Choose a new password for Do’step.</p><form id="updateForm"><label for="password">New password (at least 12 characters)</label><input id="password" type="password" minlength="12" autocomplete="new-password" required><label for="confirm">Confirm new password</label><input id="confirm" type="password" minlength="12" autocomplete="new-password" required><button type="submit">Save new password</button></form></section>
 <section id="success" hidden><p>Your password has been updated. You can now return to Do’step.</p><p><a href="https://dostep.kumbaya.cloud/" id="recovery-sign-in">Open Do’step sign in</a></p><button id="retry-sign-out" type="button" hidden>Retry sign-out</button></section>
 <p><small>Never share a recovery link, password, or verification code. KUMBAYA will never ask you to send these by email.</small></p><p><a href="https://dostep.kumbaya.cloud/help.html">Read Do’step account help</a> · <a href="https://dostep.kumbaya.cloud/">Return to sign in</a></p>
 </main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script><script>
@@ -29,6 +29,11 @@ show(null,"Password recovery couldn't load. Reload this page or use the account 
 return;
 }
 let validated=false;let pendingEmail="";
+function showPasswordForm(message){
+  validated=true;
+  show("update",message);
+  $("password").focus();
+}
 function cleanUrl(){history.replaceState(null,"",location.pathname);}
 async function init(){
 $("status").textContent="Checking your recovery link…";
@@ -40,12 +45,12 @@ if(fragment.get("type")==="recovery"&&fragment.get("access_token")&&fragment.get
 const {data,error}=await client.auth.setSession({access_token:fragment.get("access_token"),refresh_token:fragment.get("refresh_token")});
 cleanUrl();
 if(error||!data.session){show("request","Recovery verification failed. Request a new link.");return;}
-validated=true;show("update","Recovery link verified.");return;
+showPasswordForm("Recovery link verified.");return;
 }
 if(query.get("code")){
 const {data,error}=await client.auth.exchangeCodeForSession(query.get("code"));cleanUrl();
 if(error||!data.session){show("request","Recovery verification failed. Request a new link.");return;}
-validated=true;show("update","Recovery link verified.");return;
+showPasswordForm("Recovery link verified.");return;
 }
 cleanUrl();show("request","Enter your account email to start password recovery.");
 }catch(e){cleanUrl();show("request","Unable to process this recovery link. Please try a new one.");}
@@ -80,7 +85,7 @@ const {data,error}=await client.auth.verifyOtp({email:pendingEmail,token:$("code
 if(error||!data.session){$("status").textContent="Code invalid or expired. Use the newest email or choose Request a new code.";return;}
 const {data:{user}}=await client.auth.getUser();
 if(!user||user.email?.toLowerCase()!==pendingEmail.toLowerCase()){await client.auth.signOut();show("request","Account verification mismatch. Please restart.");return;}
-validated=true;show("update","Code verified. Choose your new password.");
+showPasswordForm("Code verified.");
 }catch(e){$("status").textContent="Unable to verify the code."; }
 finally{button.disabled=false;restartCode.disabled=false;}
 });
