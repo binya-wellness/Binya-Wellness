@@ -919,12 +919,14 @@ function shouldRequirePasswordSetup(user){
 function showPasswordSetup(recovery=false){
   $('portal-login-card')?.classList.add('hidden');
   $('portal-dashboard')?.classList.add('hidden');
-  $('password-setup-card')?.classList.add('hidden');
-  $('password-setup-card')?.classList.remove('hidden');
+  const card=$('password-setup-card');
+  const wasHidden=card?.classList.contains('hidden');
+  card?.classList.remove('hidden');
   if(recovery){
     $('password-setup-title').textContent='Choose a new Do’step password';
     $('password-setup-copy').textContent='Your reset link is verified. Set the new password below.';
   }
+  if(wasHidden) $('new-portal-password')?.focus();
 }
 
 async function updatePortalPassword(){
