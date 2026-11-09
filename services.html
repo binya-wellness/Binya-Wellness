@@ -505,10 +505,10 @@ function openBrowse(newMode='all',focusSearch=false){
   setTimeout(()=>{document.getElementById('result-count').scrollIntoView({behavior:'auto',block:'start'});if(focusSearch)searchEl.focus();},80);
 }
 document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{
-  selectedSections=null;mode=btn.dataset.mode;searchEl.value='';render();
+  selectedSections=null;mode=btn.dataset.mode;render();
   document.getElementById('result-count').scrollIntoView({behavior:'auto',block:'start'});
 }));
-searchEl.addEventListener('input',()=>{selectedSections=null;mode='all';render();});
+searchEl.addEventListener('input',render);
 document.getElementById('start-guide').onclick=()=>showProblems();
 document.getElementById('free-now').onclick=()=>chooseProblem('free');
 document.getElementById('search-now').onclick=()=>openBrowse('all',true);
