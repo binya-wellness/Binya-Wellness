@@ -217,7 +217,8 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
       <div class="guide-body" id="guide-body"></div>
     </section>
 
-    <section class="browse" id="browse">
+    <section class="browse" id="browse" tabindex="-1" aria-labelledby="browse-title">
+      <h2 class="guide-heading" id="browse-title">Service menu</h2>
       <div class="toolbar" aria-label="Menu filters">
         <input id="service-search" class="search" type="search" placeholder="Search — housing, SSI, VA, IEP, naloxone…" aria-label="Search services">
         <div class="filters">
@@ -323,10 +324,11 @@ function priceClass(v){return isFree(v)?'free':(String(v).trim()!=='-'?'ca':'');
 function setStep(n){
   [1,2,3].forEach(i=>{const button=document.getElementById('step-'+i);button.classList.toggle('active',i===n);button.setAttribute('aria-current',i===n?'step':'false');});
 }
-function goToServices(){
+function goToServices(focusTarget=browseEl){
   const wasBrowsing=browseEl.classList.contains('active');
   setStep(3);
   if(!wasBrowsing) render();
+  focusTarget?.focus({preventScroll:true});
   const header=document.querySelector('header');const offset=(header?.getBoundingClientRect().height||0)+20;
   window.scrollTo({top:Math.max(0,window.scrollY+browseEl.getBoundingClientRect().top-offset),behavior:'auto'});
 }
@@ -500,9 +502,9 @@ menuEl.addEventListener('click',function(e){
  const params=new URLSearchParams({section,service,price,intent:isDevelopment?'interest':'quote'});
  window.location.assign('/request.html?'+params.toString());
 });
-function openBrowse(newMode='all',focusSearch=false){
+function openBrowse(newMode='all',focusTarget=browseEl){
   selectedSections=null;mode=newMode;searchEl.value='';render();
-  setTimeout(()=>{document.getElementById('result-count').scrollIntoView({behavior:'auto',block:'start'});if(focusSearch)searchEl.focus();},80);
+  goToServices(focusTarget);
 }
 document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{
   selectedSections=null;mode=btn.dataset.mode;render();
@@ -511,8 +513,8 @@ document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',(
 searchEl.addEventListener('input',render);
 document.getElementById('start-guide').onclick=()=>showProblems();
 document.getElementById('free-now').onclick=()=>chooseProblem('free');
-document.getElementById('search-now').onclick=()=>openBrowse('all',true);
-document.getElementById('browse-all').onclick=()=>openBrowse('all',false);
+document.getElementById('search-now').onclick=()=>openBrowse('all',searchEl);
+document.getElementById('browse-all').onclick=()=>openBrowse();
 
 // Support direct links already used from the main website.
 const params=new URLSearchParams(location.search);
@@ -522,7 +524,7 @@ if(initialView==='process'){
   scrollGuide();
 }else{
   showProblems(false);
-  if(initialView==='education') openBrowse('education');
+  if(initialView==='education') openBrowse('education',null);
 }
 </script>
 <script>
