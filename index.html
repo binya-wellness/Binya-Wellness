@@ -1009,7 +1009,7 @@ body.reader-mode p,body.reader-mode li{max-width:65ch}
         <div id="mfa-existing-step" class="hidden mfa-enroll-step">
           <label for="mfa-existing-code">Enter the 6-digit code from your authenticator app</label>
           <input id="mfa-existing-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
-          <button class="btn primary" type="button" onclick="verifyExistingMfa()">Verify and open Do’step</button>
+          <button id="mfa-existing-submit" class="btn primary" type="button" onclick="verifyExistingMfa()">Verify and open Do’step</button>
         </div>
         <div id="mfa-enroll-step" class="hidden mfa-enroll-step">
           <img id="mfa-qr" alt="MFA QR code" />
@@ -1369,14 +1369,24 @@ async function verifyMfa(){
 async function verifyExistingMfa(){
   const code=$('mfa-existing-code')?.value.trim();
   if(!code) return;
-  const {data:factors,error:listErr}=await sb.auth.mfa.listFactors();
-  if(listErr){ notice('MFA verification could not be started.','error'); return; }
-  const factor=factors?.totp?.find(f=>f.status==='verified') || factors?.totp?.[0];
-  if(!factor){ notice('No verified authenticator is attached to this account.','error'); return; }
-  const challenge=await sb.auth.mfa.challenge({factorId:factor.id});
-  if(challenge.error){ notice('MFA verification could not be started.','error'); return; }
-  const verify=await sb.auth.mfa.verify({factorId:factor.id,challengeId:challenge.data.id,code});
-  if(verify.error){ notice('That verification code was not accepted.','error'); return; }
+  const button=$('mfa-existing-submit');
+  if(button.disabled) return;
+  button.disabled=true;
+  try {
+    const {data:factors,error:listErr}=await sb.auth.mfa.listFactors();
+    if(listErr){ notice('MFA verification could not be started.','error'); return; }
+    const factor=factors?.totp?.find(f=>f.status==='verified') || factors?.totp?.[0];
+    if(!factor){ notice('No verified authenticator is attached to this account.','error'); return; }
+    const challenge=await sb.auth.mfa.challenge({factorId:factor.id});
+    if(challenge.error){ notice('MFA verification could not be started.','error'); return; }
+    const verify=await sb.auth.mfa.verify({factorId:factor.id,challengeId:challenge.data.id,code});
+    if(verify.error){ notice('That verification code was not accepted.','error'); return; }
+  } catch {
+    notice('Do’step could not complete MFA verification. Check your connection and try again.','error');
+    return;
+  } finally {
+    button.disabled=false;
+  }
   $('mfa-existing-code').value=''; notice('Do’step is unlocked.','success');
   await refreshMfaState();
   await Promise.all([loadDocuments(),loadTasks(),loadMessages(),loadAppointments(),loadSchedulerServices()]);
@@ -1618,7 +1628,7 @@ async function rescheduleSelectedSlot(){
 function downloadAppointmentIcs(id){
   const a=(window.__kumbayaAppointments||[]).find(x=>x.id===id); if(!a) return;
   const fmt=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
-  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KUMBAYA//Do’step//EN','BEGIN:VEVENT',`UID:${a.id}@kumbaya.cloud`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:KUMBAYA appointment','DESCRIPTION:Open Do’step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const body=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KUMBAYA//Do’step//EN','BEGIN:VEVENT',`UID:${a.id}@kumbaya.cloud`, `DTSTAMP:${fmt(new Date())}`,`DTSTART:${fmt(a.starts_at)}`,`DTEND:${fmt(a.ends_at)}`,'SUMMARY:KUMBAYA appointment','DESCRIPTION:Open Do’step for appointment details.','END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n';
   const blob=new Blob([body],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download='kumbaya-appointment.ics'; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
