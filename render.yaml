@@ -4,11 +4,17 @@ services:
     runtime: static
     repo: https://github.com/binya-wellness/Binya-Wellness
     branch: main
-    buildCommand: >-
-      rm -rf -- dist &&
-      mkdir -p dist/northstar &&
-      cp -- index.html services.html request.html privacy.html recovery.html
-      how-services-work.html cyaam.html cyaam-wheel-worksheet.html northstar.html
-      robots.txt sitemap.xml dist/ &&
-      cp -- northstar/index.html northstar/help.html northstar/robots.txt dist/northstar/
-    staticPublishPath: ./dist
+    buildCommand: |-
+      set -eu
+      test "$(git rev-parse --show-toplevel)" = "$(pwd -P)"
+      stage=$(mktemp -d)
+      trap 'rm -rf -- "$stage"' EXIT
+      mkdir -p "$stage/northstar"
+      cp -- index.html services.html request.html privacy.html recovery.html \
+        how-services-work.html cyaam.html cyaam-wheel-worksheet.html northstar.html \
+        robots.txt sitemap.xml "$stage/"
+      cp -- northstar/index.html northstar/help.html northstar/robots.txt "$stage/northstar/"
+      # Render publishes the build checkout root and excludes .git.
+      find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf -- {} +
+      cp -R -- "$stage/." .
+    staticPublishPath: .
